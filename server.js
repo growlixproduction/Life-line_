@@ -94,7 +94,7 @@ app.post('/api/appointments', (req, res) => {
   appointmentsDB.push(newAppointment);
 
   res.status(201).json({
-    message: 'Appointment successfully registered at Sanjeevani Hospital Ambikapur',
+    message: 'Appointment successfully registered at Life Line Hospital Ambikapur',
     appointment: newAppointment
   });
 });
@@ -124,6 +124,27 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
+
+// HTML Multi-Page Routes
+// Department Sub-Page Routes
+app.get('/department/cardiology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-cardiology.html')));
+app.get('/department/orthopedics', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-orthopedics.html')));
+app.get('/department/neurology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-neurology.html')));
+app.get('/department/pediatrics', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-pediatrics.html')));
+app.get('/department/gynecology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-gynecology.html')));
+app.get('/department/surgery', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-surgery.html')));
+app.get('/department/urology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-urology.html')));
+app.get('/department/radiology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-radiology.html')));
+
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')));
+app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'dist/about.html')));
+app.get('/departments', (req, res) => res.sendFile(path.join(__dirname, 'dist/departments.html')));
+app.get('/doctors', (req, res) => res.sendFile(path.join(__dirname, 'dist/doctors.html')));
+app.get('/facilities', (req, res) => res.sendFile(path.join(__dirname, 'dist/facilities.html')));
+app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'dist/gallery.html')));
+app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'dist/contact.html')));
+app.get('/booking', (req, res) => res.sendFile(path.join(__dirname, 'dist/booking.html')));
+
 // Serve frontend SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
@@ -132,7 +153,7 @@ app.get('*', (req, res) => {
 // Start Express Server
 app.listen(PORT, () => {
   console.log(`====================================================`);
-  console.log(`🏥 Sanjeevani Hospital Ambikapur Express Server Running`);
+  console.log(`🏥 Life Line Hospital Ambikapur Express Server Running`);
   console.log(`🌐 Local URL: http://localhost:${PORT}`);
   console.log(`====================================================`);
 });

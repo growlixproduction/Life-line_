@@ -313,7 +313,7 @@ function initBookingModal() {
             <i data-lucide="check-circle" style="width: 36px; height: 36px;"></i>
           </div>
           <h2 style="color: #015965; font-size: 1.5rem; margin-bottom: 8px;">Appointment Confirmed!</h2>
-          <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Your OPD token has been registered at Sanjeevani Hospital Ambikapur.</p>
+          <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Your OPD token has been registered at Life Line Hospital Ambikapur.</p>
 
           <div style="background: #f8fafc; border: 1px dashed #028090; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">

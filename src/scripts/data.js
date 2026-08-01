@@ -1,11 +1,11 @@
 export const hospitalData = {
-  name: "Sanjeevani Hospital Ambikapur",
+  name: "Life Line Hospital Ambikapur",
   tagline: "Leading Multispecialty Healthcare & Advanced Trauma Center in Surguja Division",
   address: "Near Ring Road, Opp. Collectorate Office Road, Ambikapur, Surguja District, Chhattisgarh - 497001",
   emergencyPhone: "+91 7774 234 999",
   opdPhone: "+91 7774 235 888",
   whatsapp: "+91 94252 88990",
-  email: "care@sanjeevaniambikapur.com",
+  email: "info@lifelinehospitalambikapur.com",
   timingOPD: "Monday to Saturday: 9:00 AM - 8:00 PM (Emergency 24x7)",
   established: 2012,
   stats: {
@@ -21,7 +21,7 @@ export const hospitalData = {
       name: "Cardiology & Cardiac Surgery",
       icon: "heart-pulse",
       shortDesc: "Comprehensive heart care including 24/7 Cath Lab, Angioplasty & Echo.",
-      overview: "Sanjeevani Hospital houses Ambikapur's most advanced Cardiac Sciences department, offering round-the-clock emergency angioplasty, pacemaker implantations, color doppler, and non-invasive cardiac evaluation.",
+      overview: "Life Line Hospital houses Ambikapur's most advanced Cardiac Sciences department, offering round-the-clock emergency angioplasty, pacemaker implantations, color doppler, and non-invasive cardiac evaluation.",
       head: "Dr. Rajeshwar Sharma (MD, DM Cardiology)",
       treatments: [
         "Primary & Emergency Angioplasty (PPCI)",
@@ -304,10 +304,10 @@ export const hospitalData = {
   ],
   gallery: [
     {
-      title: "Sanjeevani Hospital Main Building",
+      title: "Life Line Hospital Main Building",
       category: "campus",
       image: "/assets/images/hero.png",
-      caption: "Exterior view of Sanjeevani Hospital Ambikapur on Ring Road."
+      caption: "Exterior view of Life Line Hospital Ambikapur on Ring Road."
     },
     {
       title: "Advanced Operation Theatre",
@@ -325,7 +325,7 @@ export const hospitalData = {
       title: "Expert Doctor Panel",
       category: "team",
       image: "/assets/images/doctors_team.png",
-      caption: "Multispecialty doctor consultation team at Sanjeevani."
+      caption: "Multispecialty doctor consultation team at Life Line."
     },
     {
       title: "Level 3 Neonatal ICU",
@@ -342,7 +342,7 @@ export const hospitalData = {
   ],
   testimonials: [
     {
-      quote: "When my father suffered an acute heart attack at midnight in Ambikapur, Sanjeevani's cardiac team performed emergency angioplasty within 40 minutes. They truly saved his life!",
+      quote: "When my father suffered an acute heart attack at midnight in Ambikapur, Life Line's cardiac team performed emergency angioplasty within 40 minutes. They truly saved his life!",
       author: "Rameshwar Sahu",
       location: "Ambikapur City",
       rating: 5,
@@ -356,7 +356,7 @@ export const hospitalData = {
       department: "Orthopedics"
     },
     {
-      quote: "We delivered our premature twins at 30 weeks. The NICU team led by Dr. Sunita took care of our babies like family. We are forever grateful to Sanjeevani Hospital.",
+      quote: "We delivered our premature twins at 30 weeks. The NICU team led by Dr. Sunita took care of our babies like family. We are forever grateful to Life Line Hospital.",
       author: "Vikram & Sunayana Patel",
       location: "Manendragarh",
       rating: 5,
