@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanjeevani Hospital Ambikapur - Advanced Multispecialty & Emergency Hospital</title>
+  <meta name="description" content="Sanjeevani Hospital Ambikapur is Surguja Division's leading multispecialty healthcare center featuring 24x7 Emergency, Cath Lab, Knee Replacement, Level-3 NICU, 3T MRI & Expert Doctors.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23028090'><path d='M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z'/></svg>">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+
+  <!-- Top Utility Header -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-info-group">
+        <div class="top-info-item">
+          <i data-lucide="map-pin" style="width: 15px; height: 15px;"></i>
+          <span>Ring Road, Opp. Collectorate Office, Ambikapur, Chhattisgarh</span>
+        </div>
+        <div class="top-info-item">
+          <i data-lucide="clock" style="width: 15px; height: 15px;"></i>
+          <span>OPD: 9:00 AM - 8:00 PM | Casualty: 24x7</span>
+        </div>
+      </div>
+
+      <div class="top-info-group">
+        <div class="top-emergency-badge">
+          <i data-lucide="phone-call" style="width: 14px; height: 14px;"></i>
+          Emergency 24x7: +91 7774 234 999
+        </div>
+        <div class="top-info-item">
+          <i data-lucide="shield-check" style="width: 15px; height: 15px;"></i>
+          <span>Ayushman Bharat & Cashless TPA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navbar with Dropdowns -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <!-- Logo -->
+        <a href="#home-view" class="brand-logo" data-view-target="home-view">
+          <div class="logo-icon-wrap">
+            <i data-lucide="cross" style="width: 28px; height: 28px;"></i>
+          </div>
+          <div class="brand-text-wrap">
+            <span class="brand-name">SANJEEVANI <span>HOSPITAL</span></span>
+            <span class="brand-tagline">Ambikapur • Multispecialty Care</span>
+          </div>
+        </a>
+
+        <!-- Navigation Links with Dropdown Menu -->
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#home-view" class="nav-link active" data-view-target="home-view">
+              Home
+            </a>
+          </li>
+
+          <!-- Dropdown: About Us -->
+          <li class="nav-item">
+            <a href="#about-view" class="nav-link" data-view-target="about-view">
+              About Us <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a href="#about-view" class="dropdown-link" data-view-target="about-view">
+                <div class="dropdown-icon"><i data-lucide="hospital"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Overview & Vision</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Healthcare excellence in Surguja</div>
+                </div>
+              </a>
+              <a href="#about-view" class="dropdown-link" data-view-target="about-view">
+                <div class="dropdown-icon"><i data-lucide="award"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Accreditations & TPA</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">NABH compliant standards</div>
+                </div>
+              </a>
+            </div>
+          </li>
+
+          <!-- Mega Dropdown: Departments -->
+          <li class="nav-item">
+            <a href="#departments-view" class="nav-link" data-view-target="departments-view">
+              Departments <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu mega-menu" id="mega-menu-dept-list">
+              <!-- Dynamically Populated -->
+            </div>
+          </li>
+
+          <!-- Dropdown: Doctors -->
+          <li class="nav-item">
+            <a href="#doctors-view" class="nav-link" data-view-target="doctors-view">
+              Doctors <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a href="#doctors-view" class="dropdown-link" data-view-target="doctors-view">
+                <div class="dropdown-icon"><i data-lucide="users"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Find a Specialist</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Search 45+ expert doctors</div>
+                </div>
+              </a>
+              <a href="#doctors-view" class="dropdown-link" data-view-target="doctors-view">
+                <div class="dropdown-icon"><i data-lucide="calendar"></i></div>
+                <div>
+                  <div style="font-weight: 700;">OPD Timings Schedule</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Check doctor availability</div>
+                </div>
+              </a>
+            </div>
+          </li>
+
+          <!-- Facilities -->
+          <li class="nav-item">
+            <a href="#facilities-view" class="nav-link" data-view-target="facilities-view">
+              Facilities
+            </a>
+          </li>
+
+          <!-- Media Gallery -->
+          <li class="nav-item">
+            <a href="#media-view" class="nav-link" data-view-target="media-view">
+              Media & Gallery
+            </a>
+          </li>
+
+          <!-- Contact Us -->
+          <li class="nav-item">
+            <a href="#contact-view" class="nav-link" data-view-target="contact-view">
+              Contact Us
+            </a>
+          </li>
+        </ul>
+
+        <!-- Action Buttons -->
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openBookingModal()">
+            <i data-lucide="calendar-plus"></i> Book Appointment
+          </button>
+          <button class="mobile-toggle" aria-label="Toggle Menu">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWS CONTAINER -->
+  <main id="app-main-content">
+
+    <!-- ================= 1. HOME VIEW ================= -->
+    <section id="home-view" class="page-view active-view">
+      
+      <!-- Hero Carousel / Banner -->
+      <div class="hero-section">
+        <div class="container hero-grid">
+          <div>
+            <div class="hero-badge">
+              <i data-lucide="sparkles"></i> 24x7 Advanced Trauma & Multispecialty Hospital
+            </div>
+            <h1 class="hero-title">
+              World-Class Healthcare Right in <span>Ambikapur</span>
+            </h1>
+            <p class="hero-desc">
+              Sanjeevani Hospital brings together renowned specialist doctors, modern ICU infrastructure, 24/7 Cath Lab, and compassionate nursing care to serve Northern Chhattisgarh.
+            </p>
+            <div class="hero-cta-group">
+              <button class="btn btn-primary" onclick="openBookingModal()">
+                <i data-lucide="calendar-check"></i> Book OPD Appointment
+              </button>
+              <a href="tel:+917774234999" class="btn btn-emergency">
+                <i data-lucide="phone"></i> Emergency Hotline 24x7
+              </a>
+            </div>
+            <div class="hero-features-list">
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>24/7 Ambulance with Ventilator</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>Ayushman Bharat Cashless</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>Level-3 NICU & PICU</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>3T MRI & 128 CT Scan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-image-card">
+            <img src="/assets/images/hero.png" alt="Sanjeevani Hospital Ambikapur Building">
+            <div class="hero-floating-card">
+              <div class="floating-icon">
+                <i data-lucide="heart-pulse"></i>
+              </div>
+              <div>
+                <strong style="display: block; font-size: 1.1rem; color: #028090;">24x7 Emergency Care</strong>
+                <span style="font-size: 0.825rem; color: #64748b;">Trauma & Cardiac Care Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick OPD Booking Bar Strip -->
+      <div class="container quick-booking-bar">
+        <div class="booking-strip-card">
+          <div class="input-field-group">
+            <label>Specialty Department</label>
+            <select id="quick-dept-select">
+              <option value="">Select Specialty</option>
+            </select>
+          </div>
+          <div class="input-field-group">
+            <label>Preferred Date</label>
+            <input type="date" id="quick-date-input">
+          </div>
+          <div class="input-field-group">
+            <label>Patient Contact</label>
+            <input type="tel" placeholder="Mobile Number" id="quick-phone-input">
+          </div>
+          <button class="btn btn-primary" onclick="openBookingModal()" style="height: 48px; margin-top: auto;">
+            <i data-lucide="search"></i> Find & Book
+          </button>
+        </div>
+      </div>
+
+      <!-- Key Statistics -->
+      <section class="stats-section">
+        <div class="container stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Medical Specialties</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">45+</div>
+            <div class="stat-label">Expert Doctors</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">200+</div>
+            <div class="stat-label">Advanced Beds</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">15,000+</div>
+            <div class="stat-label">Successful Surgeries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">&lt; 10Mins</div>
+            <div class="stat-label">Emergency Response</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Departments Spotlight -->
+      <section class="departments-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-subtitle">Center of Excellence</span>
+            <h2 class="section-title">Specialized Medical Departments</h2>
+            <p class="section-desc">Comprehensive clinical services equipped with cutting-edge technology and experienced medical teams.</p>
+          </div>
+
+          <div class="departments-grid" id="departments-grid-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Doctors Showcase -->
+      <section class="doctors-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-subtitle">Meet Our Specialists</span>
+            <h2 class="section-title">Renowned Doctors & Surgeons</h2>
+            <p class="section-desc">Consult with highly qualified doctor panel available for OPD and surgical consultations.</p>
+          </div>
+
+          <div class="doctors-filter-bar">
+            <input type="text" id="doctor-search-input" class="doctor-search-input" placeholder="Search doctor by name, specialty or qualification...">
+            <select id="doctor-dept-filter" class="form-control" style="width: auto; min-width: 200px;">
+              <option value="all">All Specialties</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="orthopedics">Orthopedics</option>
+              <option value="pediatrics">Pediatrics & NICU</option>
+              <option value="gynaecology">Gynecology</option>
+              <option value="neurology">Neurology</option>
+              <option value="surgery">Laparoscopic Surgery</option>
+              <option value="urology">Urology</option>
+            </select>
+          </div>
+
+          <div class="doctors-grid" id="doctors-grid-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Facilities Spotlight -->
+      <section class="facilities-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-subtitle">World Class Infrastructure</span>
+            <h2 class="section-title">Advanced Facilities & ICU Setup</h2>
+            <p class="section-desc">Designed with infection-controlled standards and 24x7 diagnostic backings.</p>
+          </div>
+
+          <div class="facilities-grid" id="facilities-grid-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Patient Testimonials -->
+      <section class="testimonials-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-subtitle">Patient Care Stories</span>
+            <h2 class="section-title">Trusted by Thousands in Chhattisgarh</h2>
+            <p class="section-desc">Read real reviews from patients treated at Sanjeevani Hospital Ambikapur.</p>
+          </div>
+
+          <div class="testimonials-grid" id="testimonials-grid-container">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ================= 2. ABOUT US VIEW ================= -->
+    <section id="about-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">About Sanjeevani Hospital</span>
+          <h2 class="section-title">Serving Ambikapur with Care & Compassion</h2>
+          <p class="section-desc">Established with a vision to make advanced multispecialty tertiary healthcare accessible to Surguja division.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px;">
+          <div>
+            <h3 style="font-size: 1.8rem; margin-bottom: 16px; color: #015965;">Our Vision & Mission</h3>
+            <p style="margin-bottom: 16px; color: #475569;">
+              Sanjeevani Hospital Ambikapur was founded in 2012 to address the critical need for round-the-clock emergency medical services, cardiac care, and advanced surgical procedures in Northern Chhattisgarh.
+            </p>
+            <p style="margin-bottom: 24px; color: #475569;">
+              We believe every patient deserves empathetic, transparent, and international-standard medical care. Our hospital is equipped with 200+ beds, 25 ICU beds, laminar airflow operation theatres, and round-the-clock specialists.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h4 style="color: #028090; font-size: 1.1rem; margin-bottom: 6px;">24x7 Emergency</h4>
+                <p style="font-size: 0.85rem; color: #64748b;">Trauma team ready 365 days a year.</p>
+              </div>
+              <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h4 style="color: #028090; font-size: 1.1rem; margin-bottom: 6px;">Cashless Healthcare</h4>
+                <p style="font-size: 0.85rem; color: #64748b;">Empaneled with Ayushman PM-JAY & top TPAs.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <img src="/assets/images/doctors_team.png" alt="Sanjeevani Doctor Team" style="border-radius: 16px; box-shadow: var(--shadow-lg);">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. DEPARTMENTS VIEW ================= -->
+    <section id="departments-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">Clinical Specialties</span>
+          <h2 class="section-title">Departments & Treatments Directory</h2>
+          <p class="section-desc">Explore our full range of medical specialties and specialized procedure capabilities.</p>
+        </div>
+
+        <div class="departments-grid">
+          <!-- Populated from data -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. DOCTORS VIEW ================= -->
+    <section id="doctors-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">Medical Panel</span>
+          <h2 class="section-title">Our Expert Doctors & OPD Schedule</h2>
+          <p class="section-desc">Filter by specialty to book your OPD consultation with Ambikapur's leading specialists.</p>
+        </div>
+
+        <div class="doctors-grid">
+          <!-- Populated from JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. FACILITIES VIEW ================= -->
+    <section id="facilities-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">Hospital Infrastructure</span>
+          <h2 class="section-title">Facilities & Diagnostic Excellence</h2>
+          <p class="section-desc">Modern equipment and comfortable patient spaces designed for healing.</p>
+        </div>
+
+        <div class="facilities-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. MEDIA GALLERY VIEW ================= -->
+    <section id="media-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">Visual Tour</span>
+          <h2 class="section-title">Hospital Media Gallery</h2>
+          <p class="section-desc">Explore infrastructure photos, health camp initiatives, and hospital facilities.</p>
+        </div>
+
+        <div class="gallery-filters">
+          <button class="filter-btn active" onclick="filterGallery('all', this)">All Photos</button>
+          <button class="filter-btn" onclick="filterGallery('campus', this)">Hospital Campus</button>
+          <button class="filter-btn" onclick="filterGallery('infrastructure', this)">OT & ICU</button>
+          <button class="filter-btn" onclick="filterGallery('diagnostics', this)">Diagnostics & MRI</button>
+          <button class="filter-btn" onclick="filterGallery('events', this)">Health Camps</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid-container">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. CONTACT US VIEW ================= -->
+    <section id="contact-view" class="page-view">
+      <div class="container" style="padding: 60px 0;">
+        <div class="section-header">
+          <span class="section-subtitle">Get In Touch</span>
+          <h2 class="section-title">Contact Sanjeevani Hospital Ambikapur</h2>
+          <p class="section-desc">Reach out for OPD bookings, emergency ambulance, diagnostic inquiries, or feedback.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info-box">
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="map-pin"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #015965;">Hospital Address</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  Near Ring Road, Opp. Collectorate Office Road, Ambikapur, Surguja District, Chhattisgarh - 497001
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="phone-call"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #015965;">Emergency Helpline (24x7)</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  +91 7774 234 999 | +91 7774 235 888
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="message-square"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #015965;">WhatsApp & OPD Inquiry</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  +91 94252 88990
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="mail"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #015965;">Email Address</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  care@sanjeevaniambikapur.com
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-box">
+            <h3 style="font-size: 1.4rem; color: #015965; margin-bottom: 20px;">Send Us a Message</h3>
+
+            <div id="contact-success-alert" style="display: none; padding: 14px; background: #e0f7f4; color: #00a896; border-radius: 8px; margin-bottom: 16px; font-weight: 600;">
+              ✓ Thank you! Your inquiry has been submitted. Our team will contact you shortly.
+            </div>
+
+            <form id="hospital-contact-form">
+              <div class="form-group">
+                <label>Your Full Name *</label>
+                <input type="text" class="form-control" placeholder="e.g. Rahul Sharma" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" class="form-control" placeholder="10 digit mobile number" required>
+              </div>
+              <div class="form-group">
+                <label>Department / Query Type</label>
+                <select class="form-control">
+                  <option>General OPD Inquiry</option>
+                  <option>Emergency Service</option>
+                  <option>Ayushman / Insurance Claim</option>
+                  <option>Diagnostic & CT/MRI Scan</option>
+                  <option>Feedback / Support</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Message Detail</label>
+                <textarea class="form-control" rows="4" placeholder="How can we assist you?"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Submit Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>SANJEEVANI HOSPITAL</h3>
+          <p>Ambikapur's premier multispecialty hospital and trauma center, providing round-the-clock medical excellence, emergency care, and advanced surgeries to Chhattisgarh.</p>
+          <div style="display: flex; gap: 12px;">
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="facebook"></i></a>
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="youtube"></i></a>
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home-view" data-view-target="home-view">Home</a></li>
+            <li><a href="#about-view" data-view-target="about-view">About Us</a></li>
+            <li><a href="#departments-view" data-view-target="departments-view">Clinical Departments</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Our Specialists</a></li>
+            <li><a href="#facilities-view" data-view-target="facilities-view">Facilities</a></li>
+            <li><a href="#contact-view" data-view-target="contact-view">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Specialties</h4>
+          <ul>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Cardiology</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Orthopedics & Joint Replacement</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Pediatrics & NICU</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Laparoscopic Surgery</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Neurology & Brain Surgery</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>24x7 Emergency Contact</h4>
+          <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 12px;">
+            Emergency Casualty: <strong style="color: #f4a261;">+91 7774 234 999</strong>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">
+            Ambikapur Address: Ring Road, Near Collectorate, Ambikapur, CG - 497001
+          </p>
+          <button class="btn btn-emergency" onclick="openBookingModal()" style="width: 100%;">
+            Book Appointment
+          </button>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Sanjeevani Hospital Ambikapur. All rights reserved. Designed for excellence in healthcare.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- APPOINTMENT BOOKING MODAL -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Book OPD Appointment</h3>
+        <button class="modal-close-btn" id="close-booking-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="appointment-booking-form">
+          <div class="form-group">
+            <label>Patient Full Name *</label>
+            <input type="text" id="patient-name" class="form-control" placeholder="Enter patient name" required>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="patient-phone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+          <div class="form-group">
+            <label>Select Department *</label>
+            <select id="modal-dept-select" class="form-control" required>
+              <!-- JS Populated -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Doctor (Optional)</label>
+            <select id="modal-doc-select" class="form-control">
+              <!-- JS Populated -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Date *</label>
+            <input type="date" id="appointment-date" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">
+            Confirm OPD Booking
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX GALLERY MODAL -->
+  <div class="modal-backdrop" id="lightbox-modal">
+    <div class="modal-content" style="max-width: 800px; background: #000; color: white;">
+      <div class="modal-header" style="background: #111; border-color: #333;">
+        <h3 class="modal-title" id="lightbox-title" style="color: white;">Gallery Image</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('lightbox-modal').classList.remove('active')" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center; padding: 20px;">
+        <img id="lightbox-img" src="" alt="" style="max-height: 500px; margin: 0 auto 16px auto; border-radius: 8px;">
+        <p id="lightbox-caption" style="color: #cbd5e1; font-size: 0.9rem;"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING CALL & WHATSAPP WIDGETS -->
+  <div class="floating-widgets">
+    <a href="https://wa.me/919425288990?text=Hello%20Sanjeevani%20Hospital%20Ambikapur,%20I%20want%20to%20inquire%20about%20OPD%20appointment" target="_blank" class="float-btn float-whatsapp" title="WhatsApp Chat">
+      <i data-lucide="message-circle"></i>
+    </a>
+    <a href="tel:+917774234999" class="float-btn float-call" title="Emergency Call">
+      <i data-lucide="phone"></i>
+    </a>
+  </div>
+
+  <!-- Custom Script -->
+  <script type="module" src="/src/scripts/main.js"></script>
+</body>
+</html>
