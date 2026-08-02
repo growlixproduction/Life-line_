@@ -1,0 +1,24 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/departments", "destination": "/departments.html" },
+    { "source": "/doctors", "destination": "/doctors.html" },
+    { "source": "/facilities", "destination": "/facilities.html" },
+    { "source": "/gallery", "destination": "/gallery.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/booking", "destination": "/booking.html" },
+    { "source": "/department/cardiology", "destination": "/department-cardiology.html" },
+    { "source": "/department/orthopedics", "destination": "/department-orthopedics.html" },
+    { "source": "/department/neurology", "destination": "/department-neurology.html" },
+    { "source": "/department/pediatrics", "destination": "/department-pediatrics.html" },
+    { "source": "/department/gynecology", "destination": "/department-gynecology.html" },
+    { "source": "/department/surgery", "destination": "/department-surgery.html" },
+    { "source": "/department/urology", "destination": "/department-urology.html" },
+    { "source": "/department/radiology", "destination": "/department-radiology.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
