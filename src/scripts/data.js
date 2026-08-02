@@ -306,7 +306,7 @@ export const hospitalData = {
     {
       title: "Life Line Hospital Main Building",
       category: "campus",
-      image: "/assets/images/hero.png",
+      image: "/assets/images/hospital_hero.png",
       caption: "Exterior view of Life Line Hospital Ambikapur on Ring Road."
     },
     {
