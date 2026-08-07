@@ -1,11 +1,11 @@
 import mysql from 'mysql2/promise';
 
-// Hostinger MySQL Connection Pool
+// Hostinger Business Web Hosting MySQL Connection Pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'lifeline_hospital_db',
+  user: process.env.DB_USER || 'u239297722_lifeline_user',
+  password: process.env.DB_PASSWORD || 'LifelineHospital#2026Secure',
+  database: process.env.DB_NAME || 'u239297722_lifeline_db',
   port: parseInt(process.env.DB_PORT || '3306'),
   waitForConnections: true,
   connectionLimit: 10,
@@ -16,7 +16,7 @@ const pool = mysql.createPool({
 export async function initDatabase() {
   try {
     const connection = await pool.getConnection();
-    console.log('⚡ Connected to Hostinger MySQL Database successfully!');
+    console.log('⚡ Connected to Hostinger MySQL Database (u239297722_lifeline_db) successfully!');
 
     // 1. Appointments Table
     await connection.query(`
@@ -77,10 +77,10 @@ export async function initDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
-    console.log('✅ Hostinger MySQL Database Schema verified & updated!');
+    console.log('✅ Hostinger MySQL Database Schema verified & tables created!');
     connection.release();
   } catch (err) {
-    console.error('⚠️ MySQL Connection Error (Running in fallback mode):', err.message);
+    console.error('⚠️ Hostinger MySQL Connection Notice:', err.message);
   }
 }
 
