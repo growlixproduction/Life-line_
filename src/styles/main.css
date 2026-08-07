@@ -1586,10 +1586,10 @@ body.admin-mode-active .site-footer {
   .header-actions .btn-primary { display: none; }
   .top-bar { display: none; }
 
-  /* HERO — Sleek 220px Mobile Card Banner & Clean Info Layout */
+  /* HERO — Full Size Edge-to-Edge Mobile Cover Banner */
   .hero-section {
-    padding: 12px 16px 24px !important;
-    background: linear-gradient(180deg, #f0fdfa 0%, #f8fafc 60%, #ffffff 100%) !important;
+    padding: 0 0 24px 0 !important;
+    background: #ffffff !important;
     overflow: hidden;
     width: 100%;
     box-sizing: border-box;
@@ -1606,24 +1606,25 @@ body.admin-mode-active .site-footer {
     margin: 0;
   }
 
-  /* Top Hero Photo Card Banner (220px Height) */
+  /* Full Size Edge-to-Edge Hero Banner Card */
   .hero-image-card {
     display: block !important;
     order: 0 !important;
-    margin: 0 0 4px 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    margin: 0 !important;
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
     position: relative !important;
-    border-radius: 16px !important;
+    border-radius: 0 0 24px 24px !important;
     overflow: hidden !important;
-    box-shadow: 0 8px 24px rgba(2, 128, 144, 0.16) !important;
-    border: 2px solid #ffffff !important;
+    box-shadow: 0 10px 30px rgba(2, 128, 144, 0.22) !important;
+    border: none !important;
   }
 
   .hero-image-wrap {
-    height: 220px !important;
+    height: 290px !important;
     width: 100% !important;
-    border-radius: 16px !important;
+    border-radius: 0 !important;
     border: none !important;
     position: relative !important;
     background: #012f38;
@@ -1641,39 +1642,39 @@ body.admin-mode-active .site-footer {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(1,47,56,0.05) 0%, rgba(1,47,56,0.35) 60%, rgba(1,47,56,0.85) 100%);
+    background: linear-gradient(180deg, rgba(1,47,56,0.1) 0%, rgba(1,47,56,0.4) 60%, rgba(1,47,56,0.85) 100%);
     pointer-events: none;
   }
 
   .hero-floating-card {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    padding: 8px 12px;
-    gap: 8px;
-    font-size: 0.75rem;
-    border-radius: 12px;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    padding: 10px 14px;
+    gap: 10px;
+    font-size: 0.775rem;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
     border: 1px solid rgba(255, 255, 255, 0.8);
     z-index: 2;
   }
 
   .hero-floating-card .floating-icon {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 8px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
   }
 
   .hero-floating-card strong {
-    font-size: 0.9rem !important;
+    font-size: 0.95rem !important;
   }
 
   .hero-floating-card span {
-    font-size: 0.75rem !important;
+    font-size: 0.775rem !important;
   }
 
   /* Text & CTA Column below Banner */
@@ -1681,15 +1682,15 @@ body.admin-mode-active .site-footer {
     order: 1 !important;
     width: 100% !important;
     box-sizing: border-box !important;
-    padding: 10px 0 0 0 !important;
+    padding: 16px 16px 0 16px !important;
   }
 
   .hero-badge {
-    display: none !important; /* Hide duplicate badge (Banner Floating Card already has 24x7 status!) */
+    display: none !important;
   }
 
   .hero-title {
-    font-size: 1.35rem !important;
+    font-size: 1.45rem !important;
     line-height: 1.25 !important;
     color: #014e59 !important;
     font-weight: 800 !important;
@@ -1708,10 +1709,10 @@ body.admin-mode-active .site-footer {
   }
 
   .hero-desc {
-    font-size: 0.825rem !important;
+    font-size: 0.85rem !important;
     margin-bottom: 14px !important;
     color: #475569 !important;
-    line-height: 1.45 !important;
+    line-height: 1.5 !important;
     width: 100% !important;
   }
 
