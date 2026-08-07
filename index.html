@@ -1467,23 +1467,22 @@
   <!-- MOBILE BOTTOM NAVIGATION BAR — APP STYLE -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile Navigation">
     <div class="mobile-bottom-nav-inner">
-      <a href="#home-view" class="mobile-bottom-nav-item active" onclick="switchView('home-view'); updateBottomNav(this);" id="mbn-home">
+      <a href="#home-view" class="mobile-bottom-nav-item active" data-view-target="home-view" id="mbn-home">
         <i data-lucide="home"></i>
         <span>Home</span>
       </a>
-      <a href="#doctors-view" class="mobile-bottom-nav-item" onclick="switchView('doctors-view'); updateBottomNav(this);" id="mbn-doctors">
+      <a href="#doctors-view" class="mobile-bottom-nav-item" data-view-target="doctors-view" id="mbn-doctors">
         <i data-lucide="stethoscope"></i>
         <span>Doctors</span>
       </a>
-      <button class="mobile-bottom-nav-item mobile-bottom-nav-cta" onclick="openBookingModal();" aria-label="Book Appointment">
+      <button class="mobile-bottom-nav-cta" onclick="openBookingModal();" aria-label="Book Appointment">
         <i data-lucide="calendar-check"></i>
-        <span>Book</span>
       </button>
-      <a href="#facilities-view" class="mobile-bottom-nav-item" onclick="switchView('facilities-view'); updateBottomNav(this);" id="mbn-facilities">
+      <a href="#facilities-view" class="mobile-bottom-nav-item" data-view-target="facilities-view" id="mbn-facilities">
         <i data-lucide="building-2"></i>
         <span>Facilities</span>
       </a>
-      <a href="#contact-view" class="mobile-bottom-nav-item" onclick="switchView('contact-view'); updateBottomNav(this);" id="mbn-contact">
+      <a href="#contact-view" class="mobile-bottom-nav-item" data-view-target="contact-view" id="mbn-contact">
         <i data-lucide="phone-call"></i>
         <span>Contact</span>
       </a>

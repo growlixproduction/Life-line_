@@ -127,7 +127,7 @@ function initNavigation() {
       }
     });
 
-    navLinks.forEach(link => {
+    document.querySelectorAll('[data-view-target]').forEach(link => {
       if (link.getAttribute('data-view-target') === targetId) {
         link.classList.add('active');
       } else {
@@ -150,8 +150,9 @@ function initNavigation() {
     setTimeout(initScrollAnimations, 100);
   }
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-view-target]');
+    if (link) {
       const targetId = link.getAttribute('data-view-target');
       if (targetId && document.getElementById(targetId)) {
         e.preventDefault();
@@ -159,7 +160,7 @@ function initNavigation() {
         switchView(targetId);
         closeMobileDrawer();
       }
-    });
+    }
   });
 
   window.addEventListener('hashchange', handleRouteHash);
