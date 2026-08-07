@@ -1915,25 +1915,39 @@ body.admin-mode-active .site-footer {
   .contact-form-box { padding: 24px 20px; }
   .info-icon { width: 40px; height: 40px; }
 
-  /* Floating Widgets on Mobile — Positioned compactly above bottom nav bar */
+  /* Floating Widgets on Mobile — Single Clean WhatsApp Button Above Bottom Nav */
   .floating-widgets {
-    bottom: 74px !important;
-    right: 10px !important;
-    gap: 8px !important;
-    z-index: 1400 !important;
-    transform: scale(0.82);
-    transform-origin: bottom right;
+    bottom: 72px !important;
+    right: 12px !important;
+    z-index: 2400 !important;
+    transform: none !important;
+  }
+
+  /* Hide redundant call & back-to-top floating buttons on mobile (Mobile Bottom Nav already has direct Contact tab!) */
+  .floating-widgets .float-call,
+  .floating-widgets #back-to-top-btn {
+    display: none !important;
   }
 
   .float-btn {
-    width: 48px !important;
-    height: 48px !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.22) !important;
+    width: 44px !important;
+    height: 44px !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
   }
 
   .float-btn svg, .float-btn i {
-    width: 24px !important;
-    height: 24px !important;
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* Mobile Performance Optimization — Disable laggy backdrop blurs on mobile GPU */
+  .site-header,
+  .hero-section,
+  .hero-floating-card,
+  .mobile-bottom-nav,
+  .hero-badge {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   /* Blog Detail View Mobile Responsive */
@@ -1997,10 +2011,11 @@ body.admin-mode-active .site-footer {
   /* Mobile Bottom Navigation Bar — App Style */
   .mobile-bottom-nav {
     display: flex !important;
+    z-index: 2500 !important;
   }
 
   /* Add bottom padding so content doesn't hide behind nav */
-  body { padding-bottom: 80px; }
+  body { padding-bottom: 76px; }
   .site-footer { margin-bottom: 0; }
 
   /* Admin */
@@ -2014,24 +2029,24 @@ body.admin-mode-active .site-footer {
   [style*="padding: 70px 60px"] { padding: 24px 16px !important; }
   [style*="padding: 40px 60px 80px"] { padding: 16px 14px 60px !important; }
 
-  .hero-title { font-size: 1.75rem; }
-  .hero-section { min-height: unset; padding: 32px 0 40px; }
+  .hero-title { font-size: 1.5rem !important; }
+  .hero-section { min-height: unset; padding: 0 0 24px 0 !important; }
 
   .departments-grid,
-  .doctors-grid { grid-template-columns: 1fr; }
+  .doctors-grid { grid-template-columns: 1fr !important; }
 
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .stat-number { font-size: 1.75rem; }
+  .stat-number { font-size: 1.35rem !important; }
 
-  .section-title { font-size: 1.45rem; }
+  .section-title { font-size: 1.25rem !important; }
 
-  .contact-form-box h3 { font-size: 1.25rem; }
+  .contact-form-box h3 { font-size: 1.15rem; }
 
   .mobile-bottom-nav-item span { font-size: 0.62rem; }
 }
 
 /* =====================================================
-   MOBILE BOTTOM NAVIGATION BAR — APP STYLE
+   MOBILE BOTTOM NAVIGATION BAR — PERFECT HIGH-PERFORMANCE UX
    ===================================================== */
 .mobile-bottom-nav {
   display: none; /* shown only on mobile via media query */
@@ -2039,14 +2054,13 @@ body.admin-mode-active .site-footer {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1500;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid rgba(0, 168, 150, 0.15);
-  box-shadow: 0 -4px 30px rgba(2, 128, 144, 0.1);
-  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
-  height: auto;
+  z-index: 2500;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  padding: 4px 6px calc(4px + env(safe-area-inset-bottom));
+  height: 60px;
+  box-sizing: border-box;
 }
 
 .mobile-bottom-nav-inner {
@@ -2055,6 +2069,7 @@ body.admin-mode-active .site-footer {
   justify-content: space-around;
   max-width: 500px;
   margin: 0 auto;
+  height: 100%;
 }
 
 .mobile-bottom-nav-item {
@@ -2062,64 +2077,74 @@ body.admin-mode-active .site-footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 6px 12px;
-  border-radius: 14px;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: var(--transition-bounce);
-  min-width: 56px;
+  min-width: 50px;
   border: none;
   background: none;
-  color: var(--text-muted);
+  color: #64748b;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  flex: 1;
 }
 
 .mobile-bottom-nav-item svg {
-  width: 22px;
-  height: 22px;
-  transition: var(--transition-bounce);
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  transition: transform 0.2s ease;
 }
 
 .mobile-bottom-nav-item span {
   font-size: 0.65rem;
   font-weight: 600;
   font-family: var(--font-body);
-  transition: var(--transition-fast);
+  color: #64748b;
 }
 
 .mobile-bottom-nav-item:active {
-  transform: scale(0.88);
+  transform: scale(0.92);
 }
 
-.mobile-bottom-nav-item.active,
-.mobile-bottom-nav-item:hover {
-  color: var(--primary);
+.mobile-bottom-nav-item.active {
+  color: #028090;
   background: rgba(2, 128, 144, 0.08);
 }
 
 .mobile-bottom-nav-item.active svg {
-  transform: scale(1.15);
-  filter: drop-shadow(0 2px 6px rgba(0, 168, 150, 0.4));
+  color: #028090;
+  transform: scale(1.1);
+}
+
+.mobile-bottom-nav-item.active span {
+  color: #028090;
+  font-weight: 700;
 }
 
 /* Center CTA button in bottom nav */
 .mobile-bottom-nav-cta {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #028090 0%, #00c4a7 100%);
   color: white !important;
-  box-shadow: 0 6px 20px rgba(0, 168, 150, 0.4);
+  box-shadow: 0 4px 14px rgba(2, 128, 144, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transform: translateY(-8px);
-  animation: glowPulse 3s ease-in-out infinite;
-  padding: 0;
-  gap: 0;
+  border: 3px solid #ffffff;
+  flex-shrink: 0;
+}
+
+.mobile-bottom-nav-cta svg {
+  color: white !important;
+  width: 22px;
+  height: 22px;
 }
 
 .mobile-bottom-nav-cta svg { width: 24px; height: 24px; }
