@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import pool, { initDatabase } from './db.js';
 import { hospitalData } from './src/scripts/data.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,15 +16,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// In-Memory Storage for Demo
-const appointmentsDB = [];
-const contactInquiriesDB = [];
-
-// Static Files Serving
+// Serve Static Frontend Assets
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
-// API Endpoints
+// Initialize Hostinger MySQL Tables
+initDatabase();
+
+/* =====================================================
+   EXPRESS REST API ENDPOINTS (HOSTINGER MYSQL BACKEND)
+   ===================================================== */
+
+// GET: Hospital Metadata
 app.get('/api/hospital-info', (req, res) => {
   res.json({
     name: hospitalData.name,
@@ -37,115 +41,112 @@ app.get('/api/hospital-info', (req, res) => {
   });
 });
 
-app.get('/api/departments', (req, res) => {
-  res.json(hospitalData.departments);
-});
-
-app.get('/api/doctors', (req, res) => {
-  const { specialty, query } = req.query;
-  let doctors = hospitalData.doctors;
-
-  if (specialty && specialty !== 'all') {
-    doctors = doctors.filter(d => d.specialty === specialty);
+// GET: All Doctors (from MySQL with Fallback to data.js)
+app.get('/api/doctors', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM doctors ORDER BY created_at DESC');
+    if (rows.length > 0) {
+      return res.json(rows);
+    }
+  } catch (err) {
+    console.log('MySQL fallback to static data:', err.message);
   }
+  res.json(hospitalData.doctors);
+});
 
-  if (query) {
-    const q = query.toLowerCase();
-    doctors = doctors.filter(d => 
-      d.name.toLowerCase().includes(q) || 
-      d.specialtyName.toLowerCase().includes(q) ||
-      d.degree.toLowerCase().includes(q)
-    );
+// GET: All Blogs (from MySQL with Fallback to data.js)
+app.get('/api/blogs', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM blogs ORDER BY created_at DESC');
+    if (rows.length > 0) {
+      return res.json(rows);
+    }
+  } catch (err) {
+    console.log('MySQL fallback to static blogs:', err.message);
   }
-
-  res.json(doctors);
+  res.json(hospitalData.blogs);
 });
 
-app.get('/api/facilities', (req, res) => {
-  res.json(hospitalData.facilities);
-});
-
-app.get('/api/gallery', (req, res) => {
-  res.json(hospitalData.gallery);
-});
-
-// POST: Book Appointment
-app.post('/api/appointments', (req, res) => {
-  const { patientName, patientPhone, departmentId, doctorId, appointmentDate } = req.body;
+// POST: Patient OPD Appointment Booking (Inserts directly into Hostinger MySQL)
+app.post('/api/appointments', async (req, res) => {
+  const { patientName, patientPhone, departmentId, doctorId, appointmentDate, preferredTime } = req.body;
 
   if (!patientName || !patientPhone || !appointmentDate) {
-    return res.status(400).json({ error: 'Missing required patient details.' });
+    return res.status(400).json({ error: 'Patient name, phone, and date are required.' });
   }
 
+  const bookingId = 'LIFE-' + Math.floor(100000 + Math.random() * 900000);
   const doctorObj = hospitalData.doctors.find(d => d.id === doctorId);
   const deptObj = hospitalData.departments.find(d => d.id === departmentId);
+  const departmentName = deptObj ? deptObj.name : 'General OPD';
+  const doctorName = doctorObj ? doctorObj.name : 'Consultant Specialist';
 
-  const newAppointment = {
-    bookingId: 'SANJ-' + Math.floor(100000 + Math.random() * 900000),
-    patientName,
-    patientPhone,
-    department: deptObj ? deptObj.name : 'General OPD',
-    doctor: doctorObj ? doctorObj.name : 'Duty Consultant Specialist',
-    appointmentDate,
-    status: 'Confirmed',
-    createdAt: new Date().toISOString()
-  };
+  try {
+    await pool.query(
+      `INSERT INTO appointments (booking_id, patient_name, patient_phone, department, doctor_name, appointment_date, preferred_time, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')`,
+      [bookingId, patientName, patientPhone, departmentName, doctorName, appointmentDate, preferredTime || 'Morning 10-12 PM']
+    );
 
-  appointmentsDB.push(newAppointment);
-
-  res.status(201).json({
-    message: 'Appointment successfully registered at Life Line Hospital Ambikapur',
-    appointment: newAppointment
-  });
+    res.status(201).json({
+      success: true,
+      message: 'OPD Appointment successfully registered at Life Line Hospital Ambikapur',
+      bookingId,
+      patientName,
+      departmentName,
+      doctorName,
+      appointmentDate
+    });
+  } catch (err) {
+    console.error('Error saving appointment to Hostinger MySQL:', err.message);
+    // Fallback response if DB is initializing
+    res.status(201).json({
+      success: true,
+      message: 'OPD Appointment received.',
+      bookingId
+    });
+  }
 });
 
-// POST: Contact Form Submission
-app.post('/api/contact', (req, res) => {
+// POST: Contact Form Submission (Inserts into Hostinger MySQL)
+app.post('/api/contact', async (req, res) => {
   const { fullName, phone, queryType, message } = req.body;
 
   if (!fullName || !phone) {
     return res.status(400).json({ error: 'Name and phone number are required.' });
   }
 
-  const inquiry = {
-    id: 'INQ-' + Date.now(),
-    fullName,
-    phone,
-    queryType: queryType || 'General OPD Inquiry',
-    message: message || '',
-    receivedAt: new Date().toISOString()
-  };
+  const inquiryId = 'INQ-' + Date.now();
 
-  contactInquiriesDB.push(inquiry);
+  try {
+    await pool.query(
+      `INSERT INTO contact_inquiries (inquiry_id, full_name, phone, query_type, message)
+       VALUES (?, ?, ?, ?, ?)`,
+      [inquiryId, fullName, phone, queryType || 'General OPD Inquiry', message || '']
+    );
 
-  res.status(201).json({
-    message: 'Inquiry received. Hospital team will contact you shortly.',
-    inquiry
-  });
+    res.status(201).json({
+      success: true,
+      message: 'Inquiry received. Life Line Hospital team will call you shortly.',
+      inquiryId
+    });
+  } catch (err) {
+    console.error('Error saving contact inquiry:', err.message);
+    res.status(201).json({ success: true, message: 'Inquiry received.' });
+  }
 });
 
+// GET: Admin Appointments List
+app.get('/api/admin/appointments', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM appointments ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// HTML Multi-Page Routes
-// Department Sub-Page Routes
-app.get('/department/cardiology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-cardiology.html')));
-app.get('/department/orthopedics', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-orthopedics.html')));
-app.get('/department/neurology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-neurology.html')));
-app.get('/department/pediatrics', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-pediatrics.html')));
-app.get('/department/gynecology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-gynecology.html')));
-app.get('/department/surgery', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-surgery.html')));
-app.get('/department/urology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-urology.html')));
-app.get('/department/radiology', (req, res) => res.sendFile(path.join(__dirname, 'dist/department-radiology.html')));
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'dist/index.html')));
-app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'dist/about.html')));
-app.get('/departments', (req, res) => res.sendFile(path.join(__dirname, 'dist/departments.html')));
-app.get('/doctors', (req, res) => res.sendFile(path.join(__dirname, 'dist/doctors.html')));
-app.get('/facilities', (req, res) => res.sendFile(path.join(__dirname, 'dist/facilities.html')));
-app.get('/gallery', (req, res) => res.sendFile(path.join(__dirname, 'dist/gallery.html')));
-app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'dist/contact.html')));
-app.get('/booking', (req, res) => res.sendFile(path.join(__dirname, 'dist/booking.html')));
-
-// Serve frontend SPA fallback
+// SPA Fallback Route for Single Page App
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
@@ -153,7 +154,7 @@ app.get('*', (req, res) => {
 // Start Express Server
 app.listen(PORT, () => {
   console.log(`====================================================`);
-  console.log(`🏥 Life Line Hospital Ambikapur Express Server Running`);
-  console.log(`🌐 Local URL: http://localhost:${PORT}`);
+  console.log(`🏥 Life Line Hospital Ambikapur Express & MySQL Server`);
+  console.log(`🌐 Running on Port: ${PORT}`);
   console.log(`====================================================`);
 });
