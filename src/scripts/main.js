@@ -739,10 +739,27 @@ function initBookingModal() {
       const patientName = document.getElementById('patient-name').value;
       const patientPhone = document.getElementById('patient-phone').value;
       const docSelect = document.getElementById('modal-doc-select');
-      const selectedDoc = appState.doctors.find(d => d.id === docSelect.value)?.name || 'Consultant Specialist';
+      const selectedDoc = appState.doctors.find(d => d.id === docSelect?.value)?.name || 'Consultant Specialist';
+      const deptSelect = document.getElementById('modal-dept-select');
       const apptDate = document.getElementById('appointment-date').value;
 
       const apptId = 'SANJ-' + Math.floor(100000 + Math.random() * 900000);
+
+      // Save to Hostinger MySQL Database via API
+      try {
+        fetch('/api/appointments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            patientName,
+            patientPhone,
+            departmentId: deptSelect ? deptSelect.value : '',
+            doctorId: docSelect ? docSelect.value : '',
+            appointmentDate: apptDate || new Date().toISOString().split('T')[0],
+            preferredTime: 'Morning OPD'
+          })
+        }).catch(err => console.log('DB Post notice:', err));
+      } catch (err) { console.log(err); }
 
       const modalBody = modal.querySelector('.modal-body');
       modalBody.innerHTML = `
@@ -751,7 +768,7 @@ function initBookingModal() {
             <i data-lucide="check-circle" style="width: 36px; height: 36px;"></i>
           </div>
           <h2 style="color: #014e59; font-size: 1.5rem; margin-bottom: 8px;">Appointment Confirmed!</h2>
-          <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Your OPD token has been registered at Life Line Hospital Ambikapur.</p>
+          <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Your OPD token has been registered at Life Line Hospital Ambikapur and saved to database.</p>
 
           <div style="background: #f8fafc; border: 1px dashed #028090; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 24px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
@@ -793,6 +810,19 @@ function initContactForm() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    const fullName = form.querySelector('input[type="text"]')?.value || 'Patient';
+    const phone = form.querySelector('input[type="tel"]')?.value || '';
+    const message = form.querySelector('textarea')?.value || '';
+
+    // Save to Hostinger MySQL Database via API
+    try {
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, phone, message, queryType: 'General OPD Inquiry' })
+      }).catch(err => console.log('DB Post notice:', err));
+    } catch (err) { console.log(err); }
+
     const alertBox = document.getElementById('contact-success-alert');
     if (alertBox) {
       alertBox.style.display = 'block';

@@ -1,12 +1,12 @@
 import mysql from 'mysql2/promise';
 import { hospitalData } from './src/scripts/data.js';
 
-// Hostinger Business Web Hosting MySQL Connection Pool
+// Hostinger Business Web Hosting Unique MySQL Connection Pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'u239297722_lifeline_user',
-  password: process.env.DB_PASSWORD || 'LifelineHospital#2026Secure',
-  database: process.env.DB_NAME || 'u239297722_lifeline_db',
+  user: process.env.DB_USER || 'u239297722_lifeusr2',
+  password: process.env.DB_PASSWORD || 'LifeLine#2026DbSecret',
+  database: process.env.DB_NAME || 'u239297722_lifeline2',
   port: parseInt(process.env.DB_PORT || '3306'),
   waitForConnections: true,
   connectionLimit: 10,
@@ -17,7 +17,7 @@ const pool = mysql.createPool({
 export async function initDatabase() {
   try {
     const connection = await pool.getConnection();
-    console.log('⚡ Connected to Hostinger MySQL Database (u239297722_lifeline_db) successfully!');
+    console.log('⚡ Connected to Unique Hostinger MySQL Database (u239297722_lifeline2) successfully!');
 
     // 1. Appointments Table
     await connection.query(`
