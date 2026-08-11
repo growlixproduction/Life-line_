@@ -306,31 +306,23 @@ function handleRouteHash() {
     hash = 'overview-view';
   }
 
-  const targetView = document.getElementById(hash);
-  if (targetView) {
-    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-    targetView.classList.add('active-view');
-
-    document.querySelectorAll('[data-view-target]').forEach(link => {
-      link.classList.toggle('active', link.getAttribute('data-view-target') === hash);
-    });
-
     // Hide nav & announcement bar when in admin, and render all admin data
+    let activeViewId = hash;
     if (hash === 'admin-login' || hash === 'login') {
       if (isAdminAuthenticated()) {
-        window.location.hash = 'admin-view';
+        window.location.hash = 'admin';
         handleRouteHash();
         return;
       }
-      hash = 'admin-login-view';
+      activeViewId = 'admin-login-view';
       document.body.classList.add('admin-mode-active');
     } else if (hash === 'admin-view' || hash === 'admin') {
       if (!isAdminAuthenticated()) {
-        window.location.hash = 'admin-login';
+        window.location.hash = 'login';
         handleRouteHash();
         return;
       }
-      hash = 'admin-view';
+      activeViewId = 'admin-view';
       document.body.classList.add('admin-mode-active');
       if (typeof populateAdminForms === 'function') populateAdminForms();
       if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
@@ -342,13 +334,22 @@ function handleRouteHash() {
       document.body.classList.remove('admin-mode-active');
     }
 
+    const targetView = document.getElementById(activeViewId);
+    if (targetView) {
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+      targetView.classList.add('active-view');
+
+      document.querySelectorAll('[data-view-target]').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-view-target') === hash || link.getAttribute('data-view-target') === activeViewId);
+      });
+    }
+
     if (hash === 'blogs-view' && typeof renderAllBlogsPage === 'function') {
       renderAllBlogsPage();
     }
 
     window.scrollTo({ top: 0, behavior: 'instant' });
     setTimeout(initScrollAnimations, 50);
-  }
 }
 
 /* ===================================================
@@ -361,7 +362,7 @@ window.isAdminAuthenticated = function() {
 };
 
 window.openAdminLoginModal = function() {
-  window.location.hash = 'admin-login';
+  window.location.hash = 'login';
   handleRouteHash();
 };
 
@@ -384,7 +385,7 @@ window.handleDedicatedAdminLoginSubmit = function(e) {
     } else {
       sessionStorage.setItem('admin_authenticated', 'true');
     }
-    window.location.hash = 'admin-view';
+    window.location.hash = 'admin';
     handleRouteHash();
     showToast('🔐 Welcome Admin! Authenticated successfully.');
   } else {
@@ -400,16 +401,16 @@ window.adminLogout = function() {
   localStorage.removeItem('admin_authenticated');
   sessionStorage.removeItem('admin_authenticated');
   document.body.classList.remove('admin-mode-active');
-  window.location.hash = 'admin-login';
+  window.location.hash = 'login';
   handleRouteHash();
   showToast('🔒 Admin session locked & logged out.');
 };
 
 window.openAdminPortal = function() {
   if (!isAdminAuthenticated()) {
-    window.location.hash = 'admin-login';
+    window.location.hash = 'login';
   } else {
-    window.location.hash = 'admin-view';
+    window.location.hash = 'admin';
   }
   handleRouteHash();
 };
