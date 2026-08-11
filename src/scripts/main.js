@@ -3575,24 +3575,37 @@ window.clearHeroImgPreview = function() {
 window.handleDocImageUpload = async function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    // 1. Show local base64 preview INSTANTLY so user sees feedback
-    showToast('Processing & uploading doctor photo...');
-    const base64Preview = await compressAndResizeImage(file, 800, 800);
-    updateDocImgPreview(base64Preview);
-    document.getElementById('admin-doc-image').value = base64Preview;
+    showToast('Processing doctor photo...');
 
-    // 2. Upload to Supabase bucket
-    try {
-      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 800, 800);
-      // Update the input URL to the Supabase public URL
-      document.getElementById('admin-doc-image').value = publicUrl;
-      // Also update preview with real URL
-      updateDocImgPreview(publicUrl);
-      showToast('\u26a1 Doctor photo uploaded to Supabase Bucket!');
-    } catch (err) {
-      console.error('Supabase bucket upload failed:', err);
-      showToast('Photo saved locally. Upload failed: ' + err.message);
-    }
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const rawDataUrl = e.target.result;
+      let finalImg = rawDataUrl;
+      try {
+        const compressed = await compressAndResizeImage(file, 400, 400, 0.85);
+        if (compressed) finalImg = compressed;
+      } catch (err) {
+        console.warn('Compression notice:', err);
+      }
+
+      const imgInput = document.getElementById('admin-doc-image');
+      if (imgInput) imgInput.value = finalImg;
+      updateDocImgPreview(finalImg);
+      showToast('⚡ Doctor photo ready in form!');
+
+      // Try uploading to Supabase bucket in background
+      try {
+        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 400, 400);
+        if (publicUrl && publicUrl.startsWith('http')) {
+          if (imgInput) imgInput.value = publicUrl;
+          updateDocImgPreview(publicUrl);
+          showToast('⚡ Doctor photo uploaded to Supabase Bucket!');
+        }
+      } catch (err) {
+        console.warn('Bucket upload fallback to Base64 DataURL:', err);
+      }
+    };
+    reader.readAsDataURL(file);
   }
 };
 
