@@ -1881,17 +1881,18 @@ window.handleDoctorFormSubmit = async function(e) {
   const timings = document.getElementById('admin-doc-timings')?.value.trim() || '10:00 AM - 02:00 PM';
   const fee = document.getElementById('admin-doc-fee')?.value.trim() || '₹500';
 
-  // Extract image URL from input field OR preview element
+  // 1. Extract image URL from input field OR preview element
   let image = document.getElementById('admin-doc-image')?.value.trim() || '';
   const previewImg = document.getElementById('doc-img-preview');
   if (!image && previewImg && previewImg.style.display !== 'none' && previewImg.src) {
     image = previewImg.src;
   }
 
+  // 2. If user selected a file, compress it immediately to Base64
   const docFileInput = document.getElementById('admin-doc-img-file');
-  if ((!image || image.length < 5) && docFileInput && docFileInput.files && docFileInput.files[0]) {
+  if (docFileInput && docFileInput.files && docFileInput.files[0]) {
     try {
-      image = await compressAndResizeImage(docFileInput.files[0], 800, 800);
+      image = await compressAndResizeImage(docFileInput.files[0], 400, 400, 0.85);
     } catch (err) {
       console.warn('Compression error:', err);
     }
@@ -1901,7 +1902,7 @@ window.handleDoctorFormSubmit = async function(e) {
 
   const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee, image };
 
-  // 1. Update local appState FIRST and persist immediately
+  // 3. Update local appState FIRST and persist immediately
   if (!appState.doctors) appState.doctors = [];
   const existingIndex = appState.doctors.findIndex(d => d.id === docId);
   if (existingIndex >= 0) {
@@ -1913,9 +1914,9 @@ window.handleDoctorFormSubmit = async function(e) {
   saveHospitalData(appState);
   renderDoctors();
   renderAdminDoctorsTable();
-  showToast(`⚡ Doctor '${name}' saved successfully!`);
+  showToast(`⚡ Photo & Profile saved for '${name}'!`);
 
-  // 2. Save to Supabase in background
+  // 4. Try background save to Supabase
   try {
     await saveDoctorToSupabase(newDoctor);
   } catch (err) {
@@ -2178,24 +2179,10 @@ function updateDocImgPreview(src) {
 
   if (src && src.length > 8) {
     preview.src = src;
-    // Show immediately without waiting for onload
     preview.style.display = 'block';
     if (pholder) pholder.style.display = 'none';
     if (clearBtn) clearBtn.style.display = 'block';
     if (wrap) { wrap.style.borderColor = 'rgba(2,128,144,0.5)'; wrap.style.borderStyle = 'solid'; wrap.style.boxShadow = '0 6px 24px rgba(2,128,144,0.2)'; }
-
-    preview.onerror = () => {
-      // If Supabase URL fails to load due to CORS, keep the preview visible anyway
-      // and don't revert to placeholder — user already uploaded successfully
-      console.warn('Preview image load warning for:', src);
-      if (src.startsWith('data:')) {
-        // Only hide for truly invalid data urls
-        preview.style.display = 'none';
-        if (pholder) { pholder.style.display = 'flex'; pholder.innerHTML = '<span style="font-size:0.75rem;color:#ef4444;">⚠️ Cannot load</span>'; }
-        if (clearBtn) clearBtn.style.display = 'none';
-        if (wrap) { wrap.style.borderColor = 'rgba(239,68,68,0.4)'; wrap.style.borderStyle = 'dashed'; }
-      }
-    };
   } else {
     preview.src = '';
     preview.style.display = 'none';
@@ -2296,19 +2283,7 @@ function handleBlogImageUpload(input) {
   }, 16 / 9);
 }
 
-function handleDocImageUpload(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-  openCropperModal(file, (croppedUrl) => {
-    const urlInput = document.getElementById('admin-doc-image');
-    if (urlInput) {
-      urlInput.value = croppedUrl;
-      updateDocImgPreview(croppedUrl);
-    }
-  }, 1 / 1);
-}
 
-window.handleDocImageUpload = handleDocImageUpload;
 
 /* ================= CROPPING & RESIZING ENGINE ================= */
 let activeCropCallback = null;
