@@ -101,18 +101,23 @@ async function syncFromSupabase() {
       }
 
       if (Array.isArray(docs) && docs.length > 0) {
-        appState.doctors = docs.map(d => ({
-          id: d.id,
-          name: d.name,
-          specialty: d.specialty_id || d.specialty || 'general',
-          specialtyName: d.specialty_name || d.specialtyName || 'General OPD',
-          designation: d.designation || d.specialty_name || 'Consultant Specialist',
-          degree: d.qualifications || d.degree || '',
-          experience: d.experience || '10+ Years Exp',
-          timings: d.opd_time || d.timings || '10:00 AM - 04:00 PM',
-          fee: typeof d.fee === 'number' ? `₹${d.fee}` : (d.fee || '₹500'),
-          image: d.image || ''
-        }));
+        const localImgMap = new Map((appState.doctors || []).map(d => [d.id, d.image]));
+        appState.doctors = docs.map(d => {
+          const localImg = localImgMap.get(d.id);
+          const finalImg = (d.image && d.image.length > 5) ? d.image : (localImg || '');
+          return {
+            id: d.id,
+            name: d.name,
+            specialty: d.specialty_id || d.specialty || 'general',
+            specialtyName: d.specialty_name || d.specialtyName || 'General OPD',
+            designation: d.designation || d.specialty_name || 'Consultant Specialist',
+            degree: d.qualifications || d.degree || '',
+            experience: d.experience || '10+ Years Exp',
+            timings: d.opd_time || d.timings || '10:00 AM - 04:00 PM',
+            fee: typeof d.fee === 'number' ? `₹${d.fee}` : (d.fee || '₹500'),
+            image: finalImg
+          };
+        });
       }
     } catch (docFetchErr) {
       console.log('Supabase doctors sync notice:', docFetchErr.message);
@@ -851,10 +856,11 @@ window.renderDepartmentDetailPage = function(deptId) {
 
 /* Render Doctors Directory */
 function getDoctorImage(doc) {
-  if (!doc) return null;
+  if (!doc) return '/Screenshot 2026-08-11 163953.png';
   const img = String(doc.image || doc.imageUrl || '').trim();
-  if (!img) return null;
-  if (img.includes('unsplash.com') || img.includes('placeholder')) return null;
+  if (!img || img.includes('unsplash.com') || img.includes('placeholder')) {
+    return null;
+  }
   if (img.startsWith('http') || img.startsWith('data:image') || img.startsWith('/')) return img;
   return null;
 }
