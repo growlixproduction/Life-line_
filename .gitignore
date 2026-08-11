@@ -4,3 +4,4 @@ dist/
 *.log
 .system_generated/
 *.metadata.json
+.env

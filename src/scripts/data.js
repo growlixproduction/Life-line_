@@ -1,363 +1,620 @@
 export const defaultHospitalData = {
   name: "Life Line Hospital Ambikapur",
   tagline: "Leading Multispecialty Healthcare & Advanced Trauma Center in Surguja Division",
-  topAnnouncement: "Emergency 24x7: +91 7774 234 999 | Ayushman PM-JAY & Cashless TPA Active",
-  address: "Near Ring Road, Opp. Collectorate Office Road, Ambikapur, Surguja District, Chhattisgarh - 497001",
-  emergencyPhone: "+91 7774 234 999",
-  opdPhone: "+91 7774 235 888",
-  whatsapp: "+91 94252 88990",
-  email: "info@lifelinehospitalambikapur.com",
+  topAnnouncement: "24x7 Emergency & Trauma Care | Emergency: +91 7879596337, +91 7879714048 | Ayushman Bharat Cashless Facility Available",
+  address: "Namnakala, Opposite Polytechnic College, Outer Ring Road, Ambikapur, Surguja, Chhattisgarh - 497001",
+  emergencyPhone: "+91 7879596337",
+  opdPhone: "+91 7879714048",
+  whatsapp: "+91 7879596337",
+  email: "Lifelinehospitalabikapur2017@gmail.com",
   logoUrl: "",
   hero: {
     badge: "24x7 Trauma & Multispecialty Care Active",
     titleMain: "World-Class Healthcare Right in",
     titleHighlight: "Ambikapur",
-    description: "Life Line Hospital brings together renowned specialist doctors, modern ICU infrastructure, 24/7 Cath Lab, and compassionate nursing care to serve Northern Chhattisgarh.",
-    imageUrl: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1200&auto=format&fit=crop&q=80",
+    description: "Life Line Hospital brings together renowned specialist doctors, 50 Beds, 3 Operation Theatres, modern ICU infrastructure, and 24/7 emergency care to serve Northern Chhattisgarh.",
+    imageUrl: "/assets/images/hospital_hero.png",
     floatingTitle: "24x7 Emergency Care",
     floatingSubtitle: "Trauma & Cardiac Team Ready"
   },
   stats: {
-    specialties: "25+",
-    doctors: "45+",
-    beds: "150+",
-    patients: "50,000+",
+    specialties: "15+",
+    doctors: "14+",
+    beds: "50",
+    patients: "25,000+",
     satisfaction: "99.4%"
   },
   departments: [
     {
       id: "cardiology",
-      name: "Cardiology & Cardiac Surgery",
+      name: "Cardiology & Cath Lab",
       icon: "heart-pulse",
-      shortDesc: "Comprehensive heart care including 24/7 Cath Lab, Angioplasty & Echo.",
-      head: "Dr. Rajeshwar Sharma (MD, DM Cardiology)"
+      shortDesc: "Comprehensive heart care, 24x7 Cath Lab, Angioplasty & TMT.",
+      head: "Dr. Sitanshu Sekhar Mohanti (MD, DM Cardiology)",
+      fullDescription: "Life Line Hospital's Department of Cardiology & Cath Lab provides round-the-clock emergency cardiac care, interventional cardiology, and non-invasive diagnostic cardiac evaluation in Ambikapur. Equipped with a digital Cath Lab, our cardiac team performs life-saving primary angioplasties during heart attack emergencies.",
+      procedures: [
+        "Emergency Coronary Angiography & PPCI Angioplasty",
+        "Single & Dual Chamber Pacemaker Implantation",
+        "2D/4D Color Doppler Echocardiography (ECHO)",
+        "Treadmill Stress Test (TMT) & Holter Monitoring",
+        "Intensive Cardiac Care Unit (ICCU) Management"
+      ],
+      equipment: [
+        "Flat-Panel Digital Cath Lab",
+        "High-Resolution Echocardiogram Machine",
+        "Treadmill Stress Test (TMT) Setup",
+        "24x7 ICCU Cardiac Monitors & Defibrillators"
+      ]
     },
     {
       id: "orthopedics",
       name: "Orthopedics & Joint Replacement",
       icon: "bone",
       shortDesc: "Knee & Hip replacements, Arthroscopy & 24x7 Complex Trauma Care.",
-      head: "Dr. Alok K. Verma (MS Ortho, Fellow Joint Replacement)"
+      head: "Dr. Nitesh Dubey & Dr. Rupesh Gupta (MS Ortho, DNB)",
+      fullDescription: "The Department of Orthopedics & Joint Replacement offers specialized surgical and non-surgical care for bone, joint, and spine disorders. Our team specializes in computer-assisted Total Knee Replacement (TKR), Total Hip Replacement (THR), Arthroscopic Keyhole Knee Surgery, and complex fracture fixation.",
+      procedures: [
+        "Total Knee Replacement (TKR) & Total Hip Replacement (THR)",
+        "Arthroscopic ACL / Meniscus Repair Keyhole Surgery",
+        "Complex Poly-Trauma & Fracture Fixation",
+        "Spine Surgery (Discectomy & Spinal Fusion)",
+        "Pediatric Orthopedics & Deformity Correction"
+      ],
+      equipment: [
+        "Laminar Airflow Operation Theatre",
+        "High-Frequency C-Arm Image Intensifier",
+        "Arthroscopy HD Camera Tower",
+        "Orthopedic Surgical Power Drills & Instruments"
+      ]
     },
     {
       id: "neurology",
       name: "Neurology & Neurosurgery",
       icon: "brain",
-      shortDesc: "Brain & Spine surgery, Stroke emergency unit, Epilepsy & Nerve care.",
-      head: "Dr. S. P. Singh (MCh Neurosurgery, AIIMS Alumnus)"
+      shortDesc: "Brain & Spine surgery, Stroke emergency unit & Nerve care.",
+      head: "Dr. Satish Chainsingh Suryawanshi (MS, MCh Neurosurgery)",
+      fullDescription: "Providing advanced neuro-surgical care and neurological treatment in Surguja district. Our neurosurgery team handles complex brain tumors, head injury trauma emergencies, brain hemorrhage evacuation, micro-discectomy for slipped disc, and acute stroke management.",
+      procedures: [
+        "Emergency Brain Trauma & Intracranial Hemorrhage Surgery",
+        "Micro-Neurosurgical Brain Tumor Excision",
+        "Lumbar & Cervical Micro-Discectomy Spine Surgery",
+        "Acute Stroke Thrombolysis & Emergency Management",
+        "Nerve Conduction Velocity (NCV) & EEG Evaluation"
+      ],
+      equipment: [
+        "High-Definition Surgical Neuro-Microscope",
+        "Dedicated Neuro ICU Monitors",
+        "3T High-Field MRI Scanner",
+        "128-Slice CT Scanner"
+      ]
     },
     {
       id: "pediatrics",
       name: "Pediatrics & Neonatology (NICU)",
       icon: "baby",
-      shortDesc: "Level-3 NICU & PICU, Newborn care, Pediatric Surgery & Vaccination.",
-      head: "Dr. Sunita Gupta (MD Pediatrics, Fellow Neonatology)"
+      shortDesc: "Level-3 NICU, Newborn care, Pediatric Surgery & Vaccination.",
+      head: "Dr. Bhavna Gardia & Dr. Sonal Gardia (MD Pediatrics, DCH)",
+      fullDescription: "The Center for Pediatrics & Neonatology offers dedicated Level-3 NICU (Neonatal Intensive Care Unit) for premature and critical newborns. Equipped with advanced incubators, neonatal ventilators, LED phototherapy, and specialized pediatric OPD care.",
+      procedures: [
+        "Level-3 Neonatal Intensive Care (Premature & Low Birth Weight Babies)",
+        "Neonatal Mechanical Ventilation & Surfactant Therapy",
+        "Neonatal Jaundice LED Phototherapy & Exchange Transfusion",
+        "Complete Pediatric Immunization & Growth Tracking",
+        "Pediatric Emergency Trauma & Infectious Disease Care"
+      ],
+      equipment: [
+        "Servo-Controlled Neonatal Incubators",
+        "Neonatal Mechanical Ventilators & CPAP",
+        "Double-Surface LED Phototherapy Units",
+        "Pediatric Pulse Oximetry & Monitors"
+      ]
     },
     {
-      id: "gynaecology",
+      id: "gynecology",
       name: "Obstetrics & Gynecology",
       icon: "sparkles",
-      shortDesc: "Painless delivery, High-risk pregnancy, Laparoscopy & Infertility clinic.",
-      head: "Dr. Ananya Mishra (MS OB-GYN, DNB)"
+      shortDesc: "Painless delivery, High-risk pregnancy & Laparoscopy.",
+      head: "Dr. Shroti Asati & Dr. Pravdha Gupta (MS Obs & Gynae, DNB)",
+      fullDescription: "Providing comprehensive women's health services, maternity care, and gynecological surgeries. Our department specializes in painless epidural deliveries, high-risk pregnancy management, laparoscopic hysterectomy, ovarian cystectomy, and infertility workup.",
+      procedures: [
+        "Normal & Epidural Painless Delivery / Emergency C-Section",
+        "High-Risk Pregnancy & Recurrent Miscarriage Care",
+        "Total Laparoscopic Hysterectomy (TLH Keyhole Uterus Surgery)",
+        "Laparoscopic Ovarian Cyst & Fibroid Excision",
+        "Infertility Workup, Follicular Monitoring & HSG"
+      ],
+      equipment: [
+        "4D Fetal Ultrasound Sonography Machine",
+        "Fetal Doppler & Cardiotocography (CTG) Monitor",
+        "HD Laparoscopy Camera Tower",
+        "Maternity Labor Suites"
+      ]
     },
     {
       id: "surgery",
       name: "General & Laparoscopic Surgery",
       icon: "activity",
       shortDesc: "Keyhole laparoscopic surgeries for gallbladder, hernia & appendix.",
-      head: "Dr. Manish Tiwari (MS General Surgery, FIAGES)"
+      head: "Dr. Prassan Mohan Tripathi & Dr. Chandranshu Tripathi (MS Surgery, FIAGES)",
+      fullDescription: "Equipped with modern laparoscopic keyhole surgical towers to perform minimally invasive abdominal surgeries with faster recovery, smaller incisions, and minimal pain. Handling routine and emergency general surgeries round-the-clock.",
+      procedures: [
+        "Laparoscopic Cholecystectomy (Gallbladder Stone Removal)",
+        "Laparoscopic Hernia Repair (Inguinal, Umbilical, Ventral)",
+        "Laparoscopic Appendectomy (Appendix Removal)",
+        "Laser Proctology for Piles, Fissure & Fistula",
+        "Emergency Abdominal Trauma & Perforation Surgery"
+      ],
+      equipment: [
+        "4K HD Laparoscopy Tower System",
+        "Harmonic Scalpel Energy Device",
+        "Electrosurgical High-Frequency Cautery",
+        "Infection-Controlled Modular OT"
+      ]
     },
     {
       id: "urology",
-      name: "Urology & Kidney Stone Care",
+      name: "Urology & Kidney Care",
       icon: "activity",
       shortDesc: "Laser stone removal (RIRS/PCNL), Prostate surgery & Kidney care.",
-      head: "Dr. Vikramaditya Roy (MCh Urology)"
+      head: "Dr. Akhilesh Ku. Bharat (MS, MCh Urology)",
+      fullDescription: "Comprehensive treatment for kidney stones, prostate enlargement, urinary tract infections, and urological cancers. Featuring advanced Holmium Laser technology for incisionless kidney stone fragmentation and TURP prostate surgery.",
+      procedures: [
+        "RIRS (Laser Kidney Stone Removal without Incisions)",
+        "PCNL (Keyhole Surgery for Large Kidney Stones)",
+        "URSL (Laser Ureteric Stone Removal)",
+        "TURP (Laser / Bipolar Prostate Surgery)",
+        "Hemodialysis Unit & Chronic Kidney Disease Care"
+      ],
+      equipment: [
+        "Holmium Laser Stone Machine",
+        "Rigid & Flexible Fiberoptic Ureteroscopes",
+        "C-Arm Fluoroscopy Imaging",
+        "Hemodialysis Machine Units"
+      ]
     },
     {
       id: "radiology",
       name: "Radiology & Diagnostic Pathology",
       icon: "scan",
-      shortDesc: "3T MRI, 128-Slice CT, 4D Ultrasound, Digital X-Ray & NABL Lab.",
-      head: "Dr. Priya Deshmukh (MD Radio-diagnosis)"
+      shortDesc: "CT-Scan, Digital X-Ray, USG, TMT & Pathology Lab.",
+      head: "Dr. Suneedh Gupta (MD Radiodiagnosis)",
+      fullDescription: "Providing 24x7 imaging and diagnostic laboratory services. Equipped with high-resolution 3T MRI, 128-Slice CT Scan, 3D/4D Color Ultrasound, Digital Mammography, Digital X-Ray, and NABL-standard automated pathology laboratory.",
+      procedures: [
+        "3T Whole Body MRI & Brain MR Angiography",
+        "128-Slice Whole Body CT Scan & CT Angiography",
+        "3D / 4D Color Doppler Ultrasound & Fetal Scan",
+        "High-Frequency Digital X-Ray & Special Procedures",
+        "24x7 Automated Clinical Biochemistry & Pathology"
+      ],
+      equipment: [
+        "3T High-Field MRI Machine",
+        "128-Slice CT Scanner",
+        "3D/4D Color Doppler Ultrasound",
+        "Automated Clinical Pathology Analyzer"
+      ]
     }
   ],
   doctors: [
     {
       id: "doc-1",
-      name: "Dr. Rajeshwar Sharma",
-      specialty: "cardiology",
-      specialtyName: "Cardiology",
-      designation: "Senior Interventional Cardiologist",
-      degree: "MD (Med), DM (Cardiology), FACC",
-      experience: "16+ Years Exp",
-      timings: "10:00 AM - 4:00 PM (Mon-Sat)",
-      fee: "₹600",
-      image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80"
+      name: "Dr. Amit Asati",
+      specialty: "general",
+      specialtyName: "General Medicine & Critical Care",
+      designation: "Senior Consultant Physician",
+      degree: "MD (Med), Senior Consultant",
+      experience: "15+ Years Exp",
+      timings: "05:00 AM - 12:00 PM",
+      fee: "₹500",
+      image: ""
     },
     {
       id: "doc-2",
-      name: "Dr. Alok K. Verma",
-      specialty: "orthopedics",
-      specialtyName: "Orthopedics",
-      designation: "Chief Joint Replacement Surgeon",
-      degree: "MS (Ortho), Fellow Joint Replacement (Germany)",
-      experience: "14+ Years Exp",
-      timings: "11:00 AM - 5:00 PM (Mon-Sat)",
+      name: "Dr. Shroti Asati",
+      specialty: "gynecology",
+      specialtyName: "Obstetrics & Gynecology",
+      designation: "Consultant Gynecologist",
+      degree: "MS (Obs & Gynae)",
+      experience: "12+ Years Exp",
+      timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=500&auto=format&fit=crop&q=80"
+      image: ""
     },
     {
       id: "doc-3",
-      name: "Dr. S. P. Singh",
-      specialty: "neurology",
-      specialtyName: "Neurosurgery",
-      designation: "Senior Brain & Spine Surgeon",
-      degree: "MS, MCh (Neurosurgery - AIIMS New Delhi)",
-      experience: "18+ Years Exp",
-      timings: "12:00 PM - 4:00 PM (Mon-Sat)",
-      fee: "₹700",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=80"
+      name: "Dr. Nitesh Dubey",
+      specialty: "orthopedics",
+      specialtyName: "Orthopedics & Joint Care",
+      designation: "Consultant Orthopedic Surgeon",
+      degree: "MS (Ortho), DNB",
+      experience: "10+ Years Exp",
+      timings: "09:00 AM - 02:00 PM",
+      fee: "₹500",
+      image: ""
     },
     {
       id: "doc-4",
-      name: "Dr. Sunita Gupta",
-      specialty: "pediatrics",
-      specialtyName: "Pediatrics & NICU",
-      designation: "Head of Neonatology & NICU",
-      degree: "MD (Pediatrics), Fellowship Neonatology",
-      experience: "12+ Years Exp",
-      timings: "10:00 AM - 6:00 PM (Mon-Sat)",
-      fee: "₹400",
-      image: "https://images.unsplash.com/photo-1594824813566-888553760462?w=500&auto=format&fit=crop&q=80"
+      name: "Dr. Prassan Mohan Tripathi",
+      specialty: "surgery",
+      specialtyName: "General & Laparoscopic Surgery",
+      designation: "Consultant Laparoscopic Surgeon",
+      degree: "MS (Surgery), FIAGES",
+      experience: "14+ Years Exp",
+      timings: "11:00 AM - 03:00 PM",
+      fee: "₹600",
+      image: ""
     },
     {
       id: "doc-5",
-      name: "Dr. Ananya Mishra",
-      specialty: "gynaecology",
-      specialtyName: "Gynecology",
-      designation: "Senior Gynecologist & Infertility Specialist",
-      degree: "MS (OB-GYN), DNB, Fellowship Laparoscopy",
-      experience: "11+ Years Exp",
-      timings: "10:30 AM - 4:30 PM (Mon-Sat)",
-      fee: "₹500",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=80"
+      name: "Dr. Sitanshu Sekhar Mohanti",
+      specialty: "cardiology",
+      specialtyName: "Cardiology & Cath Lab",
+      designation: "Interventional Cardiologist",
+      degree: "MD, DM (Cardiology)",
+      experience: "16+ Years Exp",
+      timings: "10:00 AM - 04:00 PM",
+      fee: "₹600",
+      image: ""
     },
     {
       id: "doc-6",
-      name: "Dr. Manish Tiwari",
-      specialty: "surgery",
-      specialtyName: "Laparoscopic Surgery",
-      designation: "Consultant General & Minimal Access Surgeon",
-      degree: "MS (General Surgery), FIAGES",
+      name: "Dr. Satish Chainsingh Suryawanshi",
+      specialty: "neurology",
+      specialtyName: "Neurology & Neurosurgery",
+      designation: "Senior Brain & Spine Surgeon",
+      degree: "MS, MCh (Neurosurgery)",
+      experience: "15+ Years Exp",
+      timings: "11:00 AM - 04:00 PM",
+      fee: "₹700",
+      image: ""
+    },
+    {
+      id: "doc-7",
+      name: "Dr. Bhavna Gardia",
+      specialty: "pediatrics",
+      specialtyName: "Pediatrics & Neonatology",
+      designation: "Pediatrician & Child Specialist",
+      degree: "MD (Pediatrics), DCH",
+      experience: "11+ Years Exp",
+      timings: "09:00 AM - 02:00 PM",
+      fee: "₹400",
+      image: ""
+    },
+    {
+      id: "doc-8",
+      name: "Dr. Akhilesh Ku. Bharat",
+      specialty: "urology",
+      specialtyName: "Urology & Kidney Care",
+      designation: "Consultant Urologist",
+      degree: "MS, MCh (Urology)",
       experience: "13+ Years Exp",
-      timings: "11:00 AM - 6:00 PM (Mon-Sat)",
+      timings: "01:00 PM - 03:00 PM",
+      fee: "₹600",
+      image: ""
+    },
+    {
+      id: "doc-9",
+      name: "Dr. Suneedh Gupta",
+      specialty: "radiology",
+      specialtyName: "Radiology & Imaging",
+      designation: "Chief Radiologist",
+      degree: "MD (Radiodiagnosis)",
+      experience: "10+ Years Exp",
+      timings: "24x7 On Duty",
       fee: "₹500",
-      image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=500&auto=format&fit=crop&q=80"
+      image: ""
+    },
+    {
+      id: "doc-10",
+      name: "Dr. Shivam Ku. Sharma",
+      specialty: "general",
+      specialtyName: "General Medicine",
+      designation: "Consultant Physician",
+      degree: "MD (Internal Medicine)",
+      experience: "9+ Years Exp",
+      timings: "10:00 AM - 04:00 PM",
+      fee: "₹450",
+      image: ""
+    },
+    {
+      id: "doc-11",
+      name: "Dr. Pravdha Gupta",
+      specialty: "gynecology",
+      specialtyName: "Gynecology & Infertility",
+      designation: "Gynecologist Specialist",
+      degree: "MS (Obs & Gynae), DNB",
+      experience: "10+ Years Exp",
+      timings: "10:00 AM - 03:00 PM",
+      fee: "₹500",
+      image: ""
+    },
+    {
+      id: "doc-12",
+      name: "Dr. Rupesh Gupta",
+      specialty: "orthopedics",
+      specialtyName: "Orthopedics & Trauma",
+      designation: "Orthopedic Surgeon",
+      degree: "MS (Ortho)",
+      experience: "12+ Years Exp",
+      timings: "11:00 AM - 05:00 PM",
+      fee: "₹500",
+      image: ""
+    },
+    {
+      id: "doc-13",
+      name: "Dr. Sonal Gardia",
+      specialty: "pediatrics",
+      specialtyName: "Pediatrics & NICU Specialist",
+      designation: "NICU Child Specialist",
+      degree: "MD (Pediatrics)",
+      experience: "8+ Years Exp",
+      timings: "09:30 AM - 02:30 PM",
+      fee: "₹400",
+      image: ""
+    },
+    {
+      id: "doc-14",
+      name: "Dr. Chandranshu Tripathi",
+      specialty: "surgery",
+      specialtyName: "General & Minimally Invasive Surgery",
+      designation: "General Surgeon",
+      degree: "MS (General Surgery)",
+      experience: "11+ Years Exp",
+      timings: "10:00 AM - 04:00 PM",
+      fee: "₹500",
+      image: ""
     }
+  ],
+  tpaInsurance: [
+    "Star Health",
+    "Niva Bupa",
+    "MD India",
+    "Health Care",
+    "SBI General Insurance",
+    "CSPTCL GOVT",
+    "TATA AIG Insurance",
+    "Universal Sompo General Insurance"
   ],
   facilities: [
     {
-      title: "24x7 Critical Care ICU & Cath Lab",
-      desc: "25-Bed Ultra-modern Intensive Care Unit equipped with invasive ventilators, cardiac monitors, and 24/7 emergency Cath Lab.",
+      id: "fac-1",
+      title: "Super Deluxe Emergency & 24x7 Casualty",
+      desc: "Round-the-clock emergency casualty, trauma response beds, and resident emergency medical officers ready 365 days a year.",
+      icon: "siren",
+      category: "24x7 Emergency",
+      image: "",
+      features: ["24x7 Resident RMOs", "Super Deluxe Trauma Beds", "Immediate Critical Care Response"]
+    },
+    {
+      id: "fac-2",
+      title: "Intensive Care Unit (ICU & Critical Care)",
+      desc: "Equipped Intensive Care Unit with central cardiac monitoring, high-end ventilators, central oxygen supply, and continuous 24-hour intensivist care.",
       icon: "heart-pulse",
-      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&auto=format&fit=crop&q=80"
+      category: "Critical Care",
+      image: "",
+      features: ["Advanced Mechanical Ventilators", "Multipara Vital Monitors", "24x7 Intensive Care Unit"]
     },
     {
-      title: "3T MRI & 128-Slice CT Scan Center",
-      desc: "Northern Chhattisgarh's highest precision 3T MRI & 128-Slice Cardiac CT Scanner for rapid zero-error diagnostic imaging.",
+      id: "fac-3",
+      title: "3 Operation Theatres (3 OTs)",
+      desc: "3 sterile Operation Theatres engineered with HEPA-filtered laminar airflow for infection-free orthopedics, neurosurgery, and laparoscopy.",
+      icon: "scissors",
+      category: "Surgical Suite",
+      image: "",
+      features: ["3 Operation Theatres", "Laminar Airflow & HEPA Filters", "C-Arm & Laparoscopy Towers"]
+    },
+    {
+      id: "fac-4",
+      title: "50-Bed Inpatient Wards (General & Private)",
+      desc: "50-bed total inpatient capacity featuring clean General Wards, Semi-Private Rooms, Private Wards, and Super Deluxe AC Rooms.",
+      icon: "bed",
+      category: "Inpatient Ward",
+      image: "",
+      features: ["50 Total Beds Capacity", "General & Private AC Wards", "Super Deluxe Patient Rooms"]
+    },
+    {
+      id: "fac-5",
+      title: "Cardiology & 24x7 Cath Lab Suite",
+      desc: "Flat-panel digital Cath Lab suite for emergency Coronary Angiography, Primary Angioplasty (PPCI), Pacemaker implantation, and TMT.",
+      icon: "heart",
+      category: "Cardiac Unit",
+      image: "",
+      features: ["24x7 Cath Lab Operational", "Emergency PPCI Angioplasty", "2D/4D ECHO & TMT Setup"]
+    },
+    {
+      id: "fac-6",
+      title: "Pathology & Diagnostic Center (CT, X-Ray, USG)",
+      desc: "24x7 imaging and diagnostic laboratory featuring 128-Slice CT-Scan, High-Frequency Digital X-Ray, 3D/4D Color Ultrasound (USG), TMT, and automated Pathology.",
       icon: "scan",
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80"
+      category: "24x7 Diagnostics",
+      image: "",
+      features: ["128-Slice CT-Scan & 3T MRI", "Digital X-Ray & 4D USG", "24x7 Automated Pathology Lab"]
     },
     {
-      title: "Modular Laminar OT Complex",
-      desc: "4 Ultra-clean Operation Theatres with HEPA air filters, zero-infection protocol, and advanced robotic surgical arm support.",
-      icon: "activity",
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
+      id: "fac-7",
+      title: "In-House 24x7 Pharmacy",
+      desc: "Round-the-clock fully stocked hospital pharmacy offering genuine prescribed medicines, surgical disposables, and emergency life-saving drugs.",
+      icon: "pill",
+      category: "24x7 Pharmacy",
+      image: "",
+      features: ["24x7 Open 365 Days", "100% Genuine Medicines", "Emergency Surgical Supplies"]
+    },
+    {
+      id: "fac-8",
+      title: "24x7 Emergency Ambulance Service",
+      desc: "24-hour dedicated emergency ambulance equipped with oxygen support, patient stretcher, and trained medical technician response team.",
+      icon: "truck",
+      category: "24 Hours Available",
+      image: "",
+      features: ["24-Hour Emergency Ambulance", "Oxygen & Stretcher Equipped", "Prompt Patient Transport"]
+    },
+    {
+      id: "fac-9",
+      title: "Ayushman Bharat & Govt. Schemes Cashless Counter",
+      desc: "Dedicated ground-floor TPA desk providing 100% cashless inpatient admissions, surgeries, and ICU care under Ayushman Bharat PM-JAY.",
+      icon: "shield-check",
+      category: "Govt. Schemes Available",
+      image: "",
+      features: ["Ayushman Bharat PM-JAY", "Dr. Khoobchand Baghel Scheme", "100% Cashless Admission"]
     }
   ],
   blogs: [
     {
       id: "blog-1",
-      title: "Understanding Golden Hour in Cardiac Arrest & Stroke Emergencies",
+      title: "Understanding Early Heart Attack Symptoms & Emergency First-Aid",
       category: "Cardiology",
-      date: "2026-08-01",
-      excerpt: "Recognizing early symptoms of heart attack and stroke can save lives. Learn why reaching a Cath Lab within 60 minutes is crucial for myocardial and brain tissue survival.",
-      content: `When a blood vessel supplying oxygen-rich blood to the heart muscle or brain tissue becomes obstructed by a thrombus, every single passing minute leads to irreversible cellular damage. In emergency cardiology and critical care neurology, medical experts universally stress the concept of the **'Golden Hour'** — the critical first 60 minutes following symptom onset when medical reperfusion yields maximum tissue preservation.
-
-# What Happens During Acute Myocardial Infarction & Ischemic Stroke?
-
-In acute coronary syndrome (heart attack), a cholesterol plaque rupture triggers rapid clot formation in a coronary artery. Deprived of oxygenated blood, cardiac muscle cells (cardiomyocytes) begin dying within 20 to 30 minutes. If blood flow is restored within the first hour through primary angioplasty, up to 90% of the threatened heart muscle can be permanently salvaged.
-
-Similarly, during an ischemic stroke, approximately 1.9 million brain neurons die every single minute an intracranial artery remains occluded. Rapid administration of thrombolytic therapy or mechanical thrombectomy within the golden window prevents lifelong paralysis, loss of speech, or cognitive deficit.
-
-# Recognizing Red-Flag Emergency Symptoms
-
-Early recognition is the single most decisive factor in surviving a cardiovascular or cerebrovascular emergency. Never wait to see if symptoms disappear on their own.
-
-- **Crushing Chest Discomfort:** Heavy pressure, tightness, or squeezing pain in the center of the chest lasting more than a few minutes.
-- **Radiating Pain:** Discomfort spreading to the shoulder, left arm, back, neck, jaw, or upper stomach.
-- **Associated Symptoms:** Unexplained cold sweating, acute shortness of breath, nausea, lightheadedness, or sudden rapid heart palpitations.
-- **F.A.S.T. Stroke Warning Signs:**
-  - **F (Face Drooping):** One side of the face droops or feels numb when smiling.
-  - **A (Arm Weakness):** One arm drifts downward when raising both arms.
-  - **S (Speech Difficulty):** Slurred, garbled, or confused speech when repeating a simple sentence.
-  - **T (Time to Call Emergency):** Immediate transport to a Level-3 ICU & Cath Lab hospital is vital.
-
-> 💡 **Crucial Advice:** Never attempt to drive yourself or a family member suffering severe chest pain in a private vehicle. Calling a specialized medical ambulance equipped with ECG, oxygen, and paramedics ensures emergency treatment begins right at your doorstep.
-
-# Advanced 24x7 Cath Lab & Critical Care at Life Line Hospital Ambikapur
-
-Life Line Multispecialty Hospital operates the premier round-the-clock Interventional Cardiology & Cath Lab facility in Ambikapur, serving Surguja, Korea, Surajpur, and Northern Chhattisgarh.
-
-- **40-Minute Door-to-Balloon PCI:** Our dedicated cardiac team performs primary angioplasty (stenting) within 40 minutes of patient presentation.
-- **Level-3 Cardiac ICU:** Equipped with advanced Philips cardiac monitors, invasive arterial monitoring, intra-aortic balloon pumps (IABP), and ventilator support.
-- **24x7 Diagnostic Support:** High-speed 128-slice CT Angiography, 3T Cardiac MRI, bedside 2D Echocardiography, and rapid Troponin-I blood biomarker testing.
-
-# Emergency First-Aid Guidelines Before Reaching Hospital
-
-1. **Keep the Patient Calm & Seated:** Restrict all physical exertion immediately. Sit the patient upright in a comfortable position.
-2. **Loosen Tight Clothing:** Unbutton tight collars, belts, and ties to assist unhindered breathing.
-3. **Displace Aspirin (If Advised):** If directed by emergency telephone triage, chewing a 300mg soluble aspirin tablet helps slow clot expansion.
-4. **Call Emergency Helpline:** Immediately alert Life Line Hospital 24x7 Casualty at **+91 7774 234 999**. Our trauma team will have the Cath Lab pre-activated before your arrival.`,
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80"
+      author: "Dr. Sitanshu Sekhar Mohanti",
+      date: "2026-08-05",
+      readTime: "5 min read",
+      excerpt: "Learn the crucial early warning signs of a cardiac event including chest tightness and shortness of breath.",
+      content: "Heart attacks are among the leading causes of medical emergencies. Immediate first aid saves lives.",
+      image: "/Screenshot 2026-08-11 164157.png"
     },
     {
       id: "blog-2",
-      title: "Modern Joint Replacement: Walk Comfortably Without Chronic Knee Pain",
+      title: "Total Knee Replacement: When Is It Time to Consult an Orthopedic Surgeon?",
       category: "Orthopedics",
-      date: "2026-07-28",
-      excerpt: "Computer-navigated knee replacement allows rapid recovery within 48 hours. Discover how modern implants last over 25 years and eliminate severe joint stiffness.",
-      content: `Chronic knee joint pain caused by advanced osteoarthritis affects millions of aging individuals, gradually robbing them of independent mobility, restful sleep, and quality of life. When conservative treatments like anti-inflammatory medications, joint injections, and physical therapy no longer provide pain relief, modern Total Knee Arthroplasty (TKA) offers a permanent, transformative solution.
-
-# Understanding Severe Osteoarthritis & Joint Degeneration
-
-Osteoarthritis occurs when the protective hyaline cartilage cushioning the ends of the femur (thigh bone) and tibia (shin bone) wears away over decades. Bone-on-bone friction causes severe joint stiffness, bowing of legs (varus deformity), grinding sensations (crepitus), and intense pain during walking or climbing stairs.
-
-> 💡 **Myth vs Fact:** Many patients fear joint replacement believing it requires months of painful bed rest. Modern surgical protocols and computer-assisted precision alignment enable patients to stand and take their first steps within 24 to 48 hours after surgery!
-
-# High-Precision Subvastus & Computer-Navigated Surgery
-
-At Life Line Multispecialty Hospital Ambikapur, our Chief Orthopedic Surgeon **Dr. Alok K. Verma** (MS Ortho, German Joint Replacement Fellow) utilizes advanced muscle-sparing subvastus techniques and high-precision computer navigation.
-
-- **Muscle-Sparing Approach:** Quadriceps muscles are preserved without cutting, resulting in significantly reduced post-operative pain and faster quadriceps strength recovery.
-- **Sub-Millimeter Implantation Accuracy:** Computer navigation aligns the artificial joint to match your exact natural mechanical leg axis, eliminating leg length discrepancies and premature wear.
-- **Premium Long-Life Implants:** We utilize imported cobalt-chromium and highly cross-linked polyethylene implants designed to last over 25 to 30 years.
-
-# Post-Operative Rehabilitation & Recovery Timeline
-
-- **Day 1 (Post-Op):** Patient stands upright with walker support and performs gentle ankle pump exercises under physiotherapy guidance.
-- **Day 2 to 5:** Assisted walking along corridors, stair-climbing training, and knee flexion exercises up to 90 degrees.
-- **Week 2:** Surgical skin staples removed; patient walks independently around home without walker support.
-- **Month 1 to 3:** Full return to normal daily routines, long walks, travel, and active social life without chronic joint pain.
-
-If severe knee or hip pain is keeping you dependent on others, schedule a specialist orthopedic evaluation at Life Line Hospital Ambikapur.`,
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80"
+      author: "Dr. Nitesh Dubey",
+      date: "2026-08-01",
+      readTime: "6 min read",
+      excerpt: "Severe knee pain affecting daily walking? Discover modern joint replacement options.",
+      content: "Modern joint replacement allows patients to walk pain-free within 24 to 48 hours.",
+      image: "/Screenshot 2026-08-11 164052.png"
     },
     {
       id: "blog-3",
-      title: "Pediatric Emergency & Level-3 NICU Care in Northern Chhattisgarh",
-      category: "Pediatrics",
-      date: "2026-07-15",
-      excerpt: "Advanced neonatal intensive care, radiant warmers, and 24x7 pediatric emergency care providing lifesaving support for newborns and children in Surguja.",
-      content: `Newborn health emergencies and acute childhood illnesses require specialized clinical expertise, gentle monitoring equipment, and dedicated pediatric intensive care. Serving Ambikapur, Korea, Surajpur, and Surguja division, Life Line Hospital operates a state-of-the-art Level-3 Neonatal Intensive Care Unit (NICU) and Pediatric Emergency Department.
-
-# Specialized Neonatal Critical Care Infrastructure
-
-Under the expert leadership of **Dr. Sunita Gupta** (MD Pediatrics, Fellowship Neonatology), our specialized NICU provides round-the-clock intensive care for premature deliveries, extremely low birth weight infants, neonatal jaundice, sepsis, and respiratory distress.
-
-- **Advanced Neonatal Ventilators:** Siemens servo-i ventilators providing Gentle High-Frequency Oscillation (HFO) and CPAP for fragile premature lungs.
-- **Micro-Environment Incubators:** Double-walled radiant warmers with precise temperature, humidity, and servo-monitored physiological control.
-- **24x7 Arterial Blood Gas (ABG) Lab:** Instant point-of-care blood gas, electrolyte, and bilirubin diagnostic evaluation.
-- **Phototherapy Units:** High-intensity LED phototherapy suites for rapid, safe treatment of severe neonatal jaundice.
-
-# Comprehensive Pediatric Healthcare & Immunization Desk
-
-Beyond critical care, Life Line Hospital provides complete outpatient and inpatient care for infants, young children, and adolescents.
-
-- **Vaccination & Immunization:** Full schedule of WHO-approved routine and optional pediatric vaccines.
-- **Child Growth & Development Screening:** Nutritional counseling, developmental milestone assessment, and pediatric asthma management.
-- **24x7 Pediatric Emergency Triage:** Dedicated pediatric casualty unit staffed by trained nurses and resident pediatricians for fever, seizures, dehydration, or accidental injury.
-
-For pediatric consultations or newborn emergency admissions, contact Life Line Hospital Ambikapur at **+91 7774 234 999**.`,
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&auto=format&fit=crop&q=80"
+      title: "Essential Care Guidelines During High-Risk Pregnancy",
+      category: "Gynecology",
+      author: "Dr. Shroti Asati",
+      date: "2026-07-28",
+      readTime: "4 min read",
+      excerpt: "Key precautions and prenatal monitoring tips for mothers.",
+      content: "A high-risk pregnancy requires close medical monitoring to ensure safety.",
+      image: "/Screenshot 2026-08-11 164117.png"
     }
   ],
   gallery: [
     {
-      title: "Life Line Hospital Main Building",
-      category: "campus",
-      image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&auto=format&fit=crop&q=80",
-      caption: "Exterior view of Life Line Hospital Ambikapur on Ring Road."
+      id: "gal-1",
+      title: "Life Line Hospital Main Campus Building",
+      category: "Hospital Campus",
+      caption: "Outer Ring Road, Namnakala, Ambikapur Campus",
+      image: "/Screenshot 2026-08-11 163953.png"
     },
     {
-      title: "Advanced Operation Theatre",
-      category: "infrastructure",
-      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&auto=format&fit=crop&q=80",
-      caption: "Laminar airflow zero-infection surgery suite."
+      id: "gal-2",
+      title: "Advanced Modular Operation Theatre (OT)",
+      category: "OT & ICU",
+      caption: "Laminar Airflow & HEPA Filter Surgery Suite",
+      image: "/Screenshot 2026-08-11 164052.png"
     },
     {
-      title: "3T MRI Diagnostic Wing",
-      category: "diagnostics",
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80",
-      caption: "High resolution Siemens 3T MRI Scanner in action."
+      id: "gal-3",
+      title: "24x7 Critical Care Intensive Unit (ICU)",
+      category: "OT & ICU",
+      caption: "Level-3 NICU, PICU & Cardiac Emergency Beds",
+      image: "/Screenshot 2026-08-11 164117.png"
+    },
+    {
+      id: "gal-4",
+      title: "Digital Flat-Panel Cath Lab Suite",
+      category: "Diagnostics & MRI",
+      caption: "24x7 Emergency Angioplasty & Cardiac Diagnostics",
+      image: "/Screenshot 2026-08-11 164157.png"
+    },
+    {
+      id: "gal-5",
+      title: "CT-Scan & MRI Diagnostic Center",
+      category: "Diagnostics & MRI",
+      caption: "128-Slice CT Scan, 3T MRI & High-Freq Digital X-Ray",
+      image: "/Screenshot 2026-08-11 164223.png"
     }
   ],
   testimonials: [
     {
-      quote: "When my father suffered an acute heart attack at midnight in Ambikapur, Life Line's cardiac team performed emergency angioplasty within 40 minutes. They truly saved his life!",
-      author: "Rameshwar Sahu",
-      location: "Ambikapur City",
-      department: "Cardiology"
+      patientName: "Rajeshwar Surguja",
+      location: "Ambikapur",
+      treatment: "Emergency Cardiology & ICU",
+      comment: "Life Line Hospital saved my father during a midnight cardiac emergency. Exceptional care!",
+      rating: 5
     },
     {
-      quote: "I underwent Total Knee Replacement surgery by Dr. Alok Verma. After 3 weeks of rehabilitation, I can walk comfortably without any pain.",
-      author: "Savitri Devi",
-      location: "Surajpur District",
-      department: "Orthopedics"
+      patientName: "Priyanka Singh",
+      location: "Bishrampur",
+      treatment: "Normal Delivery",
+      comment: "Extremely clean hospital with caring nursing staff. Dr. Shroti Asati ma’am guided us smoothly.",
+      rating: 5
+    },
+    {
+      patientName: "Suresh Kumar Sahu",
+      location: "Surajpur",
+      treatment: "Laparoscopic Surgery",
+      comment: "Got my gallbladder stone surgery done via keyhole laparoscopy. Discharged in 2 days pain free!",
+      rating: 5
+    }
+  ],
+  appointments: [
+    {
+      id: "LLH-894210",
+      patientName: "Rameshwar Prasad Sahu",
+      patientPhone: "9827154321",
+      department: "Cardiology & Cath Lab",
+      doctor: "Dr. Sitanshu Sekhar Mohanti",
+      date: "2026-08-12",
+      time: "10:00 AM - 12:00 PM",
+      status: "Pending",
+      type: "OPD Booking",
+      notes: "Chest discomfort OPD consultation",
+      createdTime: "2026-08-11 11:30 AM"
+    },
+    {
+      id: "LLH-731904",
+      patientName: "Sunita Verma",
+      patientPhone: "7879123456",
+      department: "Obstetrics & Gynecology",
+      doctor: "Dr. Shroti Asati",
+      date: "2026-08-11",
+      time: "05:00 AM - 12:00 PM",
+      status: "Confirmed",
+      type: "OPD Booking",
+      notes: "Prenatal routine checkup",
+      createdTime: "2026-08-11 09:15 AM"
     }
   ]
 };
 
 export function getHospitalData() {
   try {
-    const saved = localStorage.getItem('lifeline_hospital_data');
+    const saved = localStorage.getItem('lifeLineHospitalData');
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Automatically clean up old broken local paths
-      if (parsed.hero && parsed.hero.imageUrl && (parsed.hero.imageUrl.includes('.png') || parsed.hero.imageUrl.includes('sanjeevani_'))) {
+      if (parsed.hero && parsed.hero.imageUrl && (parsed.hero.imageUrl.includes('unsplash') || parsed.hero.imageUrl.includes('placeholder'))) {
         parsed.hero.imageUrl = defaultHospitalData.hero.imageUrl;
       }
-      if (parsed.facilities) {
-        parsed.facilities.forEach((f, i) => {
-          if (f.image && (f.image.includes('.png') || f.image.includes('sanjeevani_'))) {
-            f.image = defaultHospitalData.facilities[i]?.image || defaultHospitalData.hero.imageUrl;
+      if (parsed.blogs) {
+        parsed.blogs.forEach(b => {
+          if (b.image && b.image.includes('unsplash')) {
+            b.image = '/Screenshot 2026-08-11 164052.png';
           }
         });
       }
-      if (parsed.gallery) {
-        parsed.gallery.forEach((g, i) => {
-          if (g.image && (g.image.includes('.png') || g.image.includes('sanjeevani_'))) {
-            g.image = defaultHospitalData.gallery[i]?.image || defaultHospitalData.hero.imageUrl;
-          }
-        });
+      if (!parsed.gallery || parsed.gallery.length === 0 || parsed.gallery.some(g => g.image && g.image.includes('unsplash'))) {
+        parsed.gallery = JSON.parse(JSON.stringify(defaultHospitalData.gallery));
       }
-      return { ...defaultHospitalData, ...parsed };
+      if (!parsed.appointments) {
+        parsed.appointments = [...defaultHospitalData.appointments];
+      }
+      return parsed;
     }
   } catch (e) {
-    console.warn('Could not read saved data from localStorage:', e);
+    console.error('Could not read saved data from localStorage:', e);
   }
-  return defaultHospitalData;
+  return JSON.parse(JSON.stringify(defaultHospitalData));
 }
 
 export function saveHospitalData(data) {
   try {
-    localStorage.setItem('lifeline_hospital_data', JSON.stringify(data));
-    return true;
+    localStorage.setItem('lifeLineHospitalData', JSON.stringify(data));
   } catch (e) {
     console.error('Could not save data to localStorage:', e);
-    return false;
   }
 }
-
-export const hospitalData = getHospitalData();
