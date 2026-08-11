@@ -1840,15 +1840,27 @@ window.handleDoctorFormSubmit = function(e) {
   const name = nameEl.value.trim();
   let docId = document.getElementById('admin-doc-id')?.value;
   
-  if (!docId && appState.doctors) {
-    const matched = appState.doctors.find(d => d.name.toLowerCase().trim() === name.toLowerCase().trim());
-    if (matched) docId = matched.id;
+  let existingIndex = -1;
+  if (docId && appState.doctors) {
+    const cleanId = String(docId).replace(/^doc-?/, '');
+    existingIndex = appState.doctors.findIndex(d => 
+      String(d.id) === String(docId) || 
+      String(d.id).replace(/^doc-?/, '') === cleanId
+    );
   }
-  if (!docId) docId = 'doc-' + Date.now();
+  if (existingIndex < 0 && appState.doctors) {
+    existingIndex = appState.doctors.findIndex(d => d.name.toLowerCase().trim() === name.toLowerCase().trim());
+  }
+
+  if (existingIndex >= 0) {
+    docId = appState.doctors[existingIndex].id;
+  } else if (!docId) {
+    docId = 'doc-' + Date.now();
+  }
 
   const specialty = document.getElementById('admin-doc-specialty')?.value || 'general';
   const specialtyName = document.getElementById('admin-doc-specialty-name')?.value.trim() || specialty;
-  const designation = document.getElementById('admin-doc-designation')?.value.trim() || 'Consultant Doctor';
+  const designation = document.getElementById('admin-doc-designation')?.value.trim() || 'Consultant Specialist';
   const degree = document.getElementById('admin-doc-degree')?.value.trim() || 'MD / MS';
   const experience = document.getElementById('admin-doc-exp')?.value.trim() || '10+ Years Exp';
   const timings = document.getElementById('admin-doc-timings')?.value.trim() || '10:00 AM - 02:00 PM';
@@ -1856,7 +1868,6 @@ window.handleDoctorFormSubmit = function(e) {
   let rawFee = document.getElementById('admin-doc-fee')?.value.trim() || '₹500';
   const formattedFee = rawFee.startsWith('₹') ? rawFee : `₹${rawFee}`;
 
-  // 1. Extract image URL from input field OR preview element
   let image = document.getElementById('admin-doc-image')?.value.trim().replace(/[\r\n]+/g, '') || '';
   const previewImg = document.getElementById('doc-img-preview');
   if (!image && previewImg && previewImg.style.display !== 'none' && previewImg.src) {
@@ -1865,7 +1876,6 @@ window.handleDoctorFormSubmit = function(e) {
 
   image = image || '';
 
-  // 2. Multi-key permanent local storage locking
   if (image && image.length > 5) {
     const cleanId = String(docId).replace(/^doc-?/, '');
     const cleanNameKey = name.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -1881,9 +1891,7 @@ window.handleDoctorFormSubmit = function(e) {
 
   const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee: formattedFee, image };
 
-  // 3. Update local appState immediately
   if (!appState.doctors) appState.doctors = [];
-  const existingIndex = appState.doctors.findIndex(d => d.id === docId);
   if (existingIndex >= 0) {
     appState.doctors[existingIndex] = newDoctor;
   } else {
@@ -1895,7 +1903,6 @@ window.handleDoctorFormSubmit = function(e) {
   renderAdminDoctorsTable();
   showToast(`⚡ Doctor '${name}' profile saved live!`);
 
-  // 4. Try background save to Supabase DB asynchronously
   setTimeout(() => {
     saveDoctorToSupabase(newDoctor).catch(err => console.warn('Supabase DB save notice:', err));
   }, 10);
@@ -3177,11 +3184,15 @@ window.openManualApptModal = function() {
 };
 
 window.editDoctorInAdmin = function(docId) {
-  const doc = appState.doctors.find(d => d.id === docId);
+  if (!appState.doctors) return;
+  const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
+  const doc = appState.doctors.find(d => 
+    String(d.id || '') === String(docId || '') || 
+    String(d.id || '').replace(/^doc-?/, '') === cleanTargetId
+  );
   if (!doc) return;
 
-  const cachedPhoto = localStorage.getItem('doc_photo_' + doc.id);
-  const docImage = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
+  const docImage = getDoctorImage(doc) || '';
 
   const idEl = document.getElementById('admin-doc-id');
   const nameEl = document.getElementById('admin-doc-name');
@@ -3198,14 +3209,13 @@ window.editDoctorInAdmin = function(docId) {
   if (nameEl) nameEl.value = doc.name || '';
   if (specEl) specEl.value = doc.specialty || 'general';
   if (specNameEl) specNameEl.value = doc.specialtyName || doc.specialty || '';
-  if (desigEl) desigEl.value = doc.designation || '';
+  if (desigEl) desigEl.value = doc.designation || 'Consultant Specialist';
   if (degEl) degEl.value = doc.degree || '';
   if (expEl) expEl.value = doc.experience || '';
   if (timEl) timEl.value = doc.timings || '';
   if (feeEl) feeEl.value = doc.fee || '';
   if (imgEl) imgEl.value = docImage || '';
 
-  // Show photo preview when editing
   if (typeof updateDocImgPreview === 'function') {
     updateDocImgPreview(docImage || '');
   }
@@ -3216,6 +3226,29 @@ window.editDoctorInAdmin = function(docId) {
   setTimeout(() => {
     document.getElementById('admin-doctor-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
+};
+
+window.deleteDoctorInAdmin = function(docId) {
+  if (!appState.doctors) return;
+  const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
+  const doc = appState.doctors.find(d => 
+    String(d.id || '') === String(docId || '') || 
+    String(d.id || '').replace(/^doc-?/, '') === cleanTargetId
+  );
+  if (!doc) return;
+
+  if (confirm(`Are you sure you want to delete ${doc.name}?`)) {
+    appState.doctors = appState.doctors.filter(d => 
+      String(d.id || '') !== String(doc.id || '') && 
+      String(d.id || '').replace(/^doc-?/, '') !== cleanTargetId
+    );
+    saveHospitalData(appState);
+    renderDoctors();
+    renderAdminDoctorsTable();
+    showToast(`Deleted ${doc.name}`);
+
+    deleteDoctorFromSupabase(doc.id).catch(err => console.warn('Supabase delete notice:', err));
+  }
 };
 
 
