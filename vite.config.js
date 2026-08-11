@@ -12,6 +12,20 @@ export default defineConfig({
       }
     }
   },
+  plugins: [
+    {
+      name: 'admin-route-fallback',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const rawUrl = (req.url || '').split('?')[0].toLowerCase();
+          if (rawUrl === '/admin' || rawUrl === '/login' || rawUrl === '/admin/' || rawUrl === '/login/') {
+            req.url = '/index.html';
+          }
+          next();
+        });
+      }
+    }
+  ],
   build: {
     rollupOptions: {
       input: {

@@ -267,89 +267,107 @@ function initNavigation() {
   });
 
   window.addEventListener('hashchange', handleRouteHash);
+  window.addEventListener('popstate', handleRouteHash);
+}
+
+function getRoutePath() {
+  const path = (window.location.pathname || '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+  const hash = (window.location.hash || '').replace('#', '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+
+  if (path === 'admin' || hash === 'admin' || hash === 'admin-view') return 'admin';
+  if (path === 'login' || hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view') return 'login';
+  
+  if (hash.startsWith('department-')) return hash;
+  if (hash) return hash;
+  if (path) return path;
+
+  return 'home-view';
 }
 
 function handleRouteHash() {
-  let hash = window.location.hash.replace('#', '').replace(/^\//, '').replace(/\/$/, '').trim();
-  let currentDeptId = null;
+  const route = getRoutePath();
 
-  if (hash.startsWith('department-') && hash !== 'department-detail-view') {
-    currentDeptId = hash.replace('department-', '');
-  }
-
-  if (currentDeptId) {
-    hash = 'department-detail-view';
-    setTimeout(() => renderDepartmentDetailPage(currentDeptId), 10);
-  } else if (!hash || !document.getElementById(hash)) {
-    if (hash.includes('admin')) {
-      hash = 'admin-view';
-    } else if (hash.includes('doctor')) {
-      hash = 'doctors-view';
-    } else if (hash.includes('blog')) {
-      hash = 'blogs-view';
-    } else if (hash.includes('dept') || hash.includes('department')) {
-      hash = 'departments-view';
-    } else if (hash.includes('facility') || hash.includes('facilities')) {
-      hash = 'facilities-view';
-    } else if (hash.includes('contact')) {
-      hash = 'contact-view';
-    } else if (hash.includes('accreditation') || hash.includes('tpa') || hash.includes('insurance')) {
-      hash = 'accreditations-view';
-    } else if (hash.includes('overview') || hash.includes('about') || hash.includes('vision')) {
-      hash = 'overview-view';
-    } else {
-      hash = 'home-view';
-    }
-  }
-
-  if (hash === 'about-view' && !document.getElementById('about-view')) {
-    hash = 'overview-view';
-  }
-
-    // Hide nav & announcement bar when in admin, and render all admin data
-    let activeViewId = hash;
-    if (hash === 'admin-login' || hash === 'login') {
-      if (isAdminAuthenticated()) {
+  if (route === 'login') {
+    if (isAdminAuthenticated()) {
+      if (window.location.pathname === '/login' || window.location.pathname === '/login/') {
+        window.history.replaceState(null, '', '/admin');
+      } else {
         window.location.hash = 'admin';
-        handleRouteHash();
-        return;
       }
-      activeViewId = 'admin-login-view';
-      document.body.classList.add('admin-mode-active');
-    } else if (hash === 'admin-view' || hash === 'admin') {
-      if (!isAdminAuthenticated()) {
-        window.location.hash = 'login';
-        handleRouteHash();
-        return;
-      }
-      activeViewId = 'admin-view';
-      document.body.classList.add('admin-mode-active');
-      if (typeof populateAdminForms === 'function') populateAdminForms();
-      if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
-      if (typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
-      if (typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
-      if (typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
-      if (typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
-    } else {
-      document.body.classList.remove('admin-mode-active');
+      return handleRouteHash();
     }
-
-    const targetView = document.getElementById(activeViewId);
-    if (targetView) {
-      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-      targetView.classList.add('active-view');
-
-      document.querySelectorAll('[data-view-target]').forEach(link => {
-        link.classList.toggle('active', link.getAttribute('data-view-target') === hash || link.getAttribute('data-view-target') === activeViewId);
-      });
-    }
-
-    if (hash === 'blogs-view' && typeof renderAllBlogsPage === 'function') {
-      renderAllBlogsPage();
-    }
-
+    
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+    const loginView = document.getElementById('admin-login-view');
+    if (loginView) loginView.classList.add('active-view');
+    document.body.classList.add('admin-mode-active');
     window.scrollTo({ top: 0, behavior: 'instant' });
-    setTimeout(initScrollAnimations, 50);
+    return;
+  }
+
+  if (route === 'admin') {
+    if (!isAdminAuthenticated()) {
+      if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+        window.history.replaceState(null, '', '/login');
+      } else {
+        window.location.hash = 'login';
+      }
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+      const loginView = document.getElementById('admin-login-view');
+      if (loginView) loginView.classList.add('active-view');
+      document.body.classList.add('admin-mode-active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+    const adminView = document.getElementById('admin-view');
+    if (adminView) adminView.classList.add('active-view');
+    document.body.classList.add('admin-mode-active');
+
+    if (typeof populateAdminForms === 'function') populateAdminForms();
+    if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+    if (typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
+    if (typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
+    if (typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
+    if (typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    return;
+  }
+
+  // Public pages
+  document.body.classList.remove('admin-mode-active');
+
+  let targetId = route;
+  if (route.startsWith('department-') && route !== 'department-detail-view') {
+    const currentDeptId = route.replace('department-', '');
+    targetId = 'department-detail-view';
+    setTimeout(() => renderDepartmentDetailPage(currentDeptId), 10);
+  } else if (!document.getElementById(targetId)) {
+    if (route.includes('doctor')) targetId = 'doctors-view';
+    else if (route.includes('blog')) targetId = 'blogs-view';
+    else if (route.includes('dept') || route.includes('department')) targetId = 'departments-view';
+    else if (route.includes('facility') || route.includes('facilities')) targetId = 'facilities-view';
+    else if (route.includes('contact')) targetId = 'contact-view';
+    else if (route.includes('overview') || route.includes('about')) targetId = 'overview-view';
+    else targetId = 'home-view';
+  }
+
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+  const targetView = document.getElementById(targetId);
+  if (targetView) {
+    targetView.classList.add('active-view');
+    document.querySelectorAll('[data-view-target]').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('data-view-target') === route || link.getAttribute('data-view-target') === targetId);
+    });
+  }
+
+  if (targetId === 'blogs-view' && typeof renderAllBlogsPage === 'function') {
+    renderAllBlogsPage();
+  }
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setTimeout(initScrollAnimations, 50);
 }
 
 /* ===================================================
@@ -372,22 +390,25 @@ window.closeAdminLoginModal = function() {
 };
 
 window.handleDedicatedAdminLoginSubmit = function(e) {
-  e.preventDefault();
+  if (e) e.preventDefault();
   const user = document.getElementById('page-admin-username')?.value.trim();
   const pass = document.getElementById('page-admin-password')?.value.trim();
   const errorEl = document.getElementById('page-admin-login-error');
-  const rememberMe = document.getElementById('page-admin-remember-me')?.checked;
 
   if (user === 'admin' && pass === 'admin') {
     if (errorEl) errorEl.style.display = 'none';
-    if (rememberMe) {
-      localStorage.setItem('admin_authenticated', 'true');
+    
+    // Always store permanently in localStorage so user logs in ONLY ONCE!
+    localStorage.setItem('admin_authenticated', 'true');
+    sessionStorage.setItem('admin_authenticated', 'true');
+
+    if (window.location.pathname === '/login' || window.location.pathname === '/login/') {
+      window.history.pushState(null, '', '/admin');
     } else {
-      sessionStorage.setItem('admin_authenticated', 'true');
+      window.location.hash = 'admin';
     }
-    window.location.hash = 'admin';
     handleRouteHash();
-    showToast('🔐 Welcome Admin! Authenticated successfully.');
+    showToast('🔐 Welcome Admin! Session authenticated.');
   } else {
     if (errorEl) errorEl.style.display = 'block';
   }
