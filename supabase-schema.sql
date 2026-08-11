@@ -133,8 +133,8 @@ CREATE POLICY "Allow public insert appointments" ON public.appointments FOR INSE
 DROP POLICY IF EXISTS "Allow public read doctors" ON public.doctors;
 CREATE POLICY "Allow public read doctors" ON public.doctors FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Allow public insert doctors" ON public.doctors;
-CREATE POLICY "Allow public insert doctors" ON public.doctors FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow public all doctors" ON public.doctors;
+CREATE POLICY "Allow public all doctors" ON public.doctors FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read departments" ON public.departments;
 CREATE POLICY "Allow public read departments" ON public.departments FOR SELECT USING (true);
