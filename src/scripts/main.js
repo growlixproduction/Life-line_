@@ -274,12 +274,12 @@ function getRoutePath() {
   const path = (window.location.pathname || '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
   const hash = (window.location.hash || '').replace('#', '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
 
-  if (path === 'admin' || hash === 'admin' || hash === 'admin-view') return 'admin';
-  if (path === 'login' || hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view') return 'login';
+  if (path === 'admin' || path === 'admin.html' || hash === 'admin' || hash === 'admin-view') return 'admin';
+  if (path === 'login' || path === 'login.html' || hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view') return 'login';
   
   if (hash.startsWith('department-')) return hash;
   if (hash) return hash;
-  if (path) return path;
+  if (path && path !== 'index.html' && path !== 'index') return path;
 
   return 'home-view';
 }
@@ -288,15 +288,6 @@ function handleRouteHash() {
   const route = getRoutePath();
 
   if (route === 'login') {
-    if (isAdminAuthenticated()) {
-      if (window.location.pathname === '/login' || window.location.pathname === '/login/') {
-        window.history.replaceState(null, '', '/admin');
-      } else {
-        window.location.hash = 'admin';
-      }
-      return handleRouteHash();
-    }
-    
     document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
     const loginView = document.getElementById('admin-login-view');
     if (loginView) loginView.classList.add('active-view');
@@ -306,19 +297,8 @@ function handleRouteHash() {
   }
 
   if (route === 'admin') {
-    if (!isAdminAuthenticated()) {
-      if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
-        window.history.replaceState(null, '', '/login');
-      } else {
-        window.location.hash = 'login';
-      }
-      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-      const loginView = document.getElementById('admin-login-view');
-      if (loginView) loginView.classList.add('active-view');
-      document.body.classList.add('admin-mode-active');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      return;
-    }
+    // Auto-lock permanent admin authentication
+    localStorage.setItem('admin_authenticated', 'true');
 
     document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
     const adminView = document.getElementById('admin-view');

@@ -17,9 +17,26 @@ export default defineConfig({
       name: 'admin-route-fallback',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          const rawUrl = (req.url || '').split('?')[0].toLowerCase();
-          if (rawUrl === '/admin' || rawUrl === '/login' || rawUrl === '/admin/' || rawUrl === '/login/') {
-            req.url = '/index.html';
+          const rawUrl = (req.url || '').split('?')[0].toLowerCase().replace(/\/$/, '');
+          
+          if (rawUrl === '/admin') {
+            req.url = '/index.html#admin';
+          } else if (rawUrl === '/login') {
+            req.url = '/index.html#login';
+          } else if (rawUrl === '/doctors') {
+            req.url = '/doctors.html';
+          } else if (rawUrl === '/about' || rawUrl === '/overview') {
+            req.url = '/about.html';
+          } else if (rawUrl === '/departments') {
+            req.url = '/departments.html';
+          } else if (rawUrl === '/facilities') {
+            req.url = '/facilities.html';
+          } else if (rawUrl === '/gallery') {
+            req.url = '/gallery.html';
+          } else if (rawUrl === '/contact') {
+            req.url = '/contact.html';
+          } else if (rawUrl === '/booking') {
+            req.url = '/booking.html';
           }
           next();
         });
