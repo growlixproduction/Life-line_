@@ -3279,10 +3279,58 @@ window.editDoctorInAdmin = function(docId) {
 };
 
 
+async function ensurePublicImageUrl(imageSource, docId) {
+  if (!imageSource) return '';
+  if (imageSource.startsWith('http://') || imageSource.startsWith('https://')) {
+    return imageSource;
+  }
+  if (imageSource.startsWith('data:image/')) {
+    try {
+      const mimeMatch = imageSource.match(/^data:(image\/\w+);base64,/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+      const ext = mimeType.split('/')[1] || 'jpg';
+      const base64Clean = imageSource.replace(/^data:image\/\w+;base64,/, '');
+
+      const byteCharacters = atob(base64Clean);
+      const byteArray = new Uint8Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
+      }
+      const blob = new Blob([byteArray], { type: mimeType });
+      const fileName = `doctor-${docId}-${Date.now()}.${ext}`;
+
+      const uploadEndpoint = `${SUPABASE_STORAGE_URL}/storage/v1/object/hospital-assets/${fileName}`;
+      const res = await fetch(uploadEndpoint, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apiKey': SUPABASE_ANON_KEY,
+          'Content-Type': mimeType,
+          'x-upsert': 'true'
+        },
+        body: blob
+      });
+
+      if (res.ok || res.status === 200 || res.status === 201) {
+        return `${SUPABASE_STORAGE_URL}/storage/v1/object/public/hospital-assets/${fileName}`;
+      }
+    } catch (err) {
+      console.warn('Base64 auto-upload to Supabase bucket notice:', err);
+    }
+  }
+  return imageSource;
+}
+
 async function saveDoctorToSupabase(newDoctor) {
   const numericFee = typeof newDoctor.fee === 'number' 
     ? newDoctor.fee 
     : (parseFloat(String(newDoctor.fee || '').replace(/[^0-9.]/g, '')) || 500);
+
+  // Auto-convert Base64 DataURL to public HTTPS Bucket URL for Supabase DB
+  let publicImgUrl = newDoctor.image || '';
+  if (publicImgUrl.startsWith('data:image/')) {
+    publicImgUrl = await ensurePublicImageUrl(publicImgUrl, newDoctor.id);
+  }
 
   const docPayload = {
     id: newDoctor.id,
@@ -3293,7 +3341,7 @@ async function saveDoctorToSupabase(newDoctor) {
     experience: newDoctor.experience || '10+ Years Exp',
     opd_time: newDoctor.timings || '10:00 AM - 02:00 PM',
     fee: numericFee,
-    image: newDoctor.image || ''
+    image: publicImgUrl || ''
   };
 
   try {
@@ -3319,6 +3367,14 @@ async function saveDoctorToSupabase(newDoctor) {
         },
         body: JSON.stringify(docPayload)
       });
+    }
+
+    if (publicImgUrl && publicImgUrl.startsWith('http')) {
+      newDoctor.image = publicImgUrl;
+      const idx = (appState.doctors || []).findIndex(d => d.id === newDoctor.id);
+      if (idx >= 0) appState.doctors[idx].image = publicImgUrl;
+      saveHospitalData(appState);
+      renderAdminDoctorsTable();
     }
   } catch (e) {
     console.warn('Supabase DB save warning:', e);
