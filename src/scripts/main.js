@@ -878,8 +878,8 @@ window.renderDepartmentDetailPage = function(deptId) {
 
 /* Render Doctors Directory */
 function getDoctorImage(doc) {
-  if (!doc) return '/Screenshot 2026-08-11 163953.png';
-  const img = String(doc.image || doc.imageUrl || '').trim();
+  if (!doc) return null;
+  let img = String(doc.image || doc.imageUrl || '').trim().replace(/[\r\n]+/g, '');
   if (!img || img.includes('unsplash.com') || img.includes('placeholder')) {
     return null;
   }
@@ -1871,8 +1871,16 @@ window.handleDoctorFormSubmit = async function(e) {
     return;
   }
 
-  const docId = document.getElementById('admin-doc-id')?.value || ('doc-' + Date.now());
   const name = nameEl.value.trim();
+  let docId = document.getElementById('admin-doc-id')?.value;
+  
+  // If docId is missing, auto-match existing doctor by name
+  if (!docId && appState.doctors) {
+    const matched = appState.doctors.find(d => d.name.toLowerCase().trim() === name.toLowerCase().trim());
+    if (matched) docId = matched.id;
+  }
+  if (!docId) docId = 'doc-' + Date.now();
+
   const specialty = document.getElementById('admin-doc-specialty')?.value || 'general';
   const specialtyName = document.getElementById('admin-doc-specialty-name')?.value.trim() || specialty;
   const designation = document.getElementById('admin-doc-designation')?.value.trim() || 'Consultant Doctor';
@@ -1882,17 +1890,18 @@ window.handleDoctorFormSubmit = async function(e) {
   const fee = document.getElementById('admin-doc-fee')?.value.trim() || '₹500';
 
   // 1. Extract image URL from input field OR preview element
-  let image = document.getElementById('admin-doc-image')?.value.trim() || '';
+  let image = document.getElementById('admin-doc-image')?.value.trim().replace(/[\r\n]+/g, '') || '';
   const previewImg = document.getElementById('doc-img-preview');
   if (!image && previewImg && previewImg.style.display !== 'none' && previewImg.src) {
-    image = previewImg.src;
+    image = previewImg.src.replace(/[\r\n]+/g, '');
   }
 
   // 2. If user selected a file, compress it immediately to Base64
   const docFileInput = document.getElementById('admin-doc-img-file');
-  if (docFileInput && docFileInput.files && docFileInput.files[0]) {
+  if ((!image || image.length < 10) && docFileInput && docFileInput.files && docFileInput.files[0]) {
     try {
       image = await compressAndResizeImage(docFileInput.files[0], 400, 400, 0.85);
+      image = (image || '').replace(/[\r\n]+/g, '');
     } catch (err) {
       console.warn('Compression error:', err);
     }
@@ -2442,10 +2451,11 @@ function renderAdminDoctorsTable() {
   if (!tbody || !appState.doctors) return;
 
   tbody.innerHTML = appState.doctors.map(doc => {
-    const validImg = getDoctorImage(doc);
+    const rawImg = getDoctorImage(doc);
+    const validImg = rawImg ? rawImg.replace(/"/g, '&quot;') : null;
     const initial = (doc.name || 'D').replace(/^Dr\.\s*/i, '').charAt(0).toUpperCase() || 'D';
     const imgHtml = validImg ? `
-      <img src="${validImg}" alt="${doc.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+      <img src="${validImg}" alt="${doc.name.replace(/"/g, '&quot;')}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
     ` : `
       <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #028090, #00c4a7); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(2,128,144,0.2);">
         ${initial}
