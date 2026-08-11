@@ -858,7 +858,7 @@ window.renderDepartmentDetailPage = function(deptId) {
 
 /* Render Doctors Directory */
 function getDoctorImage(doc) {
-  if (!doc) return null;
+  if (!doc) return '/assets/images/doctors_team.png';
   const cleanId = String(doc.id || '').replace(/^doc-?/, '');
   const cleanNameKey = String(doc.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -869,99 +869,74 @@ function getDoctorImage(doc) {
 
   let img = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
   img = String(img || '').trim().replace(/[\r\n]+/g, '');
-  if (!img || img.includes('unsplash.com') || img.includes('placeholder')) {
-    return null;
-  }
-  if (img.startsWith('http') || img.startsWith('data:image') || img.startsWith('/') || img.startsWith('assets/') || img.includes('.')) {
+  if (img && img.length > 5 && !img.includes('unsplash.com') && !img.includes('placeholder')) {
     return img;
   }
-  return null;
+  return '/assets/images/doctors_team.png';
 }
 
 function renderDoctors(filterDept = 'all', searchQuery = '') {
   const doctorContainers = document.querySelectorAll('.doctors-grid');
   const doctorSelectModal = document.getElementById('modal-doc-select');
-  if (!doctorContainers.length) return;
+  if (!doctorContainers.length && !doctorSelectModal) return;
 
-  let filtered = appState.doctors;
+  let filtered = appState.doctors || [];
 
-  if (filterDept !== 'all') {
-    filtered = filtered.filter(d => d.specialty === filterDept);
+  if (filterDept && filterDept !== 'all') {
+    filtered = filtered.filter(d => (d.specialty || '').toLowerCase() === filterDept.toLowerCase());
   }
 
-  if (searchQuery.trim() !== '') {
+  if (searchQuery) {
     const q = searchQuery.toLowerCase();
     filtered = filtered.filter(d => 
-      d.name.toLowerCase().includes(q) || 
-      d.specialtyName.toLowerCase().includes(q) ||
-      d.degree.toLowerCase().includes(q)
+      (d.name || '').toLowerCase().includes(q) || 
+      (d.specialtyName || d.specialty || '').toLowerCase().includes(q) ||
+      (d.degree || '').toLowerCase().includes(q)
     );
   }
 
-  let htmlContent = '';
-  if (filtered.length === 0) {
-    htmlContent = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
-        <i data-lucide="user-x" style="width: 48px; height: 48px; color: #94a3b8; margin-bottom: 12px;"></i>
-        <h3 style="color: #0f172a;">No doctors found matching your criteria</h3>
-        <p style="color: #64748b; margin-top: 6px; font-size: 0.9rem;">Try searching for another specialty or clear your filter.</p>
+  const html = filtered.map(doc => {
+    const photoUrl = getDoctorImage(doc);
+    const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+
+    return `
+      <div class="doctor-card" style="background: white; border-radius: 16px; border: 1px solid rgba(2,128,144,0.12); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease;">
+        <div>
+          <div style="position: relative; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; background: #e6f7f5;">
+            <img src="${photoUrl}" alt="${doc.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(2,128,144,0.9); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.725rem; font-weight: 700;">
+              ${doc.specialtyName || doc.specialty}
+            </span>
+          </div>
+
+          <span style="font-size: 0.75rem; color: #028090; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">${doc.designation || 'Consultant Specialist'}</span>
+          <h3 style="font-size: 1.1rem; color: #014e59; font-weight: 800; margin: 4px 0 6px 0;">${doc.name}</h3>
+          <p style="font-size: 0.825rem; color: #64748b; margin-bottom: 8px; font-weight: 500;">${doc.degree}</p>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+            <span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 6px; font-size: 0.725rem; font-weight: 600;">⏱️ ${doc.timings || '10:00 AM - 02:00 PM'}</span>
+            <span style="background: #e6f7f5; color: #028090; padding: 3px 8px; border-radius: 6px; font-size: 0.725rem; font-weight: 700;">🎖️ ${doc.experience || '10+ Years Exp'}</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 12px; margin-top: 10px;">
+          <div>
+            <span style="display: block; font-size: 0.7rem; color: #94a3b8; font-weight: 700;">OPD FEE</span>
+            <strong style="font-size: 1rem; color: #014e59;">${feeText}</strong>
+          </div>
+        </div>
       </div>
     `;
-  } else {
-    htmlContent = filtered.map((doc, idx) => {
-      const validImg = getDoctorImage(doc);
-      const imgHtml = validImg ? `
-        <img src="${validImg}" alt="${doc.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
-      ` : `
-        <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f7f4,#f0f9ff);color:#028090;">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.75;">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span style="font-size:0.75rem;font-weight:600;color:#028090;margin-top:6px;opacity:0.8;">Photo not uploaded</span>
-        </div>
-      `;
+  }).join('');
 
-      return `
-        <div class="doctor-card reveal-on-scroll delay-${(idx % 4 + 1) * 100}">
-          <div class="doctor-img-wrap">
-            ${imgHtml}
-            <span class="doctor-badge">${doc.specialtyName}</span>
-          </div>
-          <div class="doctor-info">
-            <span class="doctor-dept">${doc.designation || doc.specialtyName}</span>
-            <h3 class="doctor-name">${doc.name}</h3>
-            <p class="doctor-degree">${doc.degree}</p>
-            <div>
-              <span class="doctor-exp">${doc.experience}</span>
-            </div>
-            <p style="font-size: 0.825rem; color: #64748b; margin-top: 6px;">
-              <i data-lucide="clock" style="width: 14px; height: 14px; display: inline;"></i> ${doc.timings}
-            </p>
-          </div>
-          <div class="doctor-footer">
-            <div>
-              <span style="font-size: 0.725rem; color: #64748b; display: block; text-transform: uppercase; font-weight: 700;">OPD Fee</span>
-              <span class="doctor-fee">${doc.fee}</span>
-            </div>
-            <button class="btn btn-primary" onclick="openBookingForDoctor('${doc.id}')" style="padding: 8px 16px; font-size: 0.85rem;">
-              Book OPD
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  doctorContainers.forEach(container => container.innerHTML = htmlContent);
+  doctorContainers.forEach(container => {
+    container.innerHTML = html || `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 30px;">No doctors found matching criteria.</p>`;
+  });
 
   if (doctorSelectModal) {
     doctorSelectModal.innerHTML = `<option value="">Select Doctor (Optional)</option>` + 
-      appState.doctors.map(doc => `<option value="${doc.id}">${doc.name} (${doc.specialtyName})</option>`).join('') +
+      (appState.doctors || []).map(doc => `<option value="${doc.id}">${doc.name} (${doc.specialtyName || doc.specialty})</option>`).join('') +
       `<option value="receptionist_assign">Any Duty Doctor (Receptionist Will Assign)</option>`;
-  }
-
-  if (typeof initDeptDocFilterSync === 'function') {
-    initDeptDocFilterSync();
   }
 
   if (window.lucide) window.lucide.createIcons();
@@ -2444,34 +2419,29 @@ function renderAdminDoctorsTable() {
   if (!tbody || !appState.doctors) return;
 
   tbody.innerHTML = appState.doctors.map(doc => {
-    const rawImg = getDoctorImage(doc);
-    const validImg = rawImg ? rawImg.replace(/"/g, '&quot;') : null;
-    const initial = (doc.name || 'D').replace(/^Dr\.\s*/i, '').charAt(0).toUpperCase() || 'D';
-    const imgHtml = validImg ? `
-      <img src="${validImg}" alt="${doc.name.replace(/"/g, '&quot;')}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-    ` : `
-      <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #028090, #00c4a7); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(2,128,144,0.2);">
-        ${initial}
-      </div>
-    `;
-
-    const formattedFee = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+    const validImg = getDoctorImage(doc);
+    const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
 
     return `
       <tr>
         <td>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            ${imgHtml}
-            <strong>${doc.name}</strong>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="${validImg}" alt="${doc.name}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #028090; box-shadow: 0 2px 8px rgba(2,128,144,0.2);">
+            <div>
+              <strong style="color: #014e59; font-size: 0.925rem; display: block;">${doc.name}</strong>
+              <span style="font-size: 0.75rem; color: #64748b;">${doc.designation || 'Consultant Specialist'}</span>
+            </div>
           </div>
         </td>
-        <td>${doc.specialtyName || doc.specialty}</td>
+        <td><span style="background: #e6f7f5; color: #028090; padding: 4px 10px; border-radius: 20px; font-size: 0.775rem; font-weight: 700;">${doc.specialtyName || doc.specialty}</span></td>
         <td>${doc.degree}</td>
         <td>${doc.timings}</td>
-        <td><strong>${formattedFee}</strong></td>
+        <td><strong style="color: #028090;">${feeText}</strong></td>
         <td>
-          <button class="admin-btn admin-btn-primary" onclick="editDoctorInAdmin('${doc.id}')">Edit</button>
-          <button class="admin-btn admin-btn-danger" onclick="deleteDoctorInAdmin('${doc.id}')">Delete</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="admin-btn admin-btn-primary" onclick="editDoctorInAdmin('${doc.id}')">Edit</button>
+            <button class="admin-btn admin-btn-danger" onclick="deleteDoctorInAdmin('${doc.id}')">Delete</button>
+          </div>
         </td>
       </tr>
     `;
