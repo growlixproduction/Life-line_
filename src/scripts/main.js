@@ -1877,7 +1877,9 @@ window.handleDoctorFormSubmit = function(e) {
   const degree = document.getElementById('admin-doc-degree')?.value.trim() || 'MD / MS';
   const experience = document.getElementById('admin-doc-exp')?.value.trim() || '10+ Years Exp';
   const timings = document.getElementById('admin-doc-timings')?.value.trim() || '10:00 AM - 02:00 PM';
-  const fee = document.getElementById('admin-doc-fee')?.value.trim() || '₹500';
+
+  let rawFee = document.getElementById('admin-doc-fee')?.value.trim() || '₹500';
+  const formattedFee = rawFee.startsWith('₹') ? rawFee : `₹${rawFee}`;
 
   // 1. Extract image URL from input field OR preview element
   let image = document.getElementById('admin-doc-image')?.value.trim().replace(/[\r\n]+/g, '') || '';
@@ -1902,7 +1904,7 @@ window.handleDoctorFormSubmit = function(e) {
     }
   }
 
-  const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee, image };
+  const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee: formattedFee, image };
 
   // 3. Update local appState immediately
   if (!appState.doctors) appState.doctors = [];
@@ -1916,7 +1918,7 @@ window.handleDoctorFormSubmit = function(e) {
   saveHospitalData(appState);
   renderDoctors();
   renderAdminDoctorsTable();
-  showToast(`⚡ Photo & Profile saved for '${name}'!`);
+  showToast(`⚡ Doctor '${name}' profile saved live!`);
 
   // 4. Try background save to Supabase DB asynchronously
   setTimeout(() => {
@@ -2453,6 +2455,8 @@ function renderAdminDoctorsTable() {
       </div>
     `;
 
+    const formattedFee = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+
     return `
       <tr>
         <td>
@@ -2461,10 +2465,10 @@ function renderAdminDoctorsTable() {
             <strong>${doc.name}</strong>
           </div>
         </td>
-        <td>${doc.specialtyName}</td>
+        <td>${doc.specialtyName || doc.specialty}</td>
         <td>${doc.degree}</td>
         <td>${doc.timings}</td>
-        <td><strong>${doc.fee}</strong></td>
+        <td><strong>${formattedFee}</strong></td>
         <td>
           <button class="admin-btn admin-btn-primary" onclick="editDoctorInAdmin('${doc.id}')">Edit</button>
           <button class="admin-btn admin-btn-danger" onclick="deleteDoctorInAdmin('${doc.id}')">Delete</button>
