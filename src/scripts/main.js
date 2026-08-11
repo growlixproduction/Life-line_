@@ -879,7 +879,9 @@ window.renderDepartmentDetailPage = function(deptId) {
 /* Render Doctors Directory */
 function getDoctorImage(doc) {
   if (!doc) return null;
-  let img = String(doc.image || doc.imageUrl || '').trim().replace(/[\r\n]+/g, '');
+  const cachedPhoto = localStorage.getItem('doc_photo_' + doc.id);
+  let img = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
+  img = String(img || '').trim().replace(/[\r\n]+/g, '');
   if (!img || img.includes('unsplash.com') || img.includes('placeholder')) {
     return null;
   }
@@ -1908,6 +1910,15 @@ window.handleDoctorFormSubmit = async function(e) {
   }
 
   image = image || '';
+
+  // Store in dedicated permanent photo cache!
+  if (image && image.length > 5) {
+    try {
+      localStorage.setItem('doc_photo_' + docId, image);
+    } catch (e) {
+      console.warn('Local photo cache write notice:', e);
+    }
+  }
 
   const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee, image };
 
@@ -3215,6 +3226,9 @@ window.editDoctorInAdmin = function(docId) {
   const doc = appState.doctors.find(d => d.id === docId);
   if (!doc) return;
 
+  const cachedPhoto = localStorage.getItem('doc_photo_' + doc.id);
+  const docImage = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
+
   const idEl = document.getElementById('admin-doc-id');
   const nameEl = document.getElementById('admin-doc-name');
   const specEl = document.getElementById('admin-doc-specialty');
@@ -3235,17 +3249,16 @@ window.editDoctorInAdmin = function(docId) {
   if (expEl) expEl.value = doc.experience || '';
   if (timEl) timEl.value = doc.timings || '';
   if (feeEl) feeEl.value = doc.fee || '';
-  if (imgEl) imgEl.value = doc.image || '';
+  if (imgEl) imgEl.value = docImage || '';
 
   // Show photo preview when editing
   if (typeof updateDocImgPreview === 'function') {
-    updateDocImgPreview(doc.image || '');
+    updateDocImgPreview(docImage || '');
   }
 
   const docTabBtn = document.querySelector('[data-admin-tab="admin-tab-doctors"]');
   if (docTabBtn) docTabBtn.click();
 
-  // Scroll form into view
   setTimeout(() => {
     document.getElementById('admin-doctor-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
