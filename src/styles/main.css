@@ -188,7 +188,11 @@ img {
 /* HIDE TOP ANNOUNCEMENT BAR & MAIN NAVBAR WHEN IN ADMIN PORTAL */
 body.admin-mode-active .top-bar,
 body.admin-mode-active .site-header,
-body.admin-mode-active .site-footer {
+body.admin-mode-active .site-footer,
+body.admin-mode-active .floating-opd-btn,
+body.admin-mode-active .emergency-call-btn,
+body.admin-mode-active .scroll-to-top,
+body.admin-mode-active .mobile-bottom-nav {
   display: none !important;
 }
 

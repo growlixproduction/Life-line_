@@ -339,25 +339,18 @@ function handleRouteHash() {
   document.body.classList.remove('admin-mode-active');
 
   let targetId = route;
-  const knownRoutes = [
-    'home-view', 'overview-view', 'about-view', 'departments-view',
-    'doctors-view', 'facilities-view', 'gallery-view', 'blogs-view',
-    'contact-view', 'booking-view', 'accreditations-view',
-    'department-detail-view', 'admin-view', 'admin-login-view', 'not-found-view'
-  ];
-
   if (route.startsWith('department-') && route !== 'department-detail-view') {
     const currentDeptId = route.replace('department-', '');
     targetId = 'department-detail-view';
     setTimeout(() => renderDepartmentDetailPage(currentDeptId), 10);
-  } else if (!document.getElementById(targetId) || (!knownRoutes.includes(targetId) && !targetId.startsWith('department-'))) {
+  } else if (!document.getElementById(targetId)) {
     if (route.includes('doctor')) targetId = 'doctors-view';
     else if (route.includes('blog')) targetId = 'blogs-view';
     else if (route.includes('dept') || route.includes('department')) targetId = 'departments-view';
     else if (route.includes('facility') || route.includes('facilities')) targetId = 'facilities-view';
     else if (route.includes('contact')) targetId = 'contact-view';
     else if (route.includes('overview') || route.includes('about')) targetId = 'overview-view';
-    else targetId = 'not-found-view';
+    else targetId = 'home-view';
   }
 
   document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
