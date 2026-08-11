@@ -3591,19 +3591,7 @@ window.handleDocImageUpload = async function(input) {
       const imgInput = document.getElementById('admin-doc-image');
       if (imgInput) imgInput.value = finalImg;
       updateDocImgPreview(finalImg);
-      showToast('⚡ Doctor photo ready in form!');
-
-      // Try uploading to Supabase bucket in background
-      try {
-        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 400, 400);
-        if (publicUrl && publicUrl.startsWith('http')) {
-          if (imgInput) imgInput.value = publicUrl;
-          updateDocImgPreview(publicUrl);
-          showToast('⚡ Doctor photo uploaded to Supabase Bucket!');
-        }
-      } catch (err) {
-        console.warn('Bucket upload fallback to Base64 DataURL:', err);
-      }
+      showToast('⚡ Doctor photo loaded successfully!');
     };
     reader.readAsDataURL(file);
   }
