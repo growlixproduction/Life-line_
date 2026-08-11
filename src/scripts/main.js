@@ -1872,7 +1872,7 @@ function populateAdminForms() {
   }
 }
 
-window.handleDoctorFormSubmit = async function(e) {
+window.handleDoctorFormSubmit = function(e) {
   if (e) e.preventDefault();
   
   const nameEl = document.getElementById('admin-doc-name');
@@ -1885,7 +1885,6 @@ window.handleDoctorFormSubmit = async function(e) {
   const name = nameEl.value.trim();
   let docId = document.getElementById('admin-doc-id')?.value;
   
-  // If docId is missing, auto-match existing doctor by name
   if (!docId && appState.doctors) {
     const matched = appState.doctors.find(d => d.name.toLowerCase().trim() === name.toLowerCase().trim());
     if (matched) docId = matched.id;
@@ -1907,20 +1906,9 @@ window.handleDoctorFormSubmit = async function(e) {
     image = previewImg.src.replace(/[\r\n]+/g, '');
   }
 
-  // 2. If user selected a file, compress it immediately to Base64
-  const docFileInput = document.getElementById('admin-doc-img-file');
-  if ((!image || image.length < 10) && docFileInput && docFileInput.files && docFileInput.files[0]) {
-    try {
-      image = await compressAndResizeImage(docFileInput.files[0], 400, 400, 0.85);
-      image = (image || '').replace(/[\r\n]+/g, '');
-    } catch (err) {
-      console.warn('Compression error:', err);
-    }
-  }
-
   image = image || '';
 
-  // Store in multi-key permanent photo cache (by ID & Name)
+  // 2. Multi-key permanent local storage locking
   if (image && image.length > 5) {
     const cleanId = String(docId).replace(/^doc-?/, '');
     const cleanNameKey = name.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -1929,14 +1917,14 @@ window.handleDoctorFormSubmit = async function(e) {
       localStorage.setItem('doc_photo_doc-' + cleanId, image);
       localStorage.setItem('doc_photo_' + cleanId, image);
       localStorage.setItem('doc_photo_name_' + cleanNameKey, image);
-    } catch (e) {
-      console.warn('Local photo cache write notice:', e);
+    } catch (err) {
+      console.warn('Photo cache write notice:', err);
     }
   }
 
   const newDoctor = { id: docId, name, specialty, specialtyName, designation, degree, experience, timings, fee, image };
 
-  // 3. Update local appState FIRST and persist immediately
+  // 3. Update local appState immediately
   if (!appState.doctors) appState.doctors = [];
   const existingIndex = appState.doctors.findIndex(d => d.id === docId);
   if (existingIndex >= 0) {
@@ -1950,12 +1938,10 @@ window.handleDoctorFormSubmit = async function(e) {
   renderAdminDoctorsTable();
   showToast(`⚡ Photo & Profile saved for '${name}'!`);
 
-  // 4. Try background save to Supabase
-  try {
-    await saveDoctorToSupabase(newDoctor);
-  } catch (err) {
-    console.warn('Supabase DB save fallback notice:', err);
-  }
+  // 4. Try background save to Supabase DB asynchronously
+  setTimeout(() => {
+    saveDoctorToSupabase(newDoctor).catch(err => console.warn('Supabase DB save notice:', err));
+  }, 10);
 
   clearDoctorForm();
 };
@@ -3670,23 +3656,25 @@ window.handleDocImageUpload = async function(input) {
     const file = input.files[0];
     showToast('Processing doctor photo...');
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const rawDataUrl = e.target.result;
-      let finalImg = rawDataUrl;
-      try {
-        const compressed = await compressAndResizeImage(file, 400, 400, 0.85);
-        if (compressed) finalImg = compressed;
-      } catch (err) {
-        console.warn('Compression notice:', err);
-      }
-
+    try {
+      // Compress to lightweight 250x250 JPG thumbnail (< 8 KB Base64)
+      const compressedDataUrl = await compressAndResizeImage(file, 250, 250, 0.7);
       const imgInput = document.getElementById('admin-doc-image');
-      if (imgInput) imgInput.value = finalImg;
-      updateDocImgPreview(finalImg);
-      showToast('⚡ Doctor photo loaded successfully!');
-    };
-    reader.readAsDataURL(file);
+      if (imgInput) imgInput.value = compressedDataUrl;
+      updateDocImgPreview(compressedDataUrl);
+      showToast('⚡ Doctor photo loaded into form!');
+    } catch (err) {
+      console.warn('Image processing error:', err);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const raw = e.target.result;
+        const imgInput = document.getElementById('admin-doc-image');
+        if (imgInput) imgInput.value = raw;
+        updateDocImgPreview(raw);
+        showToast('⚡ Doctor photo loaded!');
+      };
+      reader.readAsDataURL(file);
+    }
   }
 };
 
