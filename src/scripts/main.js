@@ -1858,6 +1858,9 @@ window.handleDoctorFormSubmit = function(e) {
     docId = 'doc-' + Date.now();
   }
 
+  const isConfirmed = confirm(`Are you sure you want to save Doctor Profile for '${name}'?`);
+  if (!isConfirmed) return;
+
   const specialty = document.getElementById('admin-doc-specialty')?.value || 'general';
   const specialtyName = document.getElementById('admin-doc-specialty-name')?.value.trim() || specialty;
   const designation = document.getElementById('admin-doc-designation')?.value.trim() || 'Consultant Specialist';
@@ -1901,6 +1904,8 @@ window.handleDoctorFormSubmit = function(e) {
   saveHospitalData(appState);
   renderDoctors();
   renderAdminDoctorsTable();
+  
+  alert(`✅ Doctor Profile for '${name}' saved successfully!`);
   showToast(`⚡ Doctor '${name}' profile saved live!`);
 
   setTimeout(() => {
@@ -1909,6 +1914,9 @@ window.handleDoctorFormSubmit = function(e) {
 
   clearDoctorForm();
 };
+
+window.saveDoctorProfile = window.handleDoctorFormSubmit;
+window.submitDoctorProfile = window.handleDoctorFormSubmit;
 
   const blogForm = document.getElementById('admin-blog-form');
   if (blogForm) {
