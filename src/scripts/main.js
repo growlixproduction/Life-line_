@@ -879,13 +879,22 @@ window.renderDepartmentDetailPage = function(deptId) {
 /* Render Doctors Directory */
 function getDoctorImage(doc) {
   if (!doc) return null;
-  const cachedPhoto = localStorage.getItem('doc_photo_' + doc.id);
+  const cleanId = String(doc.id || '').replace(/^doc-?/, '');
+  const cleanNameKey = String(doc.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  const cachedPhoto = localStorage.getItem('doc_photo_' + doc.id) ||
+                      localStorage.getItem('doc_photo_doc-' + cleanId) ||
+                      localStorage.getItem('doc_photo_' + cleanId) ||
+                      localStorage.getItem('doc_photo_name_' + cleanNameKey);
+
   let img = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
   img = String(img || '').trim().replace(/[\r\n]+/g, '');
   if (!img || img.includes('unsplash.com') || img.includes('placeholder')) {
     return null;
   }
-  if (img.startsWith('http') || img.startsWith('data:image') || img.startsWith('/')) return img;
+  if (img.startsWith('http') || img.startsWith('data:image') || img.startsWith('/') || img.startsWith('assets/') || img.includes('.')) {
+    return img;
+  }
   return null;
 }
 
@@ -1911,10 +1920,15 @@ window.handleDoctorFormSubmit = async function(e) {
 
   image = image || '';
 
-  // Store in dedicated permanent photo cache!
+  // Store in multi-key permanent photo cache (by ID & Name)
   if (image && image.length > 5) {
+    const cleanId = String(docId).replace(/^doc-?/, '');
+    const cleanNameKey = name.toLowerCase().replace(/[^a-z0-9]/g, '');
     try {
       localStorage.setItem('doc_photo_' + docId, image);
+      localStorage.setItem('doc_photo_doc-' + cleanId, image);
+      localStorage.setItem('doc_photo_' + cleanId, image);
+      localStorage.setItem('doc_photo_name_' + cleanNameKey, image);
     } catch (e) {
       console.warn('Local photo cache write notice:', e);
     }
