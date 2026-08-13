@@ -1027,7 +1027,7 @@ function renderDoctors(filterDept = 'all', searchQuery = '') {
       <div class="doctor-card" style="background: white; border-radius: 16px; border: 1px solid rgba(2,128,144,0.12); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease;">
         <div>
           <div style="position: relative; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; background: #e6f7f5;">
-            <img src="${photoUrl}" alt="${doc.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+            <img src="${photoUrl}" alt="${doc.name}" style="width: 100%; height: 100%; object-fit: contain; object-position: center;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(2,128,144,0.9); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.725rem; font-weight: 700;">
               ${doc.specialtyName || doc.specialty}
             </span>
