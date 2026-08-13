@@ -138,18 +138,28 @@ CREATE POLICY "Allow public all doctors" ON public.doctors FOR ALL USING (true) 
 
 DROP POLICY IF EXISTS "Allow public read departments" ON public.departments;
 CREATE POLICY "Allow public read departments" ON public.departments FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow public all departments" ON public.departments;
+CREATE POLICY "Allow public all departments" ON public.departments FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read facilities" ON public.facilities;
 CREATE POLICY "Allow public read facilities" ON public.facilities FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow public all facilities" ON public.facilities;
+CREATE POLICY "Allow public all facilities" ON public.facilities FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read blogs" ON public.blogs;
 CREATE POLICY "Allow public read blogs" ON public.blogs FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow public all blogs" ON public.blogs;
+CREATE POLICY "Allow public all blogs" ON public.blogs FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read gallery" ON public.gallery;
 CREATE POLICY "Allow public read gallery" ON public.gallery FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow public all gallery" ON public.gallery;
+CREATE POLICY "Allow public all gallery" ON public.gallery FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read testimonials" ON public.testimonials;
 CREATE POLICY "Allow public read testimonials" ON public.testimonials FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow public all testimonials" ON public.testimonials;
+CREATE POLICY "Allow public all testimonials" ON public.testimonials FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow public read contact_inquiries" ON public.contact_inquiries;
 CREATE POLICY "Allow public read contact_inquiries" ON public.contact_inquiries FOR SELECT USING (true);
