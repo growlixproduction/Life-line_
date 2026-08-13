@@ -3756,35 +3756,18 @@ function compressAndResizeImage(file, maxWidth = 1600, maxHeight = 1200, quality
 }
 
 /* Image Upload & Preview Global Handlers for Admin Panel */
-window.handleHeroImageUpload = async function(input) {
+window.handleHeroImageUpload = function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Uploading photo directly to Supabase Bucket hospital-assets...');
-
-    try {
-      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 1200);
-      document.getElementById('admin-hero-img').value = publicUrl;
-      updateHeroImgPreview(publicUrl);
-      showToast('⚡ Hero photo uploaded directly to Supabase Storage Bucket!');
-    } catch (err) {
-      console.error('Direct upload notice, attempting server endpoint fallback...', err.message);
-      try {
-        const base64Data = await compressAndResizeImage(file);
-        const res = await fetch('/api/upload-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fileName: file.name, base64Data })
-        });
-        const data = await res.json();
-        if (data.url && data.url.startsWith('http')) {
-          document.getElementById('admin-hero-img').value = data.url;
-          updateHeroImgPreview(data.url);
-          showToast('⚡ Hero photo uploaded live to Supabase Bucket!');
-        }
-      } catch (fallbackErr) {
-        showToast('Upload error: ' + fallbackErr.message);
+    showToast('Opening cropping tool...');
+    openCropperModal(file, (publicUrl) => {
+      const imgInput = document.getElementById('admin-hero-img');
+      if (imgInput) {
+        imgInput.value = publicUrl;
+        updateHeroImgPreview(publicUrl);
       }
-    }
+      showToast('⚡ Hero banner adjusted & saved successfully!');
+    }, 16 / 9);
   }
 };
 
@@ -3846,76 +3829,35 @@ window.clearHeroImgPreview = function() {
   updateHeroImgPreview('');
 };
 
-window.handleDocImageUpload = async function(input) {
+window.handleDocImageUpload = function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Processing doctor photo...');
-    try {
-      const base64Preview = await compressAndResizeImage(file, 1200, 1600, 0.85);
+    showToast('Opening cropping tool...');
+    openCropperModal(file, (publicUrl) => {
       const imgInput = document.getElementById('admin-doc-image');
       if (imgInput) {
-        imgInput.value = base64Preview;
-        updateDocImgPreview(base64Preview);
+        imgInput.value = publicUrl;
+        updateDocImgPreview(publicUrl);
       }
-      try {
-        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1200, 1600);
-        if (imgInput) {
-          imgInput.value = publicUrl;
-          updateDocImgPreview(publicUrl);
-        }
-        showToast('⚡ Doctor photo uploaded to Supabase Bucket!');
-      } catch (uploadErr) {
-        console.error('Doctor photo upload failed, using local version:', uploadErr);
-        showToast('Photo saved locally. Save doctor profile to apply.');
-      }
-    } catch (err) {
-      console.error('Error processing doctor image:', err);
-      showToast('Error loading image.');
-    }
+      showToast('⚡ Doctor photo adjusted & saved successfully!');
+    }, 1 / 1);
   }
 };
 
-window.handleBlogImageUpload = async function(input) {
+window.handleBlogImageUpload = function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Processing & uploading blog image...');
-    const base64Preview = await compressAndResizeImage(file, 1200, 800);
-    if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(base64Preview);
-    document.getElementById('admin-blog-image').value = base64Preview;
-    try {
-      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1200, 800);
-      document.getElementById('admin-blog-image').value = publicUrl;
-      if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(publicUrl);
-      showToast('\u26a1 Blog image uploaded to Supabase Bucket!');
-    } catch (err) {
-      console.error('Blog image bucket upload failed:', err);
-      showToast('Blog image saved locally.');
-    }
+    showToast('Opening cropping tool...');
+    openCropperModal(file, (publicUrl) => {
+      const imgInput = document.getElementById('admin-blog-image');
+      if (imgInput) {
+        imgInput.value = publicUrl;
+        if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(publicUrl);
+      }
+      showToast('⚡ Blog image adjusted & saved successfully!');
+    }, 16 / 9);
   }
 };
 
-window.handleHeroImageUpload = async function(input) {
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    // 1. IMMEDIATELY clear old image and show spinner
-    updateHeroImgPreview('loading');
-    showToast('Processing & uploading hero photo...');
 
-    // 2. Compress and show local base64 preview instantly
-    const base64Preview = await compressAndResizeImage(file, 1600, 1200);
-    updateHeroImgPreview(base64Preview);
-    document.getElementById('admin-hero-img').value = base64Preview;
-
-    // 3. Upload to Supabase bucket
-    try {
-      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 1200);
-      document.getElementById('admin-hero-img').value = publicUrl;
-      updateHeroImgPreview(publicUrl);
-      showToast('\u26a1 Hero photo uploaded to Supabase Bucket!');
-    } catch (err) {
-      console.error('Hero upload failed:', err.message);
-      showToast('Hero photo ready locally. Save to apply.');
-    }
-  }
-};
 
