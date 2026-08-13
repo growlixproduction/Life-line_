@@ -1821,6 +1821,13 @@ function initBookingModal() {
     openBookingModal();
     const docSelect = document.getElementById('modal-doc-select');
     if (docSelect) docSelect.value = docId;
+
+    // Pre-select the corresponding specialty department
+    const doc = appState.doctors.find(d => d.id === docId);
+    if (doc) {
+      const deptSelect = document.getElementById('modal-dept-select');
+      if (deptSelect) deptSelect.value = doc.specialty;
+    }
   };
 
   if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.remove('active'));
