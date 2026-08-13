@@ -1516,89 +1516,7 @@ function initBookingModal() {
     if (e.target === modal) modal.classList.remove('active');
   });
 
-  if (bookingForm) {
-    bookingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const patientName = document.getElementById('patient-name').value;
-      const patientPhone = document.getElementById('patient-phone').value;
-      const docSelect = document.getElementById('modal-doc-select');
-      const selectedDoc = appState.doctors.find(d => d.id === docSelect?.value)?.name || 'Consultant Specialist';
-      const deptSelect = document.getElementById('modal-dept-select');
-      const apptDate = document.getElementById('appointment-date').value;
 
-      const apptId = 'LLH-' + Math.floor(100000 + Math.random() * 900000);
-      const deptName = (deptSelect && deptSelect.options[deptSelect.selectedIndex]) ? deptSelect.options[deptSelect.selectedIndex].text : 'General OPD';
-
-      const newAppt = {
-        id: apptId,
-        patientName,
-        patientPhone,
-        department: deptName,
-        doctor: selectedDoc,
-        date: apptDate || new Date().toISOString().split('T')[0],
-        time: 'Morning OPD (05:00 AM - 12:00 PM)',
-        status: 'Pending',
-        type: 'OPD Booking',
-        createdTime: new Date().toLocaleString()
-      };
-
-      if (!appState.appointments) appState.appointments = [];
-      appState.appointments.unshift(newAppt);
-      saveHospitalData(appState);
-
-      if (typeof renderAdminAppointmentsTable === 'function') {
-        renderAdminAppointmentsTable();
-      }
-
-      // Save to Supabase / Backend API
-      try {
-        fetch('/api/appointments', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newAppt)
-        }).catch(err => console.log('DB Post notice:', err));
-      } catch (err) { console.log(err); }
-
-      const modalBody = modal.querySelector('.modal-body');
-      modalBody.innerHTML = `
-        <div style="text-align: center; padding: 20px 10px;">
-          <div style="width: 64px; height: 64px; background: #e0f7f4; color: #00a896; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
-            <i data-lucide="check-circle" style="width: 36px; height: 36px;"></i>
-          </div>
-          <h2 style="color: #014e59; font-size: 1.5rem; margin-bottom: 8px;">Appointment Confirmed!</h2>
-          <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Your OPD token has been registered at Life Line Hospital Ambikapur and saved to database.</p>
-
-          <div style="background: #f8fafc; border: 1px dashed #028090; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-              <span style="color: #64748b; font-size: 0.85rem;">Booking Ref:</span>
-              <strong style="color: #028090; font-family: monospace; font-size: 1rem;">${apptId}</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-              <span style="color: #64748b; font-size: 0.85rem;">Patient Name:</span>
-              <strong>${patientName}</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-              <span style="color: #64748b; font-size: 0.85rem;">Contact:</span>
-              <strong>${patientPhone}</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-              <span style="color: #64748b; font-size: 0.85rem;">Doctor:</span>
-              <strong>${selectedDoc}</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span style="color: #64748b; font-size: 0.85rem;">Scheduled Date:</span>
-              <strong>${apptDate || 'Tomorrow Morning'}</strong>
-            </div>
-          </div>
-
-          <button class="btn btn-primary" onclick="document.getElementById('booking-modal').classList.remove('active')" style="width: 100%;">
-            Done &amp; Close
-          </button>
-        </div>
-      `;
-      if (window.lucide) window.lucide.createIcons();
-    });
-  }
 }
 
 /* Contact Form Handling */
@@ -1905,7 +1823,7 @@ window.handleDoctorFormSubmit = function(e) {
   renderDoctors();
   renderAdminDoctorsTable();
   
-  alert(`✅ Doctor Profile for '${name}' saved successfully!`);
+  if (typeof closeDoctorEditorModal === 'function') closeDoctorEditorModal();
   showToast(`⚡ Doctor '${name}' profile saved live!`);
 
   setTimeout(() => {
@@ -2094,28 +2012,56 @@ window.clearHeroImgPreview = clearHeroImgPreview;
 /**
  * Handle device file upload with interactive Cropper & Resizer modal.
  */
-function handleHeroImageUpload(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-  openCropperModal(file, (croppedUrl) => {
-    const urlInput = document.getElementById('admin-hero-img');
-    if (urlInput) {
-      urlInput.value = croppedUrl;
-      updateHeroImgPreview(croppedUrl);
+async function handleHeroImageUpload(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    updateHeroImgPreview('loading');
+    showToast('Processing & uploading hero photo...');
+
+    try {
+      const base64Preview = await compressAndResizeImage(file, 1600, 1200);
+      updateHeroImgPreview(base64Preview);
+      const urlInput = document.getElementById('admin-hero-img');
+      if (urlInput) urlInput.value = base64Preview;
+
+      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 1200);
+      if (urlInput) urlInput.value = publicUrl;
+      updateHeroImgPreview(publicUrl);
+      showToast('⚡ Hero photo uploaded to Supabase Bucket!');
+    } catch (err) {
+      console.error('Hero upload error:', err);
+      showToast('Hero photo ready locally. Save to apply.');
     }
-  }, 16 / 9);
+  }
 }
 
-function handleOverviewImageUpload(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-  openCropperModal(file, (croppedUrl) => {
-    const urlInput = document.getElementById('admin-overview-img');
-    if (urlInput) {
-      urlInput.value = croppedUrl;
-      updateOverviewImgPreview(croppedUrl);
+async function handleOverviewImageUpload(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    showToast('Processing overview photo...');
+    try {
+      const base64Preview = await compressAndResizeImage(file, 1600, 900);
+      const urlInput = document.getElementById('admin-overview-img');
+      if (urlInput) {
+        urlInput.value = base64Preview;
+        updateOverviewImgPreview(base64Preview);
+      }
+      try {
+        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 900);
+        if (urlInput) {
+          urlInput.value = publicUrl;
+          updateOverviewImgPreview(publicUrl);
+        }
+        showToast('⚡ Overview photo uploaded to Supabase Bucket!');
+      } catch (uploadErr) {
+        console.error('Overview upload failed, using local version:', uploadErr);
+        showToast('Photo saved locally.');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('Error loading image.');
     }
-  }, 16 / 9);
+  }
 }
 
 function updateOverviewImgPreview(src) {
@@ -2430,37 +2376,9 @@ window.clearBlogImgPreview   = clearBlogImgPreview;
 window.clearBlogForm          = clearBlogForm;
 
 function renderAdminDoctorsTable() {
-  const tbody = document.getElementById('admin-doctors-table-body');
-  if (!tbody || !appState.doctors) return;
-
-  tbody.innerHTML = appState.doctors.map(doc => {
-    const validImg = getDoctorImage(doc);
-    const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
-
-    return `
-      <tr>
-        <td>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="${validImg}" alt="${doc.name}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #028090; box-shadow: 0 2px 8px rgba(2,128,144,0.2);">
-            <div>
-              <strong style="color: #014e59; font-size: 0.925rem; display: block;">${doc.name}</strong>
-              <span style="font-size: 0.75rem; color: #64748b;">${doc.designation || 'Consultant Specialist'}</span>
-            </div>
-          </div>
-        </td>
-        <td><span style="background: #e6f7f5; color: #028090; padding: 4px 10px; border-radius: 20px; font-size: 0.775rem; font-weight: 700;">${doc.specialtyName || doc.specialty}</span></td>
-        <td>${doc.degree}</td>
-        <td>${doc.timings}</td>
-        <td><strong style="color: #028090;">${feeText}</strong></td>
-        <td>
-          <div style="display: flex; gap: 6px;">
-            <button class="admin-btn admin-btn-primary" onclick="editDoctorInAdmin('${doc.id}')">Edit</button>
-            <button class="admin-btn admin-btn-danger" onclick="deleteDoctorInAdmin('${doc.id}')">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  if (typeof renderAdminDoctorsGrid === 'function') {
+    renderAdminDoctorsGrid();
+  }
 }
 
 function renderAdminBlogsTable() {
@@ -2512,47 +2430,31 @@ function clearFacImgPreview() {
   updateFacImgPreview('');
 }
 
-function handleFacilityImageUpload(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-
-  showToast('Processing & loading facility photo...');
-
-  // 1. Immediately read compressed base64 image as instant fallback
-  if (typeof compressAndResizeImage === 'function') {
-    compressAndResizeImage(file, 1200, 800).then(base64 => {
-      const urlInput = document.getElementById('admin-fac-image');
-      if (urlInput) urlInput.value = base64;
-      updateFacImgPreview(base64);
-    }).catch(() => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const urlInput = document.getElementById('admin-fac-image');
-        if (urlInput) urlInput.value = e.target.result;
-        updateFacImgPreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-  } else {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const urlInput = document.getElementById('admin-fac-image');
-      if (urlInput) urlInput.value = e.target.result;
-      updateFacImgPreview(e.target.result);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  // 2. Open interactive Cropper modal for fine-tuning ratio
-  if (typeof openCropperModal === 'function') {
+async function handleFacilityImageUpload(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    showToast('Processing facility photo...');
     try {
-      openCropperModal(file, (croppedUrl) => {
-        const urlInput = document.getElementById('admin-fac-image');
-        if (urlInput) urlInput.value = croppedUrl;
-        updateFacImgPreview(croppedUrl);
-      }, 16 / 9);
+      const base64Preview = await compressAndResizeImage(file, 1200, 800);
+      const urlInput = document.getElementById('admin-fac-image');
+      if (urlInput) {
+        urlInput.value = base64Preview;
+        updateFacImgPreview(base64Preview);
+      }
+      try {
+        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1200, 800);
+        if (urlInput) {
+          urlInput.value = publicUrl;
+          updateFacImgPreview(publicUrl);
+        }
+        showToast('⚡ Facility photo uploaded to Supabase Bucket!');
+      } catch (uploadErr) {
+        console.error('Facility upload failed, using local version:', uploadErr);
+        showToast('Photo saved locally.');
+      }
     } catch (err) {
-      console.warn('Cropper modal notice:', err);
+      console.error(err);
+      showToast('Error loading image.');
     }
   }
 }
@@ -2728,45 +2630,31 @@ function clearGalImgPreview() {
   updateGalImgPreview('');
 }
 
-function handleGalleryImageUpload(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-
-  showToast('Processing & uploading gallery photo...');
-
-  if (typeof compressAndResizeImage === 'function') {
-    compressAndResizeImage(file, 1600, 1200).then(base64 => {
-      const urlInput = document.getElementById('admin-gal-image');
-      if (urlInput) urlInput.value = base64;
-      updateGalImgPreview(base64);
-    }).catch(() => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const urlInput = document.getElementById('admin-gal-image');
-        if (urlInput) urlInput.value = e.target.result;
-        updateGalImgPreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-  } else {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const urlInput = document.getElementById('admin-gal-image');
-      if (urlInput) urlInput.value = e.target.result;
-      updateGalImgPreview(e.target.result);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  if (typeof openCropperModal === 'function') {
+async function handleGalleryImageUpload(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    showToast('Processing gallery photo...');
     try {
-      openCropperModal(file, (croppedUrl) => {
-        const urlInput = document.getElementById('admin-gal-image');
-        if (urlInput) urlInput.value = croppedUrl;
-        updateGalImgPreview(croppedUrl);
-      }, 16 / 9);
+      const base64Preview = await compressAndResizeImage(file, 1600, 1200);
+      const urlInput = document.getElementById('admin-gal-image');
+      if (urlInput) {
+        urlInput.value = base64Preview;
+        updateGalImgPreview(base64Preview);
+      }
+      try {
+        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 1200);
+        if (urlInput) {
+          urlInput.value = publicUrl;
+          updateGalImgPreview(publicUrl);
+        }
+        showToast('⚡ Gallery photo uploaded to Supabase Bucket!');
+      } catch (uploadErr) {
+        console.error('Gallery upload failed, using local version:', uploadErr);
+        showToast('Photo saved locally.');
+      }
     } catch (err) {
-      console.warn('Cropper modal notice:', err);
+      console.error(err);
+      showToast('Error loading image.');
     }
   }
 }
@@ -3191,6 +3079,58 @@ window.openManualApptModal = function() {
   showToast(`Walk-In Appointment ${newAppt.id} Registered!`);
 };
 
+window.openDoctorEditorModal = function(docId) {
+  const modal = document.getElementById('doctor-editor-modal');
+  const title = document.getElementById('doctor-modal-title');
+  if (!modal) return;
+
+  if (docId) {
+    const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
+    const doc = (appState.doctors || []).find(d => 
+      String(d.id || '') === String(docId || '') || 
+      String(d.id || '').replace(/^doc-?/, '') === cleanTargetId
+    );
+
+    if (doc) {
+      if (title) title.innerText = `Edit Profile: ${doc.name}`;
+      const idEl = document.getElementById('admin-doc-id');
+      const nameEl = document.getElementById('admin-doc-name');
+      const specEl = document.getElementById('admin-doc-specialty');
+      const specNameEl = document.getElementById('admin-doc-specialty-name');
+      const desigEl = document.getElementById('admin-doc-designation');
+      const degEl = document.getElementById('admin-doc-degree');
+      const expEl = document.getElementById('admin-doc-exp');
+      const timEl = document.getElementById('admin-doc-timings');
+      const feeEl = document.getElementById('admin-doc-fee');
+      const imgEl = document.getElementById('admin-doc-image');
+
+      if (idEl) idEl.value = doc.id || '';
+      if (nameEl) nameEl.value = doc.name || '';
+      if (specEl) specEl.value = doc.specialty || 'general';
+      if (specNameEl) specNameEl.value = doc.specialtyName || doc.specialty || '';
+      if (desigEl) desigEl.value = doc.designation || 'Consultant Specialist';
+      if (degEl) degEl.value = doc.degree || '';
+      if (expEl) expEl.value = doc.experience || '';
+      if (timEl) timEl.value = doc.timings || '';
+      if (feeEl) feeEl.value = doc.fee || '';
+      
+      const docImg = getDoctorImage(doc);
+      if (imgEl) imgEl.value = docImg || '';
+      if (typeof updateDocImgPreview === 'function') updateDocImgPreview(docImg || '');
+    }
+  } else {
+    if (title) title.innerText = 'Add New Specialist Doctor';
+    if (typeof clearDoctorForm === 'function') clearDoctorForm();
+  }
+
+  modal.style.display = 'flex';
+};
+
+window.closeDoctorEditorModal = function() {
+  const modal = document.getElementById('doctor-editor-modal');
+  if (modal) modal.style.display = 'none';
+};
+
 window.editDoctorInAdmin = function(docId) {
   if (!appState.doctors) return;
   const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
@@ -3234,6 +3174,81 @@ window.editDoctorInAdmin = function(docId) {
   setTimeout(() => {
     document.getElementById('admin-doctor-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
+};
+
+window.renderAdminDoctorsGrid = function() {
+  const grid = document.getElementById('admin-doctors-roster-grid');
+  if (!grid) return;
+
+  const searchQuery = (document.getElementById('admin-doc-search')?.value || '').toLowerCase().trim();
+  const deptFilter = (document.getElementById('admin-doc-dept-filter')?.value || 'all').toLowerCase();
+
+  let list = appState.doctors || [];
+
+  if (deptFilter !== 'all') {
+    list = list.filter(d => (d.specialty || '').toLowerCase() === deptFilter);
+  }
+
+  if (searchQuery) {
+    list = list.filter(d => 
+      (d.name || '').toLowerCase().includes(searchQuery) || 
+      (d.specialtyName || d.specialty || '').toLowerCase().includes(searchQuery) ||
+      (d.degree || '').toLowerCase().includes(searchQuery)
+    );
+  }
+
+  if (list.length === 0) {
+    grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1; color: #64748b;">No doctors match search criteria.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(doc => {
+    const photoUrl = getDoctorImage(doc);
+    const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+
+    return `
+      <div class="admin-doc-card" style="background: white; border-radius: 18px; border: 1px solid rgba(2,128,144,0.12); padding: 22px; box-shadow: 0 6px 24px rgba(2,128,144,0.06); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
+        <div>
+          <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px;">
+            <img src="${photoUrl}" alt="${doc.name}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2.5px solid #028090; box-shadow: 0 4px 14px rgba(2,128,144,0.25); flex-shrink: 0;">
+            <div>
+              <strong style="color: #014e59; font-size: 1.125rem; font-weight: 800; display: block; line-height: 1.25; margin-bottom: 3px;">${doc.name}</strong>
+              <span style="font-size: 0.8rem; color: #028090; font-weight: 700; display: block;">${doc.designation || 'Consultant Specialist'}</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <span style="background: #e6f7f5; color: #028090; padding: 4px 12px; border-radius: 20px; font-size: 0.775rem; font-weight: 700; display: inline-block; margin-bottom: 10px; border: 1px solid rgba(2,128,144,0.2);">
+              ${doc.specialtyName || doc.specialty}
+            </span>
+            <div style="font-size: 0.85rem; color: #475569; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>🎓</span> <span>${doc.degree}</span>
+            </div>
+            <div style="font-size: 0.825rem; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+              <span>⏱️</span> <span>${doc.timings || '10:00 AM - 02:00 PM'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 14px; margin-top: 8px;">
+          <div>
+            <span style="display: block; font-size: 0.68rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">OPD FEE</span>
+            <strong style="font-size: 1.15rem; color: #014e59; font-weight: 800;">${feeText}</strong>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="openDoctorEditorModal('${doc.id}')" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 700; border-radius: 8px;">
+              ✏️ Edit
+            </button>
+            <button type="button" onclick="deleteDoctorInAdmin('${doc.id}')" style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; padding: 7px 12px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease;">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) window.lucide.createIcons();
 };
 
 window.deleteDoctorInAdmin = function(docId) {
@@ -3303,79 +3318,74 @@ async function ensurePublicImageUrl(imageSource, docId) {
 }
 
 async function saveDoctorToSupabase(newDoctor) {
-  const numericFee = typeof newDoctor.fee === 'number' 
-    ? newDoctor.fee 
-    : (parseFloat(String(newDoctor.fee || '').replace(/[^0-9.]/g, '')) || 500);
-
-  // Auto-convert Base64 DataURL to public HTTPS Bucket URL for Supabase DB
   let publicImgUrl = newDoctor.image || '';
   if (publicImgUrl.startsWith('data:image/')) {
-    publicImgUrl = await ensurePublicImageUrl(publicImgUrl, newDoctor.id);
-  }
+    try {
+      const mimeMatch = publicImgUrl.match(/^data:(image\/\w+);base64,/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+      const ext = mimeType.split('/')[1] || 'jpg';
+      const fileName = `doctor-${newDoctor.id}-${Date.now()}.${ext}`;
 
-  const docPayload = {
-    id: newDoctor.id,
-    name: newDoctor.name,
-    specialty_id: newDoctor.specialty || 'general',
-    specialty_name: newDoctor.specialtyName || newDoctor.specialty || 'General OPD',
-    qualifications: newDoctor.degree || '',
-    experience: newDoctor.experience || '10+ Years Exp',
-    opd_time: newDoctor.timings || '10:00 AM - 02:00 PM',
-    fee: numericFee,
-    image: publicImgUrl || ''
-  };
-
-  try {
-    let res = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors?id=eq.${encodeURIComponent(newDoctor.id)}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
-        'apiKey': SUPABASE_STORAGE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(docPayload)
-    });
-
-    if (!res.ok || (await res.clone().json()).length === 0) {
-      res = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors`, {
+      const res = await fetch('/api/upload-image', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
-          'apiKey': SUPABASE_STORAGE_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(docPayload)
+        body: JSON.stringify({ fileName, base64Data: publicImgUrl })
       });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) {
+          publicImgUrl = data.url;
+          console.log('⚡ Doctor photo uploaded via backend successfully:', publicImgUrl);
+        }
+      }
+    } catch (err) {
+      console.warn('Backend image upload fallback warning:', err);
     }
-
-    if (publicImgUrl && publicImgUrl.startsWith('http')) {
-      newDoctor.image = publicImgUrl;
-      const idx = (appState.doctors || []).findIndex(d => d.id === newDoctor.id);
-      if (idx >= 0) appState.doctors[idx].image = publicImgUrl;
-      saveHospitalData(appState);
-      renderAdminDoctorsTable();
-    }
-  } catch (e) {
-    console.warn('Supabase DB save warning:', e);
   }
 
-  return docPayload;
+  newDoctor.image = publicImgUrl;
+
+  try {
+    const res = await fetch('/api/doctors', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newDoctor)
+    });
+
+    if (res.ok) {
+      const savedDocData = await res.json();
+      console.log('⚡ Doctor saved live via backend successfully:', savedDocData);
+      
+      const idx = (appState.doctors || []).findIndex(d => d.id === newDoctor.id);
+      if (idx >= 0) {
+        appState.doctors[idx] = newDoctor;
+        saveHospitalData(appState);
+        renderAdminDoctorsGrid();
+        if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+      }
+    } else {
+      const errText = await res.text();
+      console.warn('Backend DB save failed:', errText);
+    }
+  } catch (e) {
+    console.warn('Backend DB save warning:', e);
+  }
+
+  return newDoctor;
 }
 
 async function deleteDoctorFromSupabase(docId) {
-  const res = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors?id=eq.${encodeURIComponent(docId)}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
-      'apiKey': SUPABASE_STORAGE_KEY
-    }
+  const res = await fetch(`/api/doctors/${encodeURIComponent(docId)}`, {
+    method: 'DELETE'
   });
 
   if (!res.ok) {
     const errText = await res.text();
-    console.error('Supabase Doc Delete Error:', errText);
+    console.error('Backend Doc Delete Error:', errText);
     throw new Error(errText);
   }
 }
@@ -3650,25 +3660,27 @@ window.handleDocImageUpload = async function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
     showToast('Processing doctor photo...');
-
     try {
-      // Compress to lightweight 250x250 JPG thumbnail (< 8 KB Base64)
-      const compressedDataUrl = await compressAndResizeImage(file, 250, 250, 0.7);
+      const base64Preview = await compressAndResizeImage(file, 1200, 1600, 0.85);
       const imgInput = document.getElementById('admin-doc-image');
-      if (imgInput) imgInput.value = compressedDataUrl;
-      updateDocImgPreview(compressedDataUrl);
-      showToast('⚡ Doctor photo loaded into form!');
+      if (imgInput) {
+        imgInput.value = base64Preview;
+        updateDocImgPreview(base64Preview);
+      }
+      try {
+        const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1200, 1600);
+        if (imgInput) {
+          imgInput.value = publicUrl;
+          updateDocImgPreview(publicUrl);
+        }
+        showToast('⚡ Doctor photo uploaded to Supabase Bucket!');
+      } catch (uploadErr) {
+        console.error('Doctor photo upload failed, using local version:', uploadErr);
+        showToast('Photo saved locally. Save doctor profile to apply.');
+      }
     } catch (err) {
-      console.warn('Image processing error:', err);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const raw = e.target.result;
-        const imgInput = document.getElementById('admin-doc-image');
-        if (imgInput) imgInput.value = raw;
-        updateDocImgPreview(raw);
-        showToast('⚡ Doctor photo loaded!');
-      };
-      reader.readAsDataURL(file);
+      console.error('Error processing doctor image:', err);
+      showToast('Error loading image.');
     }
   }
 };

@@ -1267,8 +1267,8 @@ body.admin-mode-active .mobile-bottom-nav {
   outline: none;
 }
 
-.doctor-img-wrap { position: relative; height: 260px; overflow: hidden; background: var(--bg-subtle); }
-.doctor-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.doctor-img-wrap { position: relative; height: 320px; overflow: hidden; background: var(--bg-subtle); }
+.doctor-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.4s ease; }
 .doctor-card:hover .doctor-img-wrap img { transform: scale(1.05); }
 .doctor-badge { position: absolute; top: 12px; right: 12px; background: rgba(2, 128, 144, 0.9); color: white; padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; }
 .doctor-info { padding: 20px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; }

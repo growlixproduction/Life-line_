@@ -152,7 +152,7 @@ app.post('/api/doctors', async (req, res) => {
     qualifications: doctor.degree || doctor.qualifications || '',
     experience: doctor.experience || '10+ Years',
     opd_time: doctor.timings || doctor.opd_time || '10:00 AM - 04:00 PM',
-    fee: parseFloat(doctor.fee || 500),
+    fee: parseFloat(String(doctor.fee || '').replace(/[^0-9.]/g, '')) || 500,
     image: doctor.image || ''
   };
 

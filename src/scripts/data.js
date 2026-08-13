@@ -205,7 +205,7 @@ export const defaultHospitalData = {
       experience: "15+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_male_1.png"
     },
     {
       id: "doc-2",
@@ -217,7 +217,7 @@ export const defaultHospitalData = {
       experience: "12+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_female_1.png"
     },
     {
       id: "doc-3",
@@ -229,7 +229,7 @@ export const defaultHospitalData = {
       experience: "10+ Years Exp",
       timings: "09:00 AM - 02:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_male_2.png"
     },
     {
       id: "doc-4",
@@ -241,7 +241,7 @@ export const defaultHospitalData = {
       experience: "14+ Years Exp",
       timings: "11:00 AM - 03:00 PM",
       fee: "₹600",
-      image: ""
+      image: "/assets/images/doctor_male_3.png"
     },
     {
       id: "doc-5",
@@ -253,7 +253,7 @@ export const defaultHospitalData = {
       experience: "16+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹600",
-      image: ""
+      image: "/assets/images/doctor_male_4.png"
     },
     {
       id: "doc-6",
@@ -265,7 +265,7 @@ export const defaultHospitalData = {
       experience: "15+ Years Exp",
       timings: "11:00 AM - 04:00 PM",
       fee: "₹700",
-      image: ""
+      image: "/assets/images/doctor_male_1.png"
     },
     {
       id: "doc-7",
@@ -277,7 +277,7 @@ export const defaultHospitalData = {
       experience: "11+ Years Exp",
       timings: "09:00 AM - 02:00 PM",
       fee: "₹400",
-      image: ""
+      image: "/assets/images/doctor_female_2.png"
     },
     {
       id: "doc-8",
@@ -289,7 +289,7 @@ export const defaultHospitalData = {
       experience: "13+ Years Exp",
       timings: "01:00 PM - 03:00 PM",
       fee: "₹600",
-      image: ""
+      image: "/assets/images/doctor_male_2.png"
     },
     {
       id: "doc-9",
@@ -301,7 +301,7 @@ export const defaultHospitalData = {
       experience: "10+ Years Exp",
       timings: "24x7 On Duty",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_male_3.png"
     },
     {
       id: "doc-10",
@@ -313,7 +313,7 @@ export const defaultHospitalData = {
       experience: "9+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹450",
-      image: ""
+      image: "/assets/images/doctor_male_4.png"
     },
     {
       id: "doc-11",
@@ -325,7 +325,7 @@ export const defaultHospitalData = {
       experience: "10+ Years Exp",
       timings: "10:00 AM - 03:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_female_3.png"
     },
     {
       id: "doc-12",
@@ -337,7 +337,7 @@ export const defaultHospitalData = {
       experience: "12+ Years Exp",
       timings: "11:00 AM - 05:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_male_1.png"
     },
     {
       id: "doc-13",
@@ -349,7 +349,7 @@ export const defaultHospitalData = {
       experience: "8+ Years Exp",
       timings: "09:30 AM - 02:30 PM",
       fee: "₹400",
-      image: ""
+      image: "/assets/images/doctor_female_4.png"
     },
     {
       id: "doc-14",
@@ -361,7 +361,7 @@ export const defaultHospitalData = {
       experience: "11+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹500",
-      image: ""
+      image: "/assets/images/doctor_male_2.png"
     }
   ],
   tpaInsurance: [
@@ -615,6 +615,18 @@ export function saveHospitalData(data) {
   try {
     localStorage.setItem('lifeLineHospitalData', JSON.stringify(data));
   } catch (e) {
-    console.error('Could not save data to localStorage:', e);
+    console.warn('localStorage quota warning, attempting cleanup:', e);
+    try {
+      // Clear legacy doc_photo_ keys to free up localStorage space
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('doc_photo_')) {
+          localStorage.removeItem(key);
+        }
+      }
+      localStorage.setItem('lifeLineHospitalData', JSON.stringify(data));
+    } catch (err) {
+      console.error('Critical localStorage save failure:', err);
+    }
   }
 }
