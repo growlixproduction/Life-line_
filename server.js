@@ -248,6 +248,56 @@ app.delete('/api/blogs/:id', async (req, res) => {
   }
 });
 
+// GET: All Departments
+app.get('/api/departments', async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('departments').select('*').order('created_at', { ascending: true });
+    if (!error && data) {
+      return res.json(data);
+    }
+  } catch (err) {
+    console.error('Error fetching departments from Supabase:', err.message);
+  }
+  res.json(hospitalData.departments);
+});
+
+// POST: Save Department
+app.post('/api/departments', async (req, res) => {
+  const dept = req.body;
+  if (!dept || !dept.id || !dept.name) {
+    return res.status(400).json({ error: 'Department ID and Name are required.' });
+  }
+  const payload = {
+    id: dept.id,
+    name: dept.name,
+    icon: dept.icon || 'activity',
+    short_desc: dept.shortDesc || '',
+    full_description: dept.fullDescription || '',
+    key_treatments: Array.isArray(dept.procedures) ? dept.procedures.join('\n') : ''
+  };
+  try {
+    const { data, error } = await supabase.from('departments').upsert([payload], { onConflict: 'id' }).select();
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error saving uploader department to Supabase:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE: Delete Department
+app.delete('/api/departments/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { data, error } = await supabase.from('departments').delete().eq('id', id);
+    if (error) throw error;
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Error deleting department from Supabase:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST: Patient OPD Appointment Booking (Inserts directly into Supabase)
 app.post('/api/appointments', async (req, res) => {
   const { patientName, patientPhone, departmentId, doctorId, appointmentDate, preferredTime } = req.body;

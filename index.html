@@ -1305,7 +1305,7 @@
             <div class="form-group" style="margin-bottom: 20px;">
               <label style="font-weight: 700; color: #014e59; font-size: 0.825rem; text-transform: uppercase; letter-spacing: 0.5px;">Username *</label>
               <div style="position: relative;">
-                <input type="text" id="page-admin-username" class="form-control" placeholder="Enter admin username" required value="admin" style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                <input type="text" id="page-admin-username" class="form-control" placeholder="Enter admin username" required style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
                 <i data-lucide="user" style="position: absolute; left: 14px; top: 15px; width: 19px; height: 19px; color: #028090;"></i>
               </div>
             </div>
@@ -1313,7 +1313,7 @@
             <div class="form-group" style="margin-bottom: 22px;">
               <label style="font-weight: 700; color: #014e59; font-size: 0.825rem; text-transform: uppercase; letter-spacing: 0.5px;">Password *</label>
               <div style="position: relative;">
-                <input type="password" id="page-admin-password" class="form-control" placeholder="Enter admin password" required value="admin" style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                <input type="password" id="page-admin-password" class="form-control" placeholder="Enter admin password" required style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
                 <i data-lucide="lock" style="position: absolute; left: 14px; top: 15px; width: 19px; height: 19px; color: #028090;"></i>
               </div>
             </div>
@@ -1379,6 +1379,9 @@
               </li>
               <li class="admin-nav-item" data-admin-tab="admin-tab-blogs" onclick="switchAdminTab('admin-tab-blogs')">
                 <i data-lucide="newspaper"></i> Health Blogs &amp; Articles
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-departments" onclick="switchAdminTab('admin-tab-departments')">
+                <i data-lucide="building"></i> Departments Management
               </li>
               <li class="admin-nav-item" data-admin-tab="admin-tab-facilities" onclick="switchAdminTab('admin-tab-facilities')">
                 <i data-lucide="building-2"></i> Facilities Management
@@ -1754,15 +1757,7 @@
                       <div class="form-group">
                         <label>Specialty Department *</label>
                         <select id="admin-doc-specialty" class="form-control" required style="height: 38px; font-size: 0.85rem; padding: 6px 12px;">
-                          <option value="general">General Medicine &amp; Critical Care</option>
-                          <option value="cardiology">Cardiology &amp; Cath Lab</option>
-                          <option value="orthopedics">Orthopedics &amp; Joint Care</option>
-                          <option value="neurology">Neurology &amp; Neurosurgery</option>
-                          <option value="pediatrics">Pediatrics &amp; Neonatology</option>
-                          <option value="gynecology">Obstetrics &amp; Gynecology</option>
-                          <option value="surgery">General &amp; Laparoscopic Surgery</option>
-                          <option value="urology">Urology &amp; Kidney Care</option>
-                          <option value="radiology">Radiology &amp; Imaging</option>
+                          <!-- Populated dynamically -->
                         </select>
                       </div>
                       <div class="form-group">
@@ -1958,6 +1953,80 @@
             </div>
 
             <!-- Tab 6: Facilities Management -->
+            <!-- Tab: Departments Management -->
+            <div id="admin-tab-departments" class="admin-tab-pane">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                  <h3 style="font-size: 1.4rem; color: #014e59; margin: 0;">Specialty Departments Manager</h3>
+                  <p style="font-size: 0.85rem; color: #64748b; margin: 2px 0 0 0;">Add, edit, or remove specialty departments, details, and HODs.</p>
+                </div>
+              </div>
+
+              <!-- List of Departments -->
+              <div style="background: white; padding: 24px; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #f1f5f9; margin-bottom: 24px;">
+                <h4 style="font-size: 1.1rem; color: #014e59; margin-bottom: 16px; font-weight: 800;">Active Specialties List</h4>
+                <div class="admin-table-responsive">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>ID / Code</th>
+                        <th>Department Name</th>
+                        <th>Icon</th>
+                        <th>HOD / Head</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-departments-table-body">
+                      <!-- Dynamic Rows -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Add/Edit Department Form -->
+              <div style="background: white; padding: 24px; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;">
+                <h4 id="admin-dept-form-title" style="font-size: 1.1rem; color: #014e59; margin-bottom: 16px; font-weight: 800;">Add New Department</h4>
+                <form id="admin-dept-form">
+                  <input type="hidden" id="admin-dept-edit-mode" value="false">
+                  <input type="hidden" id="admin-dept-original-id" value="">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                      <label>Department ID / Code *</label>
+                      <input type="text" id="admin-dept-id" class="form-control" placeholder="e.g. child-care (lowercase, no spaces)" required style="height: 38px; font-size: 0.85rem;">
+                    </div>
+                    <div class="form-group">
+                      <label>Department Name *</label>
+                      <input type="text" id="admin-dept-name" class="form-control" placeholder="e.g. Child Care &amp; Pediatric OT" required style="height: 38px; font-size: 0.85rem;">
+                    </div>
+                    <div class="form-group">
+                      <label>Lucide Icon Name *</label>
+                      <input type="text" id="admin-dept-icon" class="form-control" placeholder="e.g. baby, heart-pulse, bone" required style="height: 38px; font-size: 0.85rem;">
+                    </div>
+                    <div class="form-group">
+                      <label>HOD / Department Head</label>
+                      <input type="text" id="admin-dept-head" class="form-control" placeholder="e.g. Dr. Amit Asati" style="height: 38px; font-size: 0.85rem;">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Short Description *</label>
+                    <input type="text" id="admin-dept-shortdesc" class="form-control" placeholder="Brief summary of department services" required style="height: 38px; font-size: 0.85rem;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Full Description (Overview Page)</label>
+                    <textarea id="admin-dept-fulldesc" class="form-control" rows="4" placeholder="Detailed overview of the department services..." style="font-size: 0.85rem; padding: 12px;"></textarea>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Key Procedures / Treatments (one per line)</label>
+                    <textarea id="admin-dept-procedures" class="form-control" rows="4" placeholder="e.g.&#10;Emergency Angioplasty&#10;Pacemaker Implantation" style="font-size: 0.85rem; padding: 12px;"></textarea>
+                  </div>
+                  <div style="display: flex; gap: 12px;">
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 800;">Save Department</button>
+                    <button type="button" class="btn btn-outline" onclick="clearDeptForm()" style="padding: 10px 20px; font-weight: 700;">Cancel / Clear</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
             <div id="admin-tab-facilities" class="admin-tab-pane">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
                 <div>
@@ -2498,7 +2567,7 @@
           <div class="form-group" style="margin-bottom: 18px;">
             <label style="font-weight: 700; color: #014e59; font-size: 0.85rem;">ADMIN USERNAME</label>
             <div style="position: relative;">
-              <input type="text" id="admin-username" class="form-control" placeholder="Enter username" required value="admin" style="padding-left: 40px; height: 44px; font-weight: 600;">
+              <input type="text" id="admin-username" class="form-control" placeholder="Enter username" required style="padding-left: 40px; height: 44px; font-weight: 600;">
               <i data-lucide="user" style="position: absolute; left: 12px; top: 13px; width: 18px; height: 18px; color: #028090;"></i>
             </div>
           </div>
@@ -2506,7 +2575,7 @@
           <div class="form-group" style="margin-bottom: 22px;">
             <label style="font-weight: 700; color: #014e59; font-size: 0.85rem;">PASSWORD</label>
             <div style="position: relative;">
-              <input type="password" id="admin-password" class="form-control" placeholder="Enter password" required value="admin" style="padding-left: 40px; height: 44px; font-weight: 600;">
+              <input type="password" id="admin-password" class="form-control" placeholder="Enter password" required style="padding-left: 40px; height: 44px; font-weight: 600;">
               <i data-lucide="lock" style="position: absolute; left: 12px; top: 13px; width: 18px; height: 18px; color: #028090;"></i>
             </div>
           </div>

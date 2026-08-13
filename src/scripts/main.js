@@ -133,6 +133,7 @@ if (appState.blogs && defaultHospitalData.blogs) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  populateDepartmentDropdowns();
   renderSiteFromState();
   initNavigation();
   initMobileDrawer();
@@ -264,10 +265,45 @@ async function syncFromSupabase() {
       console.log('Supabase blogs sync notice:', blogFetchErr.message);
     }
 
+    // 4. Fetch Departments
+    try {
+      let depts = null;
+      const supaDepts = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments?select=*&order=created_at.asc`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaDepts.ok) {
+        depts = await supaDepts.json();
+      } else {
+        const deptsRes = await fetch('/api/departments');
+        if (deptsRes.ok) depts = await deptsRes.json();
+      }
+
+      if (Array.isArray(depts) && depts.length > 0) {
+        appState.departments = depts.map(d => ({
+          id: d.id,
+          name: d.name,
+          icon: d.icon || 'activity',
+          shortDesc: d.short_desc || d.shortDesc || '',
+          head: d.head || '',
+          fullDescription: d.full_description || d.fullDescription || '',
+          procedures: typeof d.key_treatments === 'string' ? d.key_treatments.split('\n').filter(Boolean) : (Array.isArray(d.procedures) ? d.procedures : []),
+          equipment: Array.isArray(d.equipment) ? d.equipment : []
+        }));
+      }
+    } catch (deptFetchErr) {
+      console.log('Supabase departments sync notice:', deptFetchErr.message);
+    }
     // Re-render frontend and admin panel from updated Supabase state
     saveHospitalData(appState);
     renderSiteFromState();
-    populateAdminForms();
+    populateDepartmentDropdowns();
+  renderAdminDepartmentsTable();
+  populateAdminForms();
+    populateDepartmentDropdowns();
+    renderAdminDepartmentsTable();
     renderAdminDoctorsTable();
     renderAdminBlogsTable();
     renderAdminGalleryTable();
@@ -275,6 +311,136 @@ async function syncFromSupabase() {
     console.log('Supabase sync notice:', err.message);
   }
 }
+
+// --- Specialty Departments Management & Populators ---
+function populateDepartmentDropdowns() {
+  const depts = appState.departments || defaultHospitalData.departments || [];
+
+  const docSpecialtySelect = document.getElementById('admin-doc-specialty');
+  if (docSpecialtySelect) {
+    docSpecialtySelect.innerHTML = depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  }
+
+  const adminDocFilter = document.getElementById('admin-doc-dept-filter');
+  if (adminDocFilter) {
+    adminDocFilter.innerHTML = `<option value="all">All Departments</option>` + 
+      depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  }
+
+  const bookingDeptSelect = document.getElementById('modal-dept-select');
+  if (bookingDeptSelect) {
+    bookingDeptSelect.innerHTML = `<option value="">Choose Department *</option>` + 
+      depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('') +
+      `<option value="other">Other Checkup / General OPD</option>`;
+  }
+
+  const quickDeptSelect = document.getElementById('quick-dept-select');
+  if (quickDeptSelect) {
+    quickDeptSelect.innerHTML = `<option value="">Choose Department</option>` + 
+      depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  }
+
+  const visitorFilters = document.querySelectorAll('.doctor-dept-filter');
+  visitorFilters.forEach(select => {
+    select.innerHTML = `<option value="all">All Specialties</option>` + 
+      depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  });
+}
+
+function renderAdminDepartmentsTable() {
+  const tbody = document.getElementById('admin-departments-table-body');
+  const depts = appState.departments || defaultHospitalData.departments || [];
+  if (!tbody) return;
+
+  tbody.innerHTML = depts.map(d => `
+    <tr>
+      <td><strong>${d.id}</strong></td>
+      <td>${d.name}</td>
+      <td><span class="blog-cat-badge" style="position: static; text-transform: none; background: #e0f2fe; color: #0369a1; border-color: #bae6fd;">${d.icon || 'activity'}</span></td>
+      <td>${d.head || 'N/A'}</td>
+      <td>
+        <button class="admin-btn admin-btn-primary" onclick="editDeptInAdmin('${d.id}')">Edit</button>
+        <button class="admin-btn admin-btn-danger" onclick="deleteDeptInAdmin('${d.id}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+window.editDeptInAdmin = function(deptId) {
+  const depts = appState.departments || defaultHospitalData.departments || [];
+  const dept = depts.find(d => d.id === deptId);
+  if (!dept) return;
+
+  const idIn = document.getElementById('admin-dept-id');
+  if (idIn) {
+    idIn.value = dept.id;
+    idIn.disabled = false; // Make editable!
+  }
+  document.getElementById('admin-dept-original-id').value = dept.id;
+  document.getElementById('admin-dept-edit-mode').value = 'true';
+  document.getElementById('admin-dept-name').value = dept.name;
+  document.getElementById('admin-dept-icon').value = dept.icon || 'activity';
+  document.getElementById('admin-dept-head').value = dept.head || '';
+  document.getElementById('admin-dept-shortdesc').value = dept.shortDesc || '';
+  document.getElementById('admin-dept-fulldesc').value = dept.fullDescription || '';
+  document.getElementById('admin-dept-procedures').value = Array.isArray(dept.procedures) ? dept.procedures.join('\n') : '';
+
+  const titleEl = document.getElementById('admin-dept-form-title');
+  if (titleEl) titleEl.textContent = `Edit Department: ${dept.name}`;
+  document.getElementById('admin-dept-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.clearDeptForm = function() {
+  const idIn = document.getElementById('admin-dept-id');
+  if (idIn) {
+    idIn.value = '';
+    idIn.disabled = false;
+  }
+  document.getElementById('admin-dept-original-id').value = '';
+  document.getElementById('admin-dept-edit-mode').value = 'false';
+  document.getElementById('admin-dept-name').value = '';
+  document.getElementById('admin-dept-icon').value = '';
+  document.getElementById('admin-dept-head').value = '';
+  document.getElementById('admin-dept-shortdesc').value = '';
+  document.getElementById('admin-dept-fulldesc').value = '';
+  document.getElementById('admin-dept-procedures').value = '';
+  
+  const titleEl = document.getElementById('admin-dept-form-title');
+  if (titleEl) titleEl.textContent = 'Add New Department';
+};
+
+window.deleteDeptInAdmin = async function(deptId) {
+  const depts = appState.departments || defaultHospitalData.departments || [];
+  const dept = depts.find(d => d.id === deptId);
+  const name = dept ? dept.name : deptId;
+
+  if (confirm(`Are you sure you want to delete the department "${name}"?\nWarning: This will also remove it from selection filters.`)) {
+    try {
+      if (isLocal) {
+        await fetch(`/api/departments/${deptId}`, { method: 'DELETE' });
+      } else {
+        await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments?id=eq.${deptId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+            'apiKey': SUPABASE_STORAGE_KEY
+          }
+        });
+      }
+      showToast('Specialty Department deleted successfully!');
+      
+      appState.departments = depts.filter(d => d.id !== deptId);
+      saveHospitalData(appState);
+      
+      populateDepartmentDropdowns();
+      renderAdminDepartmentsTable();
+      renderSiteFromState();
+    } catch (err) {
+      console.error(err);
+      showToast('Error deleting department.');
+    }
+  }
+};
 
 /* Render all site elements dynamically from state */
 function renderSiteFromState() {
@@ -1029,7 +1195,7 @@ function renderDoctors(filterDept = 'all', searchQuery = '') {
           <div style="position: relative; aspect-ratio: 1 / 1; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 16px; background: #e6f7f5;">
             <img src="${photoUrl}" alt="${doc.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(2,128,144,0.9); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.725rem; font-weight: 700;">
-              ${doc.specialtyName || doc.specialty}
+              ${(typeof appState !== 'undefined' && appState.departments && appState.departments.find(d => d.id === doc.specialty)?.name) || doc.specialtyName || doc.specialty}
             </span>
           </div>
 
@@ -1967,6 +2133,148 @@ window.handleDoctorFormSubmit = function(e) {
 
 window.saveDoctorProfile = window.handleDoctorFormSubmit;
 window.submitDoctorProfile = window.handleDoctorFormSubmit;
+
+  const deptForm = document.getElementById('admin-dept-form');
+  if (deptForm) {
+    deptForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('admin-dept-id').value.trim().toLowerCase();
+      const name = document.getElementById('admin-dept-name').value.trim();
+      const icon = document.getElementById('admin-dept-icon').value.trim();
+      const head = document.getElementById('admin-dept-head').value.trim();
+      const shortDesc = document.getElementById('admin-dept-shortdesc').value.trim();
+      const fullDescription = document.getElementById('admin-dept-fulldesc').value.trim();
+      const proceduresStr = document.getElementById('admin-dept-procedures').value;
+      const procedures = proceduresStr.split('\n').map(p => p.trim()).filter(Boolean);
+
+      const deptData = {
+        id,
+        name,
+        icon,
+        head,
+        shortDesc,
+        fullDescription,
+        procedures,
+        equipment: []
+      };
+
+      const originalId = document.getElementById('admin-dept-original-id').value;
+      const isEdit = document.getElementById('admin-dept-edit-mode').value === 'true';
+
+      // Handle ID Change (Delete old row, insert new row, update referencing doctors)
+      if (isEdit && originalId && originalId !== id) {
+        showToast('Updating department ID & cascading doctor records...');
+        try {
+          if (isLocal) {
+            await fetch(`/api/departments/${originalId}`, { method: 'DELETE' });
+          } else {
+            await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments?id=eq.${originalId}`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+                'apiKey': SUPABASE_STORAGE_KEY
+              }
+            });
+          }
+          // Remove old from appState
+          appState.departments = appState.departments.filter(d => d.id !== originalId);
+        } catch (delOldErr) {
+          console.error('Error removing old department ID:', delOldErr);
+        }
+
+        // Update referencing doctors locally and in DB
+        appState.doctors = appState.doctors.map(doc => {
+          if (doc.specialty === originalId) {
+            doc.specialty = id;
+            doc.specialtyName = name;
+            
+            // Save updated doctor in background
+            const docData = { ...doc };
+            (async () => {
+              try {
+                if (isLocal) {
+                  await fetch('/api/doctors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(docData)
+                  });
+                } else {
+                  await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors`, {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+                      'apiKey': SUPABASE_STORAGE_KEY,
+                      'Content-Type': 'application/json',
+                      'Prefer': 'resolution=merge-duplicates'
+                    },
+                    body: JSON.stringify({
+                      id: docData.id,
+                      name: docData.name,
+                      specialty: docData.specialty,
+                      specialty_name: docData.specialtyName,
+                      designation: docData.designation,
+                      degree: docData.degree,
+                      experience: docData.experience,
+                      timings: docData.timings,
+                      fee: docData.fee,
+                      image: docData.image
+                    })
+                  });
+                }
+              } catch (docLinkErr) {
+                console.error('Failed to update doctor link in DB:', docLinkErr);
+              }
+            })();
+          }
+          return doc;
+        });
+        saveHospitalData(appState);
+      }
+
+      try {
+        if (isLocal) {
+          await fetch('/api/departments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(deptData)
+          });
+        } else {
+          const payload = {
+            id,
+            name,
+            icon,
+            short_desc: shortDesc,
+            full_description: fullDescription,
+            key_treatments: procedures.join('\n')
+          };
+          await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+              'apiKey': SUPABASE_STORAGE_KEY,
+              'Content-Type': 'application/json',
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(payload)
+          });
+        }
+        showToast('Specialty Department Saved Live!');
+      } catch (err) {
+        console.warn('DB save notice:', err);
+      }
+
+      if (!appState.departments) appState.departments = [];
+      const idx = appState.departments.findIndex(d => d.id === id);
+      if (idx >= 0) appState.departments[idx] = deptData;
+      else appState.departments.push(deptData);
+
+      saveHospitalData(appState);
+      clearDeptForm();
+      populateDepartmentDropdowns();
+      renderAdminDepartmentsTable();
+      renderSiteFromState();
+    });
+  }
 
   const blogForm = document.getElementById('admin-blog-form');
   if (blogForm) {
@@ -3380,7 +3688,7 @@ window.renderAdminDoctorsGrid = function() {
 
           <div style="margin-bottom: 14px;">
             <span style="background: #e6f7f5; color: #028090; padding: 4px 12px; border-radius: 20px; font-size: 0.775rem; font-weight: 700; display: inline-block; margin-bottom: 10px; border: 1px solid rgba(2,128,144,0.2);">
-              ${doc.specialtyName || doc.specialty}
+              ${(typeof appState !== 'undefined' && appState.departments && appState.departments.find(d => d.id === doc.specialty)?.name) || doc.specialtyName || doc.specialty}
             </span>
             <div style="font-size: 0.85rem; color: #475569; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
               <span>🎓</span> <span>${doc.degree}</span>
