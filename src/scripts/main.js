@@ -1,5 +1,85 @@
 import { getHospitalData, saveHospitalData, defaultHospitalData } from './data.js';
 
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+async function uploadImageToSupabase(fileName, base64Data) {
+  if (isLocal) {
+    try {
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileName, base64Data })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.url;
+      }
+    } catch (e) {
+      console.warn('Local image upload fail:', e);
+    }
+  } else {
+    try {
+      const mimeMatch = base64Data.match(/^data:(image\/\w+);base64,/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+      const uploadUrl = `${SUPABASE_STORAGE_URL}/storage/v1/object/hospital-assets/${fileName}`;
+      
+      const base64Parts = base64Data.split(',');
+      const byteCharacters = atob(base64Parts[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: mimeType });
+
+      const uploadRes = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apiKey': SUPABASE_ANON_KEY,
+          'Content-Type': mimeType,
+          'x-upsert': 'true'
+        },
+        body: blob
+      });
+
+      if (uploadRes.ok) {
+        return `${SUPABASE_STORAGE_URL}/storage/v1/object/public/hospital-assets/${fileName}`;
+      }
+    } catch (err) {
+      console.warn('Direct upload failed:', err);
+    }
+  }
+  return base64Data;
+}
+
+async function saveSettingToSupabase(settingKey, settingValue) {
+  if (isLocal) {
+    await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ settingKey, settingValue })
+    });
+  } else {
+    try {
+      const strValue = typeof settingValue === 'object' ? JSON.stringify(settingValue) : String(settingValue);
+      const dbUrl = `${SUPABASE_STORAGE_URL}/rest/v1/hospital_settings`;
+      await fetch(dbUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apiKey': SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({ setting_key: settingKey, setting_value: strValue })
+      });
+    } catch (err) {
+      console.warn('Direct save setting failed:', err);
+    }
+  }
+}
+
 let appState = getHospitalData();
 
 // Set default hero image only if nothing valid is stored (or if it's an old Unsplash URL)
@@ -73,9 +153,39 @@ document.addEventListener('DOMContentLoaded', () => {
 async function syncFromSupabase() {
   try {
     // 1. Fetch Hospital Settings (Branding & Hero)
-    const settingsRes = await fetch('/api/settings');
-    if (settingsRes.ok) {
-      const settings = await settingsRes.json();
+    let settings = null;
+    try {
+      const supaSettings = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/hospital_settings?select=*`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaSettings.ok) {
+        const rawSettings = await supaSettings.json();
+        settings = {};
+        rawSettings.forEach(item => {
+          try {
+            settings[item.setting_key] = JSON.parse(item.setting_value);
+          } catch (e) {
+            settings[item.setting_key] = item.setting_value;
+          }
+        });
+      }
+    } catch (settingsSupaErr) {
+      console.log('Supabase settings direct fetch error:', settingsSupaErr.message);
+    }
+
+    if (!settings) {
+      try {
+        const settingsRes = await fetch('/api/settings');
+        if (settingsRes.ok) settings = await settingsRes.json();
+      } catch (settingsLocalErr) {
+        console.log('Local settings fetch error:', settingsLocalErr.message);
+      }
+    }
+
+    if (settings) {
       if (settings.branding && typeof settings.branding === 'object') {
         Object.assign(appState, settings.branding);
       }
@@ -124,9 +234,21 @@ async function syncFromSupabase() {
     }
 
     // 3. Fetch Blogs
-    const blogsRes = await fetch('/api/blogs');
-    if (blogsRes.ok) {
-      const blogs = await blogsRes.json();
+    try {
+      let blogs = null;
+      const supaBlogs = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/blogs?select=*&order=created_at.desc`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaBlogs.ok) {
+        blogs = await supaBlogs.json();
+      } else {
+        const blogsRes = await fetch('/api/blogs');
+        if (blogsRes.ok) blogs = await blogsRes.json();
+      }
+
       if (Array.isArray(blogs) && blogs.length > 0) {
         appState.blogs = blogs.map(b => ({
           id: b.id,
@@ -138,6 +260,8 @@ async function syncFromSupabase() {
           image: b.image
         }));
       }
+    } catch (blogFetchErr) {
+      console.log('Supabase blogs sync notice:', blogFetchErr.message);
     }
 
     // Re-render frontend and admin panel from updated Supabase state
@@ -1430,11 +1554,34 @@ function initBookingModal() {
       }
 
       try {
-        fetch('/api/appointments', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newAppt)
-        }).catch(err => console.log('DB Post notice:', err));
+        if (isLocal) {
+          fetch('/api/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newAppt)
+          }).catch(err => console.log('DB Post notice:', err));
+        } else {
+          const apptPayload = {
+            booking_id: newAppt.id,
+            patient_name: newAppt.patientName,
+            patient_phone: newAppt.patientPhone,
+            department: newAppt.department,
+            doctor_name: newAppt.doctor,
+            appointment_date: newAppt.date,
+            preferred_time: newAppt.time,
+            status: newAppt.status,
+            notes: newAppt.notes
+          };
+          fetch(`${SUPABASE_STORAGE_URL}/rest/v1/appointments`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'apiKey': SUPABASE_ANON_KEY,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(apptPayload)
+          }).catch(err => console.log('Direct appt save fail:', err));
+        }
       } catch (err) { console.log(err); }
 
       if (modalBody) {
@@ -1632,11 +1779,7 @@ function initAdminPanel() {
       renderSiteFromState();
 
       try {
-        await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ settingKey: 'branding', settingValue: brandingData })
-        });
+        await saveSettingToSupabase('branding', brandingData);
         showToast('Hospital Branding & Contact Info Saved Live to Supabase!');
       } catch (err) {
         showToast('Branding updated locally.');
@@ -1662,16 +1805,9 @@ function initAdminPanel() {
       if (heroData.imageUrl && heroData.imageUrl.startsWith('data:image')) {
         showToast('Uploading hero image to Supabase Storage Bucket...');
         try {
-          const res = await fetch('/api/upload-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fileName: `hero-banner-${Date.now()}.png`, base64Data: heroData.imageUrl })
-          });
-          const uploadRes = await res.json();
-          if (uploadRes.url) {
-            heroData.imageUrl = uploadRes.url;
-            document.getElementById('admin-hero-img').value = uploadRes.url;
-          }
+          const fileName = `hero-banner-${Date.now()}.png`;
+          heroData.imageUrl = await uploadImageToSupabase(fileName, heroData.imageUrl);
+          document.getElementById('admin-hero-img').value = heroData.imageUrl;
         } catch (uploadErr) {
           console.error('Upload notice:', uploadErr);
         }
@@ -1682,11 +1818,7 @@ function initAdminPanel() {
       renderSiteFromState();
 
       try {
-        await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ settingKey: 'hero', settingValue: heroData })
-        });
+        await saveSettingToSupabase('hero', heroData);
         showToast('Hero Banner Settings Saved Live to Supabase!');
       } catch (err) {
         showToast('Hero Banner updated locally.');
@@ -1852,11 +1984,40 @@ window.submitDoctorProfile = window.handleDoctorFormSubmit;
       const newBlog = { id: blogId, title, category, excerpt, content, date, image };
 
       try {
-        await fetch('/api/blogs', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newBlog)
-        });
+        if (newBlog.image && newBlog.image.startsWith('data:image/')) {
+          const fileName = `blog-${newBlog.id}-${Date.now()}.png`;
+          newBlog.image = await uploadImageToSupabase(fileName, newBlog.image);
+        }
+
+        if (isLocal) {
+          await fetch('/api/blogs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newBlog)
+          });
+        } else {
+          const blogPayload = {
+            id: newBlog.id,
+            title: newBlog.title,
+            category: newBlog.category,
+            author: 'Life Line Medical Editorial',
+            date_str: newBlog.date,
+            read_time: '6 min read',
+            excerpt: newBlog.excerpt,
+            content: newBlog.content,
+            image: newBlog.image || ''
+          };
+          await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/blogs`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'apiKey': SUPABASE_ANON_KEY,
+              'Content-Type': 'application/json',
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify(blogPayload)
+          });
+        }
         showToast('Health Blog Published Live to Supabase Database!');
         await syncFromSupabase();
       } catch (err) {
@@ -3320,73 +3481,92 @@ async function ensurePublicImageUrl(imageSource, docId) {
 async function saveDoctorToSupabase(newDoctor) {
   let publicImgUrl = newDoctor.image || '';
   if (publicImgUrl.startsWith('data:image/')) {
-    try {
-      const mimeMatch = publicImgUrl.match(/^data:(image\/\w+);base64,/);
-      const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-      const ext = mimeType.split('/')[1] || 'jpg';
-      const fileName = `doctor-${newDoctor.id}-${Date.now()}.${ext}`;
-
-      const res = await fetch('/api/upload-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fileName, base64Data: publicImgUrl })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.url) {
-          publicImgUrl = data.url;
-          console.log('⚡ Doctor photo uploaded via backend successfully:', publicImgUrl);
-        }
-      }
-    } catch (err) {
-      console.warn('Backend image upload fallback warning:', err);
-    }
+    const ext = publicImgUrl.match(/^data:image\/(\w+);base64,/)?.[1] || 'png';
+    const fileName = `doctor-${newDoctor.id}-${Date.now()}.${ext}`;
+    publicImgUrl = await uploadImageToSupabase(fileName, publicImgUrl);
   }
 
   newDoctor.image = publicImgUrl;
 
   try {
-    const res = await fetch('/api/doctors', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newDoctor)
-    });
+    let saveSuccess = false;
+    if (isLocal) {
+      const res = await fetch('/api/doctors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newDoctor)
+      });
+      if (res.ok) {
+        saveSuccess = true;
+        console.log('⚡ Doctor saved live via backend successfully.');
+      }
+    } else {
+      const docPayload = {
+        id: newDoctor.id,
+        name: newDoctor.name,
+        specialty_id: newDoctor.specialty || 'general',
+        specialty_name: newDoctor.specialtyName || 'General OPD',
+        qualifications: newDoctor.degree || '',
+        experience: newDoctor.experience || '10+ Years',
+        opd_time: newDoctor.timings || '10:00 AM - 04:00 PM',
+        fee: parseFloat(String(newDoctor.fee || '').replace(/[^0-9.]/g, '')) || 500,
+        image: newDoctor.image || ''
+      };
+      const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apiKey': SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(docPayload)
+      });
+      if (dbRes.ok) {
+        saveSuccess = true;
+        console.log('⚡ Doctor saved directly to Supabase REST API successfully.');
+      }
+    }
 
-    if (res.ok) {
-      const savedDocData = await res.json();
-      console.log('⚡ Doctor saved live via backend successfully:', savedDocData);
-      
+    if (saveSuccess) {
       const idx = (appState.doctors || []).findIndex(d => d.id === newDoctor.id);
       if (idx >= 0) {
         appState.doctors[idx] = newDoctor;
-        saveHospitalData(appState);
-        renderAdminDoctorsGrid();
-        if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+      } else {
+        appState.doctors.push(newDoctor);
       }
-    } else {
-      const errText = await res.text();
-      console.warn('Backend DB save failed:', errText);
+      saveHospitalData(appState);
+      renderAdminDoctorsGrid();
+      if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
     }
   } catch (e) {
-    console.warn('Backend DB save warning:', e);
+    console.warn('DB Save Error:', e);
   }
 
   return newDoctor;
 }
 
 async function deleteDoctorFromSupabase(docId) {
-  const res = await fetch(`/api/doctors/${encodeURIComponent(docId)}`, {
-    method: 'DELETE'
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error('Backend Doc Delete Error:', errText);
-    throw new Error(errText);
+  if (isLocal) {
+    const res = await fetch(`/api/doctors/${encodeURIComponent(docId)}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText);
+    }
+  } else {
+    const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors?id=eq.${docId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'apiKey': SUPABASE_ANON_KEY
+      }
+    });
+    if (!dbRes.ok) {
+      const errText = await dbRes.text();
+      throw new Error(errText);
+    }
   }
 }
 
@@ -3436,7 +3616,17 @@ window.editBlogInAdmin = function(blogId) {
 window.deleteBlogInAdmin = async function(blogId) {
   if (confirm('Delete this health blog article?')) {
     try {
-      await fetch('/api/blogs/' + blogId, { method: 'DELETE' });
+      if (isLocal) {
+        await fetch('/api/blogs/' + blogId, { method: 'DELETE' });
+      } else {
+        await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'apiKey': SUPABASE_ANON_KEY
+          }
+        });
+      }
       showToast('Blog article deleted live from Supabase!');
       await syncFromSupabase();
     } catch (err) {
