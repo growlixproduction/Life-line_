@@ -5,12 +5,13 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \\\"node server.js\\\" \\\"vite\\\"",
     "build": "vite build",
     "start": "node server.js",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "concurrently": "^10.0.4",
     "vite": "^5.4.2"
   },
   "dependencies": {
