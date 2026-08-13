@@ -1190,7 +1190,7 @@ function renderDoctors(filterDept = 'all', searchQuery = '') {
     const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
 
     return `
-      <div class="doctor-card" style="background: white; border-radius: 16px; border: 1px solid rgba(2,128,144,0.12); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease;">
+      <div class="doctor-card" onclick="openDoctorDetailsModal('${doc.id}')" style="cursor: pointer; background: white; border-radius: 16px; border: 1px solid rgba(2,128,144,0.12); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease;">
         <div>
           <div style="position: relative; aspect-ratio: 1 / 1; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 16px; background: #e6f7f5;">
             <img src="${photoUrl}" alt="${doc.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
@@ -4062,6 +4062,72 @@ function compressAndResizeImage(file, maxWidth = 1600, maxHeight = 1200, quality
     reader.readAsDataURL(file);
   });
 }
+
+// --- Doctor Details Popup Modal ---
+window.openDoctorDetailsModal = function(docId) {
+  const doc = appState.doctors.find(d => d.id === docId);
+  if (!doc) return;
+
+  const modal = document.getElementById('doctor-details-modal');
+  const img = document.getElementById('modal-doc-detail-img');
+  const specialty = document.getElementById('modal-doc-detail-specialty');
+  const designation = document.getElementById('modal-doc-detail-designation');
+  const name = document.getElementById('modal-doc-detail-name');
+  const degree = document.getElementById('modal-doc-detail-degree');
+  const bio = document.getElementById('modal-doc-detail-bio');
+  const timings = document.getElementById('modal-doc-detail-timings');
+  const exp = document.getElementById('modal-doc-detail-exp');
+  const fee = document.getElementById('modal-doc-detail-fee');
+  const bookBtn = document.getElementById('modal-doc-detail-book-btn');
+
+  if (!modal) return;
+
+  const photoUrl = getDoctorImage(doc);
+  if (img) img.src = photoUrl;
+  
+  const deptObj = (appState.departments || []).find(d => d.id === doc.specialty);
+  const deptName = deptObj ? deptObj.name : (doc.specialtyName || doc.specialty);
+
+  if (specialty) specialty.textContent = deptName;
+  if (designation) designation.textContent = doc.designation || 'Consultant Specialist';
+  if (name) name.textContent = doc.name;
+  if (degree) degree.textContent = doc.degree;
+  
+  const cleanDocName = doc.name.replace(/^Dr\.\s*/i, '');
+  const bioText = `Dr. ${cleanDocName} is a distinguished ${doc.designation || 'Specialist Consultant'} in ${deptName} at Life Line Hospital Ambikapur. Holding a qualification of ${doc.degree}, they bring ${doc.experience || 'extensive years'} of clinical expertise to our medical team. Dr. ${cleanDocName} is highly dedicated to providing advanced care, comprehensive consultations, and medical support.`;
+  if (bio) bio.textContent = bioText;
+
+  if (timings) timings.textContent = doc.timings || '10:00 AM - 02:00 PM';
+  if (exp) exp.textContent = doc.experience || '10+ Years Exp';
+  if (fee) fee.textContent = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+
+  if (bookBtn) {
+    bookBtn.onclick = function(e) {
+      e.stopPropagation();
+      closeDoctorDetailsModal();
+      openBookingForDoctor(doc.id);
+    };
+  }
+
+  modal.style.display = 'flex';
+};
+
+window.closeDoctorDetailsModal = function() {
+  const modal = document.getElementById('doctor-details-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+// Close modal when clicking outside the card
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('doctor-details-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeDoctorDetailsModal();
+      }
+    });
+  }
+});
 
 /* Image Upload & Preview Global Handlers for Admin Panel */
 window.handleHeroImageUpload = async function(input) {
