@@ -54,29 +54,33 @@ async function uploadImageToSupabase(fileName, base64Data) {
 }
 
 async function saveSettingToSupabase(settingKey, settingValue) {
-  if (isLocal) {
-    await fetch('/api/settings', {
+  // Always save directly to Supabase (regardless of localhost/production)
+  try {
+    const strValue = typeof settingValue === 'object' ? JSON.stringify(settingValue) : String(settingValue);
+    const dbUrl = `${SUPABASE_STORAGE_URL}/rest/v1/hospital_settings`;
+    const res = await fetch(dbUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ settingKey, settingValue })
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'apiKey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ setting_key: settingKey, setting_value: strValue })
     });
-  } else {
+    if (!res.ok) console.warn('Supabase settings save returned', res.status);
+  } catch (err) {
+    console.warn('Supabase settings save failed:', err.message);
+  }
+  // Also try local api as fallback
+  if (isLocal) {
     try {
-      const strValue = typeof settingValue === 'object' ? JSON.stringify(settingValue) : String(settingValue);
-      const dbUrl = `${SUPABASE_STORAGE_URL}/rest/v1/hospital_settings`;
-      await fetch(dbUrl, {
+      await fetch('/api/settings', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'apiKey': SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify({ setting_key: settingKey, setting_value: strValue })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ settingKey, settingValue })
       });
-    } catch (err) {
-      console.warn('Direct save setting failed:', err);
-    }
+    } catch (e) { /* ignore local api errors */ }
   }
 }
 
@@ -108,6 +112,12 @@ if (!appState.facilities || appState.facilities.length < 9 || !appState.faciliti
 // Ensure appState.appointments contains active bookings
 if (!appState.appointments || appState.appointments.length === 0) {
   appState.appointments = JSON.parse(JSON.stringify(defaultHospitalData.appointments));
+  saveHospitalData(appState);
+}
+
+// Ensure director data is initialized (only if never set before)
+if (!appState.director) {
+  appState.director = JSON.parse(JSON.stringify(defaultHospitalData.director));
   saveHospitalData(appState);
 }
 
@@ -192,6 +202,10 @@ async function syncFromSupabase() {
       }
       if (settings.hero && typeof settings.hero === 'object') {
         appState.hero = { ...defaultHospitalData.hero, ...settings.hero };
+      }
+      // Load director from hospital_settings
+      if (settings.director && typeof settings.director === 'object' && settings.director.name) {
+        appState.director = { ...defaultHospitalData.director, ...settings.director };
       }
     }
 
@@ -453,6 +467,8 @@ function renderSiteFromState() {
   if (typeof renderAllBlogsPage === 'function') renderAllBlogsPage();
   renderGallery();
   renderTestimonials();
+  renderDirectorSection();
+  renderHomeDirectorSpotlight();
 }
 
 /* Update Header, Top Bar, Hero Banner from appState */
@@ -1915,6 +1931,214 @@ window.switchAdminTab = function(tabId) {
   window.scrollTo({ top: 0, behavior: 'instant' });
 };
 
+/* ============ DIRECTOR PROFILE - VISITOR RENDER ============ */
+function renderDirectorSection() {
+  const dir = (appState && appState.director && appState.director.name)
+    ? appState.director
+    : (defaultHospitalData ? defaultHospitalData.director : null);
+  if (!dir || !dir.name) return;
+
+  const el = id => document.getElementById(id);
+  const setText = (id, val) => { const e = el(id); if (e) e.textContent = val || ''; };
+
+  setText('director-name-display', dir.name);
+  setText('director-title-display', dir.title || '');
+  setText('director-qual-display', dir.qualification || '');
+  if (el('director-exp-badge')) el('director-exp-badge').textContent = dir.experience ? dir.experience + ' Experience' : '';
+  setText('director-tagline-display', dir.tagline || '');
+  setText('director-bio-display', dir.bio || '');
+  setText('director-journey-display', dir.journey || '');
+
+  // Photo
+  const photoImg = el('director-photo-img');
+  const photoPlaceholder = el('director-photo-placeholder');
+  if (photoImg) {
+    if (dir.photo && dir.photo.length > 5) {
+      photoImg.src = dir.photo;
+      photoImg.style.display = 'block';
+      if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+    } else {
+      photoImg.style.display = 'none';
+      if (photoPlaceholder) photoPlaceholder.style.display = 'flex';
+    }
+  }
+
+  // Achievements
+  const achEl = el('director-achievements-list');
+  if (achEl && Array.isArray(dir.achievements)) {
+    achEl.innerHTML = dir.achievements.map(a =>
+      `<li style="display:flex;align-items:flex-start;gap:10px;color:#475569;font-size:0.9rem;line-height:1.5;">
+        <span style="width:22px;height:22px;border-radius:50%;background:#e0f7f4;color:#028090;font-size:0.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">✓</span>
+        <span>${a}</span>
+      </li>`
+    ).join('');
+  }
+}
+
+function renderHomeDirectorSpotlight() {
+  // Read directly from appState (most up-to-date after admin save)
+  const dir = (appState && appState.director && appState.director.name)
+    ? appState.director
+    : (defaultHospitalData ? defaultHospitalData.director : null);
+  if (!dir || !dir.name) return;
+
+  // Helper
+  const el = id => document.getElementById(id);
+  const setText = (id, val) => { const e = el(id); if (e) e.textContent = val || ''; };
+
+  setText('home-director-name', dir.name);
+  setText('home-director-sig-name', dir.name);
+  setText('home-director-qual', dir.qualification || '');
+  setText('home-director-exp', dir.experience ? dir.experience + ' Experience' : '');
+  setText('home-director-tagline', dir.tagline || '');
+  setText('home-director-bio', dir.bio || '');
+
+  // Title span
+  const titleEl = el('home-director-title');
+  if (titleEl) titleEl.textContent = dir.title || '';
+
+  // Watermark: last part of name
+  const wmEl = el('home-director-watermark');
+  if (wmEl) {
+    const parts = (dir.name || '').replace(/^Dr\.?\s*/i,'').trim().split(' ');
+    wmEl.textContent = parts[parts.length - 1] || '';
+  }
+
+  // Photo
+  const photoImg = el('home-director-photo');
+  const photoPH = el('home-director-photo-placeholder');
+  if (photoImg) {
+    if (dir.photo && dir.photo.length > 5) {
+      photoImg.src = dir.photo;
+      photoImg.style.display = 'block';
+      if (photoPH) photoPH.style.display = 'none';
+    } else {
+      photoImg.style.display = 'none';
+      if (photoPH) photoPH.style.display = 'flex';
+    }
+  }
+}
+
+function populateDirectorAdminForm() {
+  const dir = (appState && appState.director) ? appState.director : (defaultHospitalData ? defaultHospitalData.director : null);
+  if (!dir) return;
+
+  const get = id => document.getElementById(id);
+  if (get('admin-dir-name')) get('admin-dir-name').value = dir.name || '';
+  if (get('admin-dir-title')) get('admin-dir-title').value = dir.title || '';
+  if (get('admin-dir-qualification')) get('admin-dir-qualification').value = dir.qualification || '';
+  if (get('admin-dir-experience')) get('admin-dir-experience').value = dir.experience || '';
+  if (get('admin-dir-tagline')) get('admin-dir-tagline').value = dir.tagline || '';
+  if (get('admin-dir-bio')) get('admin-dir-bio').value = dir.bio || '';
+  if (get('admin-dir-journey')) get('admin-dir-journey').value = dir.journey || '';
+  if (get('admin-dir-achievements')) get('admin-dir-achievements').value = Array.isArray(dir.achievements) ? dir.achievements.join('\n') : '';
+  if (get('admin-dir-photo')) get('admin-dir-photo').value = dir.photo || '';
+  if (get('admin-dir-linkedin')) get('admin-dir-linkedin').value = (dir.socialLinks && dir.socialLinks.linkedin) ? dir.socialLinks.linkedin : '';
+  if (get('admin-dir-facebook')) get('admin-dir-facebook').value = (dir.socialLinks && dir.socialLinks.facebook) ? dir.socialLinks.facebook : '';
+  if (get('admin-dir-twitter')) get('admin-dir-twitter').value = (dir.socialLinks && dir.socialLinks.twitter) ? dir.socialLinks.twitter : '';
+
+  updateDirPhotoPreview(dir.photo || '');
+}
+
+/* ============ DIRECTOR ADMIN - PHOTO PREVIEW ============ */
+window.updateDirPhotoPreview = function(url) {
+  const img = document.getElementById('dir-photo-preview');
+  const placeholder = document.getElementById('dir-photo-placeholder-admin');
+  if (img) {
+    if (url && url.length > 5) {
+      img.src = url;
+      img.style.display = 'block';
+      if (placeholder) placeholder.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      if (placeholder) placeholder.style.display = 'flex';
+    }
+  }
+};
+
+/* ============ DIRECTOR ADMIN - FILE UPLOAD ============ */
+window.handleDirectorPhotoUpload = function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const base64 = e.target.result;
+    const urlInput = document.getElementById('admin-dir-photo');
+    updateDirPhotoPreview(base64);
+    if (urlInput) urlInput.value = base64;
+
+    // Upload to Supabase
+    try {
+      showToast('Uploading director photo...');
+      const fileName = 'director-photo-' + Date.now() + '.png';
+      const uploadedUrl = await uploadImageToSupabase(fileName, base64);
+      if (urlInput) urlInput.value = uploadedUrl;
+      updateDirPhotoPreview(uploadedUrl);
+      showToast('Director photo uploaded!');
+    } catch (err) {
+      console.warn('Director photo upload warning:', err);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
+/* ============ DIRECTOR ADMIN - FORM SUBMIT ============ */
+window.handleDirectorFormSubmit = async function(e) {
+  if (e) e.preventDefault();
+
+  const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+  const dirData = {
+    name: get('admin-dir-name'),
+    title: get('admin-dir-title'),
+    qualification: get('admin-dir-qualification'),
+    experience: get('admin-dir-experience'),
+    tagline: get('admin-dir-tagline'),
+    bio: get('admin-dir-bio'),
+    journey: get('admin-dir-journey'),
+    achievements: get('admin-dir-achievements').split('\n').map(s => s.trim()).filter(Boolean),
+    photo: get('admin-dir-photo'),
+    socialLinks: {
+      linkedin: get('admin-dir-linkedin'),
+      facebook: get('admin-dir-facebook'),
+      twitter: get('admin-dir-twitter')
+    }
+  };
+
+  if (!dirData.name) {
+    alert('Please enter the Director\'s name.');
+    return;
+  }
+
+  appState.director = dirData;
+  saveHospitalData(appState);
+  renderDirectorSection();
+  renderHomeDirectorSpotlight();
+  if (window.lucide) window.lucide.createIcons();
+
+  // Save to Supabase settings
+  try {
+    await saveSettingToSupabase('director', dirData);
+    showToast('Director Profile saved to Supabase!');
+  } catch (err) {
+    showToast('Director Profile saved locally.');
+  }
+};
+
+/* ============ DIRECTOR ADMIN - RESET FORM ============ */
+window.resetDirectorForm = function() {
+  const dir = defaultHospitalData ? defaultHospitalData.director : null;
+  if (dir) {
+    appState.director = JSON.parse(JSON.stringify(dir));
+    saveHospitalData(appState);
+    populateDirectorAdminForm();
+    renderDirectorSection();
+    renderHomeDirectorSpotlight();
+    showToast('Director form reset to defaults.');
+  }
+};
+
+
 function initAdminPanel() {
   document.addEventListener('click', (e) => {
     const navItem = e.target.closest('.admin-nav-item');
@@ -1927,6 +2151,7 @@ function initAdminPanel() {
   });
 
   populateAdminForms();
+  populateDirectorAdminForm();
   renderAdminDoctorsTable();
   renderAdminBlogsTable();
   if (typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();

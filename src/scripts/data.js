@@ -580,6 +580,25 @@ export const defaultHospitalData = {
       createdTime: "2026-08-11 09:15 AM"
     }
   ]
+,
+  director: {
+    name: "Dr. Life Line Director",
+    title: "Founder & Managing Director",
+    qualification: "MBBS, MS (General Surgery)",
+    experience: "20+ Years",
+    photo: "",
+    tagline: "Bringing World-Class Healthcare to Every Doorstep of Surguja Division",
+    bio: "Life Line Hospital Ambikapur was founded with one mission — to ensure that every patient in Surguja, Surajpur, Balrampur and surrounding districts receives world-class medical care without traveling to distant cities. Our hospital stands as a testament to that commitment, with 24x7 emergency care, advanced surgical suites, and a dedicated team of specialist doctors.",
+    journey: "Born from a deep commitment to serve the people of Northern Chhattisgarh, Life Line Hospital was established to bridge the critical healthcare gap in Surguja division. Over the years, we have grown from a small setup to a 50+ bed multispecialty center equipped with a Cath Lab, 3 Modular Operation Theatres, Level-3 NICU, Laminar Airflow ICU, and 24x7 Casualty — all under one roof in Ambikapur.",
+    achievements: [
+      "Established Northern CG first 24x7 Digital Cath Lab for Emergency Angioplasty",
+      "1000+ Successful Total Knee and Hip Replacement Surgeries in Surguja",
+      "Ayushman Bharat Cashless Facility serving 25,000+ tribal patients",
+      "Level-3 NICU with Advanced Neonatal Ventilators and LED Phototherapy",
+      "24x7 Emergency Trauma Center with Resident Surgeons and Intensivists"
+    ],
+    socialLinks: { linkedin: "", facebook: "", twitter: "" }
+  }
 };
 
 export function getHospitalData() {
@@ -602,6 +621,9 @@ export function getHospitalData() {
       }
       if (!parsed.appointments) {
         parsed.appointments = [...defaultHospitalData.appointments];
+      }
+      if (!parsed.director) {
+        parsed.director = JSON.parse(JSON.stringify(defaultHospitalData.director));
       }
       return parsed;
     }
