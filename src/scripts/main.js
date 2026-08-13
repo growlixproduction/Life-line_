@@ -3756,18 +3756,26 @@ function compressAndResizeImage(file, maxWidth = 1600, maxHeight = 1200, quality
 }
 
 /* Image Upload & Preview Global Handlers for Admin Panel */
-window.handleHeroImageUpload = function(input) {
+window.handleHeroImageUpload = async function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Opening cropping tool...');
-    openCropperModal(file, (publicUrl) => {
-      const imgInput = document.getElementById('admin-hero-img');
-      if (imgInput) {
-        imgInput.value = publicUrl;
-        updateHeroImgPreview(publicUrl);
-      }
-      showToast('⚡ Hero banner adjusted & saved successfully!');
-    }, 16 / 9);
+    updateHeroImgPreview('loading');
+    showToast('Processing & uploading hero photo...');
+
+    try {
+      const base64Preview = await compressAndResizeImage(file, 1600, 1200);
+      updateHeroImgPreview(base64Preview);
+      const urlInput = document.getElementById('admin-hero-img');
+      if (urlInput) urlInput.value = base64Preview;
+
+      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 1200);
+      if (urlInput) urlInput.value = publicUrl;
+      updateHeroImgPreview(publicUrl);
+      showToast('⚡ Hero photo uploaded successfully!');
+    } catch (err) {
+      console.error('Hero upload error:', err);
+      showToast('Hero photo ready locally. Save to apply.');
+    }
   }
 };
 
@@ -3829,33 +3837,47 @@ window.clearHeroImgPreview = function() {
   updateHeroImgPreview('');
 };
 
-window.handleDocImageUpload = function(input) {
+window.handleDocImageUpload = async function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Opening cropping tool...');
-    openCropperModal(file, (publicUrl) => {
-      const imgInput = document.getElementById('admin-doc-image');
-      if (imgInput) {
-        imgInput.value = publicUrl;
-        updateDocImgPreview(publicUrl);
-      }
-      showToast('⚡ Doctor photo adjusted & saved successfully!');
-    }, 1 / 1);
+    showToast('Processing & uploading doctor photo...');
+
+    try {
+      const base64Preview = await compressAndResizeImage(file, 1200, 1200);
+      updateDocImgPreview(base64Preview);
+      const urlInput = document.getElementById('admin-doc-image');
+      if (urlInput) urlInput.value = base64Preview;
+
+      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1200, 1200);
+      if (urlInput) urlInput.value = publicUrl;
+      updateDocImgPreview(publicUrl);
+      showToast('⚡ Doctor photo uploaded successfully!');
+    } catch (err) {
+      console.error('Doctor upload error:', err);
+      showToast('Doctor photo ready locally. Save to apply.');
+    }
   }
 };
 
-window.handleBlogImageUpload = function(input) {
+window.handleBlogImageUpload = async function(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    showToast('Opening cropping tool...');
-    openCropperModal(file, (publicUrl) => {
-      const imgInput = document.getElementById('admin-blog-image');
-      if (imgInput) {
-        imgInput.value = publicUrl;
-        if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(publicUrl);
-      }
-      showToast('⚡ Blog image adjusted & saved successfully!');
-    }, 16 / 9);
+    showToast('Processing & uploading blog photo...');
+
+    try {
+      const base64Preview = await compressAndResizeImage(file, 1600, 900);
+      if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(base64Preview);
+      const urlInput = document.getElementById('admin-blog-image');
+      if (urlInput) urlInput.value = base64Preview;
+
+      const publicUrl = await uploadFileDirectToSupabaseBucket(file, 1600, 900);
+      if (urlInput) urlInput.value = publicUrl;
+      if (typeof updateBlogImgPreview === 'function') updateBlogImgPreview(publicUrl);
+      showToast('⚡ Blog photo uploaded successfully!');
+    } catch (err) {
+      console.error('Blog upload error:', err);
+      showToast('Blog photo ready locally. Save to apply.');
+    }
   }
 };
 
