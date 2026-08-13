@@ -2654,59 +2654,76 @@
   </nav>
 
   <!-- DOCTOR PROFILE DETAILS MODAL -->
+  <style>
+    @media (max-width: 768px) {
+      .responsive-doc-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .responsive-doc-photo {
+        min-height: 250px !important;
+        height: 250px !important;
+      }
+    }
+  </style>
   <div id="doctor-details-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px;">
-    <div class="modal-card" style="max-width: 580px; width: 92%; padding: 0; border-radius: 24px; overflow: hidden; background: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
-      <!-- Header Image Banner -->
-      <div style="position: relative; background: #e6f7f5; height: 320px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-        <img id="modal-doc-detail-img" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
-        <button type="button" onclick="closeDoctorDetailsModal()" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.9); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: #1e293b; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">✕</button>
-        <span id="modal-doc-detail-specialty" style="position: absolute; bottom: 16px; left: 16px; background: rgba(2,128,144,0.95); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.775rem; font-weight: 700; backdrop-filter: blur(4px);">
+    <div class="modal-card responsive-doc-grid" style="max-width: 820px; width: 92%; padding: 0; border-radius: 24px; overflow: hidden; background: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: grid; grid-template-columns: 340px 1fr; position: relative;">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeDoctorDetailsModal()" style="position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); z-index: 10; transition: all 0.2s;">✕</button>
+
+      <!-- LEFT SIDE: Doctor Photo -->
+      <div class="responsive-doc-photo" style="position: relative; background: #e6f7f5; height: 100%; min-height: 480px; display: flex; overflow: hidden;">
+        <img id="modal-doc-detail-img" src="" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: center top;">
+        <span id="modal-doc-detail-specialty" style="position: absolute; bottom: 20px; left: 20px; background: rgba(2,128,144,0.95); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.775rem; font-weight: 700; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15);">
           Specialty
         </span>
       </div>
 
-      <!-- Content -->
-      <div style="padding: 24px;">
-        <span id="modal-doc-detail-designation" style="font-size: 0.775rem; color: #028090; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">DESIGNATION</span>
-        <h3 id="modal-doc-detail-name" style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin: 0 0 6px 0;">Doctor Name</h3>
-        <p id="modal-doc-detail-degree" style="font-size: 0.9rem; color: #475569; margin: 0 0 16px 0; font-weight: 600;">Degrees &amp; Qualifications</p>
+      <!-- RIGHT SIDE: Doctor Info Details -->
+      <div style="padding: 32px 30px; display: flex; flex-direction: column; justify-content: center;">
+        <span id="modal-doc-detail-designation" style="font-size: 0.775rem; color: #028090; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px;">DESIGNATION</span>
+        <h3 id="modal-doc-detail-name" style="font-size: 1.6rem; color: #014e59; font-weight: 800; margin: 0 0 4px 0; line-height: 1.2;">Doctor Name</h3>
+        <p id="modal-doc-detail-degree" style="font-size: 0.95rem; color: #475569; margin: 0 0 20px 0; font-weight: 600;">Degrees &amp; Qualifications</p>
 
-        <!-- Brief Bio -->
-        <div style="background: #f8fafc; padding: 16px; border-radius: 14px; border-left: 4px solid #028090; margin-bottom: 20px;">
+        <!-- Professional Profile Bio -->
+        <div style="background: #f8fafc; padding: 18px; border-radius: 16px; border-left: 4px solid #028090; margin-bottom: 22px;">
           <h5 style="margin: 0 0 6px 0; font-size: 0.85rem; color: #014e59; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Professional Profile</h5>
-          <p id="modal-doc-detail-bio" style="margin: 0; font-size: 0.875rem; color: #475569; line-height: 1.6; font-weight: 500;">
+          <p id="modal-doc-detail-bio" style="margin: 0; font-size: 0.875rem; color: #475569; line-height: 1.65; font-weight: 500;">
             Doctor professional bio description...
           </p>
         </div>
 
         <!-- OPD Info Grid -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
-          <div style="background: #f1f5f9; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 1.25rem;">⏱️</span>
+          <div style="background: #f1f5f9; padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.35rem;">⏱️</span>
             <div>
-              <span style="display: block; font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase;">OPD Timings</span>
-              <span id="modal-doc-detail-timings" style="font-size: 0.825rem; color: #1e293b; font-weight: 700;">10:00 AM - 02:00 PM</span>
+              <span style="display: block; font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">OPD Timings</span>
+              <span id="modal-doc-detail-timings" style="font-size: 0.85rem; color: #1e293b; font-weight: 700;">10:00 AM - 02:00 PM</span>
             </div>
           </div>
-          <div style="background: #e6f7f5; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 1.25rem;">🎖️</span>
+          <div style="background: #e6f7f5; padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.35rem;">🎖️</span>
             <div>
-              <span style="display: block; font-size: 0.65rem; color: #028090; font-weight: 700; text-transform: uppercase;">Experience</span>
-              <span id="modal-doc-detail-exp" style="font-size: 0.825rem; color: #014e59; font-weight: 700;">10+ Years Exp</span>
+              <span style="display: block; font-size: 0.65rem; color: #028090; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">Experience</span>
+              <span id="modal-doc-detail-exp" style="font-size: 0.85rem; color: #014e59; font-weight: 700;">10+ Years Exp</span>
             </div>
           </div>
-          <div style="background: #fdf2f8; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 8px; grid-column: 1 / -1;">
-            <span style="font-size: 1.25rem;">💳</span>
-            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; padding-right: 8px;">
+          <div style="background: #fdf2f8; padding: 14px 16px; border-radius: 14px; display: flex; align-items: center; gap: 10px; grid-column: 1 / -1; margin-top: 4px; border: 1px solid #fbcfe8;">
+            <span style="font-size: 1.4rem;">💳</span>
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
               <div>
-                <span style="display: block; font-size: 0.65rem; color: #be185d; font-weight: 700; text-transform: uppercase;">OPD Consultation Fee</span>
-                <span id="modal-doc-detail-fee" style="font-size: 0.95rem; color: #9d174d; font-weight: 800;">₹500</span>
+                <span style="display: block; font-size: 0.65rem; color: #be185d; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">OPD Consultation Fee</span>
+                <span id="modal-doc-detail-fee" style="font-size: 1rem; color: #9d174d; font-weight: 800;">₹500</span>
               </div>
-              <button id="modal-doc-detail-book-btn" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.8rem; font-weight: 800;">Book Appointment</button>
+              <button id="modal-doc-detail-book-btn" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.825rem; font-weight: 800; background: linear-gradient(135deg,#028090,#00c4a7); border: none; box-shadow: 0 4px 12px rgba(2,128,144,0.25);">
+                Book Appointment
+              </button>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
