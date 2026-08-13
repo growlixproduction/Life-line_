@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Line Hospital Ambikapur - Advanced Multispecialty & Emergency Hospital</title>
+  <meta name="description" content="Life Line Hospital Ambikapur is Surguja Division's leading multispecialty healthcare center featuring 24x7 Emergency, Cath Lab, Knee Replacement, Level-3 NICU, 3T MRI & Expert Doctors.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23028090'><path d='M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z'/></svg>">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Cropper.js for Interactive Admin Image Crop & Resize -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+
+  <!-- Ultra-Slim Announcement Top Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-info-group">
+        <div class="top-info-item">
+          <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
+          <span class="dynamic-address">Namnakala, Opp. Polytechnic College, Outer Ring Road, Ambikapur, CG (497001)</span>
+        </div>
+        <div class="top-info-item">
+          <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+          <span>OPD: 5:00 AM - 12:00 PM &amp; Evening | Casualty: 24x7</span>
+        </div>
+      </div>
+
+      <div class="top-info-group">
+        <div class="top-emergency-badge">
+          <i data-lucide="phone-call" style="width: 12px; height: 12px;"></i>
+          <span id="top-bar-announcement-text">Emergency 24x7: +91 7879596337, +91 7879714048</span>
+        </div>
+        <div class="top-info-item">
+          <i data-lucide="shield-check" style="width: 13px; height: 13px;"></i>
+          <span>NABH Certified • Ayushman PM-JAY Cashless</span>
+        </div>
+        <a href="#login" data-view-target="login" style="font-weight: 700; color: #70e4d5; font-size: 0.75rem; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px;">
+          <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> Admin Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Header & Navigation -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <!-- Logo -->
+        <a href="#home-view" class="brand-logo" data-view-target="home-view">
+          <div class="logo-icon-wrap">
+            <i data-lucide="cross" style="width: 26px; height: 26px;"></i>
+          </div>
+          <div class="brand-text-wrap">
+            <span class="brand-name">LIFE LINE <span>HOSPITAL</span></span>
+            <span class="brand-tagline">Ambikapur • Multispecialty Care</span>
+          </div>
+        </a>
+
+        <!-- Navigation Links with Dropdown Menu -->
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#home-view" class="nav-link active" data-view-target="home-view">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#overview-view" class="nav-link" data-view-target="overview-view">
+              About Us <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a href="#overview-view" class="dropdown-link" data-view-target="overview-view">
+                <div class="dropdown-icon"><i data-lucide="hospital"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Overview &amp; Vision</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Healthcare excellence in Surguja</div>
+                </div>
+              </a>
+              <a href="#accreditations-view" class="dropdown-link" data-view-target="accreditations-view">
+                <div class="dropdown-icon"><i data-lucide="award"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Accreditations &amp; TPA</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">NABH compliant &amp; Ayushman Cashless</div>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="#departments-view" class="nav-link" data-view-target="departments-view">
+              Departments <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu mega-menu" id="mega-menu-dept-list">
+              <!-- Dynamically Populated -->
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="#doctors-view" class="nav-link" data-view-target="doctors-view">
+              Doctors <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a href="#doctors-view" class="dropdown-link" data-view-target="doctors-view">
+                <div class="dropdown-icon"><i data-lucide="users"></i></div>
+                <div>
+                  <div style="font-weight: 700;">Find a Specialist</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Search expert doctor panel</div>
+                </div>
+              </a>
+              <a href="#doctors-view" class="dropdown-link" data-view-target="doctors-view">
+                <div class="dropdown-icon"><i data-lucide="calendar"></i></div>
+                <div>
+                  <div style="font-weight: 700;">OPD Timings Schedule</div>
+                  <div style="font-size: 0.775rem; color: #64748b;">Check doctor availability</div>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="#facilities-view" class="nav-link" data-view-target="facilities-view">Facilities</a>
+          </li>
+          <li class="nav-item">
+            <a href="#blogs-view" class="nav-link" data-view-target="blogs-view">Health Blogs</a>
+          </li>
+          <li class="nav-item">
+            <a href="#media-view" class="nav-link" data-view-target="media-view">Media & Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact-view" class="nav-link" data-view-target="contact-view">Contact Us</a>
+          </li>
+        </ul>
+
+        <!-- Header Action Buttons -->
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openBookingModal()">
+            <i data-lucide="calendar-plus"></i> Book Appointment
+          </button>
+          <button class="mobile-toggle" aria-label="Toggle Menu">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MOBILE DRAWER MENU OVERLAY -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay">
+    <div class="mobile-drawer">
+      <div class="drawer-header">
+        <div class="brand-logo">
+          <div class="logo-icon-wrap" style="width: 36px; height: 36px;">
+            <i data-lucide="cross" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div class="brand-text-wrap">
+            <span class="brand-name" style="font-size: 1.1rem;">LIFE LINE <span>HOSPITAL</span></span>
+            <span class="brand-tagline">Ambikapur</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" id="close-drawer-btn" aria-label="Close Menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        <ul class="drawer-nav-list">
+          <li>
+            <a href="#home-view" class="drawer-nav-link active" data-view-target="home-view">
+              <span>Home</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#overview-view" class="drawer-nav-link" data-view-target="overview-view">
+              <span>Overview &amp; Vision</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#accreditations-view" class="drawer-nav-link" data-view-target="accreditations-view">
+              <span>Accreditations &amp; TPA</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#departments-view" class="drawer-nav-link" data-view-target="departments-view">
+              <span>Departments</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#doctors-view" class="drawer-nav-link" data-view-target="doctors-view">
+              <span>Doctors Directory</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#facilities-view" class="drawer-nav-link" data-view-target="facilities-view">
+              <span>Hospital Facilities</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#blogs-view" class="drawer-nav-link" data-view-target="blogs-view">
+              <span>Health Blogs & News</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#media-view" class="drawer-nav-link" data-view-target="media-view">
+              <span>Media & Gallery</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#contact-view" class="drawer-nav-link" data-view-target="contact-view">
+              <span>Contact Us</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#login" class="drawer-nav-link" data-view-target="login" style="color: #028090;">
+              <span>🔐 Admin Panel</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn btn-primary" onclick="openBookingModal()" style="width: 100%;">
+          <i data-lucide="calendar-plus"></i> Book Appointment
+        </button>
+        <a href="tel:+917774234999" class="btn btn-emergency" style="width: 100%;">
+          <i data-lucide="phone"></i> Emergency Hotline
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN VIEWS CONTAINER -->
+  <main id="app-main-content">
+
+    <!-- ================= 1. HOME VIEW ================= -->
+    <section id="home-view" class="page-view active-view">
+      
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="container hero-grid">
+          <div class="hero-text-col reveal-on-scroll delay-100">
+            <div class="hero-badge">
+              <span class="status-dot"></span>
+              <span id="hero-badge-text">24x7 Trauma & Multispecialty Care Active</span>
+            </div>
+            <h1 class="hero-title">
+              <span id="hero-title-main">World-Class Healthcare Right in</span> <span id="hero-title-highlight">Ambikapur</span>
+            </h1>
+            <p class="hero-desc" id="hero-desc-text">
+              Life Line Hospital brings together renowned specialist doctors, modern ICU infrastructure, 24/7 Cath Lab, and compassionate nursing care to serve Northern Chhattisgarh.
+            </p>
+            <div class="hero-cta-group">
+              <button class="btn btn-primary" onclick="openBookingModal()">
+                <i data-lucide="calendar-check"></i> Book OPD Appointment
+              </button>
+              <a href="tel:+917774234999" class="btn btn-emergency">
+                <i data-lucide="phone"></i> Emergency Hotline 24x7
+              </a>
+            </div>
+            <div class="hero-features-list">
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>24/7 Ventilator Ambulance</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>Ayushman PM-JAY Cashless</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>Level-3 NICU & PICU</span>
+              </div>
+              <div class="hero-feature-item">
+                <div class="hero-feature-icon"><i data-lucide="check"></i></div>
+                <span>3T MRI & 128 CT Scan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-image-card reveal-on-scroll delay-200">
+            <div class="hero-image-wrap">
+              <img id="hero-banner-img" src="/assets/images/hospital_hero.png" alt="Life Line Hospital Ambikapur Building">
+            </div>
+            <div class="hero-floating-card">
+              <div class="floating-icon">
+                <i data-lucide="heart-pulse" style="width: 24px; height: 24px;"></i>
+              </div>
+              <div>
+                <strong id="floating-card-title" style="display: block; font-size: 1.05rem; color: #028090;">24x7 Emergency Care</strong>
+                <span id="floating-card-subtitle" style="font-size: 0.825rem; color: #64748b;">Trauma & Cardiac Team Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick OPD Booking Bar Strip -->
+      <div class="container quick-booking-bar reveal-on-scroll delay-300">
+        <div class="booking-strip-card">
+          <div class="input-field-group">
+            <label>Specialty Department</label>
+            <select id="quick-dept-select">
+              <option value="">Choose Department</option>
+            </select>
+          </div>
+          <div class="input-field-group">
+            <label>Preferred Date</label>
+            <input type="date" id="quick-date-input">
+          </div>
+          <div class="input-field-group">
+            <label>Patient Mobile</label>
+            <input type="tel" placeholder="10-digit phone number" id="quick-phone-input">
+          </div>
+          <button class="btn btn-primary" onclick="openBookingModal()" style="height: 44px; min-width: 150px;">
+            <i data-lucide="search"></i> Find & Book OPD
+          </button>
+        </div>
+      </div>
+
+      <!-- Key Statistics Section -->
+      <section class="stats-section">
+        <div class="container stats-grid reveal-on-scroll">
+          <div class="stat-card">
+            <div class="stat-number" data-target="15" data-suffix="+">15+</div>
+            <div class="stat-label">Medical Specialties</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="14" data-suffix="+">14+</div>
+            <div class="stat-label">Expert Doctors</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="50">50</div>
+            <div class="stat-label">Advanced Beds</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="25000" data-suffix="+" data-format="comma">25,000+</div>
+            <div class="stat-label">Patients Served</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="99.4" data-suffix="%">99.4%</div>
+            <div class="stat-label">Satisfaction Rate</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Departments Spotlight -->
+      <section class="departments-section">
+        <div class="container">
+          <div class="section-header reveal-on-scroll">
+            <span class="section-subtitle">Centers of Excellence</span>
+            <h2 class="section-title">Specialized Medical Departments</h2>
+            <p class="section-desc">Comprehensive clinical services equipped with cutting-edge technology and experienced medical teams.</p>
+          </div>
+
+          <div class="departments-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Doctors Showcase -->
+      <section class="doctors-section">
+        <div class="container">
+          <div class="section-header reveal-on-scroll">
+            <span class="section-subtitle">Meet Our Specialists</span>
+            <h2 class="section-title">Renowned Doctors & Surgeons</h2>
+            <p class="section-desc">Consult with highly qualified doctor panel available for OPD and surgical consultations.</p>
+          </div>
+
+          <div class="doctors-filter-bar reveal-on-scroll">
+            <input type="text" class="doctor-search-input" placeholder="Search doctor by name, specialty or qualification...">
+            <select class="form-control doctor-dept-filter" style="width: auto; min-width: 220px;">
+              <option value="all">All Specialties</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="orthopedics">Orthopedics</option>
+              <option value="pediatrics">Pediatrics & NICU</option>
+              <option value="gynaecology">Gynecology</option>
+              <option value="neurology">Neurology</option>
+              <option value="surgery">Laparoscopic Surgery</option>
+              <option value="urology">Urology</option>
+            </select>
+          </div>
+
+          <div class="doctors-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Facilities Spotlight -->
+      <section class="facilities-section">
+        <div class="container">
+          <div class="section-header reveal-on-scroll">
+            <span class="section-subtitle">World Class Infrastructure</span>
+            <h2 class="section-title">Advanced Facilities & ICU Setup</h2>
+            <p class="section-desc">Designed with infection-controlled standards and 24x7 diagnostic backings.</p>
+          </div>
+
+          <div class="facilities-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Health Blogs & News Section -->
+      <section class="blogs-section">
+        <div class="container">
+          <div class="section-header reveal-on-scroll">
+            <span class="section-subtitle">Health Insights & Articles</span>
+            <h2 class="section-title">Latest Medical Blogs & News</h2>
+            <p class="section-desc">Read expert medical advice, health tips, and hospital updates from Life Line doctors.</p>
+          </div>
+
+          <div class="blogs-grid" id="blogs-grid-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Patient Testimonials -->
+      <section class="testimonials-section">
+        <div class="container">
+          <div class="section-header reveal-on-scroll">
+            <span class="section-subtitle">Patient Care Stories</span>
+            <h2 class="section-title">Trusted by Thousands in Chhattisgarh</h2>
+            <p class="section-desc">Read real reviews from patients treated at Life Line Hospital Ambikapur.</p>
+          </div>
+
+          <div class="testimonials-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ================= 2. ABOUT US VIEW ================= -->
+    <!-- ================= 2. OVERVIEW & VISION VIEW ================= -->
+    <section id="overview-view" class="page-view">
+      <div class="container" style="padding: 60px 40px;">
+        
+        <!-- Header Banner -->
+        <div class="section-header reveal-on-scroll" style="text-align: left; max-width: 100%; margin-bottom: 40px;">
+          <span class="section-subtitle">Healthcare Excellence in Surguja</span>
+          <h2 class="section-title">Life Line Hospital Ambikapur — Overview &amp; Vision</h2>
+          <p class="section-desc">Leading multispecialty hospital and 24x7 trauma care center serving Northern Chhattisgarh with compassionate, advanced medical care.</p>
+        </div>
+
+        <!-- Verified Hospital Quick Facts Bar (Justdial & Official Information) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 50px;" class="reveal-on-scroll">
+          <div style="background: white; padding: 22px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: #028090;">
+              <i data-lucide="map-pin" style="width: 24px; height: 24px;"></i>
+              <strong style="font-size: 1rem; color: #014e59;">Hospital Location</strong>
+            </div>
+            <p style="font-size: 0.875rem; color: #475569; margin: 0; line-height: 1.5;">Ring Road, Opp. Polytechnic College, Ambikavani, Ambikapur, Surguja, CG - 497001</p>
+          </div>
+
+          <div style="background: white; padding: 22px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: #028090;">
+              <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
+              <strong style="font-size: 1rem; color: #014e59;">Operating Hours</strong>
+            </div>
+            <p style="font-size: 0.875rem; color: #475569; margin: 0; line-height: 1.5;"><strong>OPD:</strong> 09:00 AM – 08:00 PM (Mon-Sat)<br><strong>Casualty &amp; Emergency:</strong> 24x7 Open (365 Days)</p>
+          </div>
+
+          <div style="background: white; padding: 22px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: #028090;">
+              <i data-lucide="phone-call" style="width: 24px; height: 24px;"></i>
+              <strong style="font-size: 1rem; color: #014e59;">Emergency Helpline</strong>
+            </div>
+            <p style="font-size: 0.875rem; color: #475569; margin: 0; line-height: 1.5;"><strong>Emergency:</strong> +91 7879596337<br><strong>OPD Desk:</strong> +91 7879714048</p>
+          </div>
+
+          <div style="background: white; padding: 22px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: #028090;">
+              <i data-lucide="star" style="width: 24px; height: 24px; color: #f59e0b; fill: #f59e0b;"></i>
+              <strong style="font-size: 1rem; color: #014e59;">Patient Rating &amp; Review</strong>
+            </div>
+            <p style="font-size: 0.875rem; color: #475569; margin: 0; line-height: 1.5;"><strong>⭐ 3.8 / 5.0</strong> based on 92+ Verified Reviews on Justdial &amp; Google</p>
+          </div>
+        </div>
+
+        <!-- Vision & Mission Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px;">
+          <div class="reveal-on-scroll delay-100">
+            <h3 style="font-size: 1.8rem; margin-bottom: 16px; color: #014e59; font-weight: 800;">Our Core Mission &amp; Vision</h3>
+            <p style="margin-bottom: 16px; color: #475569; line-height: 1.7; font-size: 1.025rem;">
+              Life Line Hospital Ambikapur was established to bridge the critical healthcare gap in Northern Chhattisgarh (Surguja, Surajpur, Balrampur, Koriya &amp; Jashpur districts), providing 24x7 emergency medical attention, cardiac interventions, and advanced surgical capabilities.
+            </p>
+            <p style="margin-bottom: 24px; color: #475569; line-height: 1.7; font-size: 1.025rem;">
+              We believe every patient deserves empathetic, transparent, and international-standard medical treatment. Our facility features 150+ inpatient beds, 25 ICU beds, laminar airflow operation theatres, and round-the-clock resident medical officers.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div style="background: #f0f9ff; padding: 20px; border-radius: 14px; border-left: 4px solid #028090;">
+                <h4 style="color: #014e59; font-size: 1.05rem; margin-bottom: 6px; font-weight: 700;">🎯 Our Vision</h4>
+                <p style="font-size: 0.85rem; color: #475569; margin: 0;">To be the region's most trusted hospital for emergency response and specialized clinical treatment.</p>
+              </div>
+              <div style="background: #f0f9ff; padding: 20px; border-radius: 14px; border-left: 4px solid #00c4a7;">
+                <h4 style="color: #014e59; font-size: 1.05rem; margin-bottom: 6px; font-weight: 700;">❤️ Our Mission</h4>
+                <p style="font-size: 0.85rem; color: #475569; margin: 0;">Affordable, high-quality tertiary medical care delivered with zero-compromise patient safety.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="overview-image-wrap" class="reveal-on-scroll delay-200" style="position: relative; display: none;">
+            <img id="overview-img-display" src="" alt="Life Line Hospital Ambikapur Building" style="width: 100%; border-radius: 20px; box-shadow: 0 12px 36px rgba(0,0,0,0.12); height: 380px; object-fit: cover;">
+            <div style="position: absolute; bottom: -20px; right: -10px; background: white; padding: 18px 24px; border-radius: 16px; box-shadow: 0 10px 30px rgba(2,128,144,0.18); border: 1px solid #e2e8f0;">
+              <div style="font-size: 1.6rem; font-weight: 800; color: #028090;">50 Beds</div>
+              <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">3 Operation Theatres</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infrastructure & Specialties Overview -->
+        <div style="background: white; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 50px;" class="reveal-on-scroll">
+          <h3 style="font-size: 1.5rem; color: #014e59; font-weight: 800; margin-bottom: 24px;">Hospital Infrastructure &amp; Department Capabilities</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="heart-pulse"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">24x7 Cath Lab &amp; Cardiology</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">Emergency Angiography, Primary Angioplasty (PPCI), Pacemaker Implantation, and ECHO Facilities.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="bone"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">Orthopedics &amp; Joint Replacement</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">Total Knee Replacement (TKR), Total Hip Replacement (THR), Arthroscopy, and Complex Trauma Surgery.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="activity"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">Critical Care &amp; Level-3 NICU/PICU</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">25 ICU beds with Advanced Ventilators, Monitors, Dialysis Unit, and Specialized Newborn Care.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="brain"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">Neurology &amp; Neurosurgery</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">Brain tumor surgeries, head injury trauma care, stroke management, and spine surgeries.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="scissors"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">Laparoscopic &amp; General Surgery</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">Minimally invasive keyhole surgeries for Gallbladder, Hernia, Appendix, and Gastrointestinal disorders.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: start;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: #e0f7f4; color: #028090; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="scan"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 4px;">Advanced Radiology &amp; Lab</h4>
+                <p style="font-size: 0.875rem; color: #64748b; margin: 0; line-height: 1.5;">3T MRI, 128-Slice CT Scan, Digital X-Ray, 4D Ultrasound, Echocardiogram, and 24x7 Automated Lab.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Modes & Acceptance -->
+        <div style="background: linear-gradient(135deg, #014e59, #028090); color: white; padding: 32px 40px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;" class="reveal-on-scroll">
+          <div>
+            <h4 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; color: white;">Convenient Payment Options &amp; Cashless Care</h4>
+            <p style="margin: 0; font-size: 0.9rem; color: #ccfbf1;">Accepted: Cash, Google Pay, PhonePe, Paytm, Cards (Debit/Credit), Ayushman Bharat &amp; All Major Insurance TPAs.</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a href="#accreditations-view" onclick="switchView('accreditations-view')" class="btn btn-primary" style="background: white; color: #014e59; font-weight: 800; border: none;">
+              View TPA Empanelment
+            </a>
+            <button class="btn btn-primary" onclick="openBookingModal()">
+              Book OPD Appointment
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2.5 ACCREDITATIONS & TPA VIEW ================= -->
+    <section id="accreditations-view" class="page-view">
+      <div class="container" style="padding: 60px 40px;">
+        
+        <!-- Header Banner -->
+        <div class="section-header reveal-on-scroll" style="text-align: left; max-width: 100%; margin-bottom: 40px;">
+          <span class="section-subtitle">Quality Standards &amp; Insurance Coverage</span>
+          <h2 class="section-title">Accreditations, Ayushman &amp; TPA Empanelment</h2>
+          <p class="section-desc">Life Line Hospital Ambikapur adheres to NABH compliant clinical quality standards and is empaneled with Ayushman Bharat PM-JAY &amp; 15+ leading health insurance TPAs for 100% cashless medical treatment.</p>
+        </div>
+
+        <!-- Quality Accreditations Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 50px;" class="reveal-on-scroll">
+          
+          <div style="background: white; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg,#028090,#00c4a7); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <i data-lucide="award" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 style="font-size: 1.15rem; color: #014e59; font-weight: 800; margin-bottom: 8px;">NABH Compliant Standards</h3>
+            <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+              Adhering to strict National Accreditation Board for Hospitals guidelines for patient safety, clinical protocols, medication management, and ethical care.
+            </p>
+          </div>
+
+          <div style="background: white; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg,#028090,#00c4a7); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <i data-lucide="shield-check" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 style="font-size: 1.15rem; color: #014e59; font-weight: 800; margin-bottom: 8px;">Ayushman PM-JAY Empaneled</h3>
+            <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+              Empaneled center for Ayushman Bharat Pradhan Mantri Jan Arogya Yojana &amp; Dr. Khoobchand Baghel Swasthya Sahayata Yojana for cashless surgeries and ICU admissions.
+            </p>
+          </div>
+
+          <div style="background: white; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg,#028090,#00c4a7); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <i data-lucide="sparkles" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 style="font-size: 1.15rem; color: #014e59; font-weight: 800; margin-bottom: 8px;">Laminar Airflow Clean OTs</h3>
+            <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+              Operation theatres engineered with HEPA filtration technology to maintain zero-bacteria air quality for orthopedics and neurosurgery.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Government Cashless Schemes Featured Box -->
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f7f4 100%); padding: 36px; border-radius: 24px; border: 2px dashed #028090; margin-bottom: 50px;" class="reveal-on-scroll">
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+            <div style="background: #028090; color: white; padding: 8px 16px; border-radius: 999px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase;">
+              Government Cashless Scheme
+            </div>
+            <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin: 0;">Ayushman Bharat PM-JAY &amp; State Card Cashless Facility</h3>
+          </div>
+          <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+            Eligible beneficiaries holding an Ayushman Golden Card or Chhattisgarh State Ration Card can avail 100% cashless inpatient medical treatment, surgeries, ICU admissions, and medicine coverage up to <strong>₹5,00,000 per family per year</strong> at Life Line Hospital Ambikapur.
+          </p>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <div style="background: white; padding: 12px 20px; border-radius: 12px; font-weight: 700; color: #014e59; font-size: 0.875rem; border: 1px solid #cbd5e1;">
+              ✅ Free Inpatient Admission &amp; Surgery
+            </div>
+            <div style="background: white; padding: 12px 20px; border-radius: 12px; font-weight: 700; color: #014e59; font-size: 0.875rem; border: 1px solid #cbd5e1;">
+              ✅ ICU &amp; Ventilator Coverage Included
+            </div>
+            <div style="background: white; padding: 12px 20px; border-radius: 12px; font-weight: 700; color: #014e59; font-size: 0.875rem; border: 1px solid #cbd5e1;">
+              ✅ Free Medicines &amp; Diagnostic Tests
+            </div>
+          </div>
+        </div>
+
+        <!-- Empaneled TPAs & Insurance Companies Grid -->
+        <div style="margin-bottom: 50px;" class="reveal-on-scroll">
+          <div style="margin-bottom: 28px;">
+            <h3 style="font-size: 1.5rem; color: #014e59; font-weight: 800; margin-bottom: 6px;">Empaneled TPA Insurance Companies (Cashless Desk)</h3>
+            <p style="color: #64748b; font-size: 0.95rem;">Life Line Hospital provides direct cashless admission through all major Third Party Administrators (TPAs) and Health Insurance providers:</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🏥</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Star Health Insurance</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Empaneled TPA</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🛡️</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Niva Bupa Health</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Formerly Max Bupa</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🩺</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Care Health Insurance</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Formerly Religare</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">💳</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">ICICI Lombard</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">General Insurance</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🏛️</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">HDFC ERGO</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Health Insurance</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🌟</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Bajaj Allianz</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Health Care TPA</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🏢</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Tata AIG Insurance</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Cashless Empaneled</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">💠</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">MD India TPA</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Healthcare Services</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🤝</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Heritage Health TPA</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Empaneled TPA</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">📋</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Paramount TPA</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Health Services</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">📑</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Vipul Medcorp TPA</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Cashless Desk</span>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+              <span style="font-size: 1.4rem;">🔖</span>
+              <div>
+                <strong style="display: block; color: #014e59; font-size: 0.925rem;">Raksha Health TPA</strong>
+                <span style="font-size: 0.75rem; color: #64748b;">Insurance TPA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cashless Claim Process Guide -->
+        <div style="background: white; padding: 36px; border-radius: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 50px;" class="reveal-on-scroll">
+          <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin-bottom: 24px;">How to Claim Cashless Admission (Step-by-Step)</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+            <div style="background: #f8fafc; padding: 22px; border-radius: 16px; border-top: 4px solid #028090;">
+              <div style="font-size: 1.6rem; font-weight: 800; color: #028090; margin-bottom: 8px;">01</div>
+              <h4 style="font-size: 1rem; color: #014e59; font-weight: 700; margin-bottom: 6px;">TPA Desk Visit</h4>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0; line-height: 1.5;">Present your Ayushman Card / Insurance Card &amp; Government ID at Ground Floor TPA Desk.</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 22px; border-radius: 16px; border-top: 4px solid #028090;">
+              <div style="font-size: 1.6rem; font-weight: 800; color: #028090; margin-bottom: 8px;">02</div>
+              <h4 style="font-size: 1rem; color: #014e59; font-weight: 700; margin-bottom: 6px;">Pre-Auth Request</h4>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0; line-height: 1.5;">Hospital TPA Desk fills pre-authorization form and submits to insurance team.</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 22px; border-radius: 16px; border-top: 4px solid #028090;">
+              <div style="font-size: 1.6rem; font-weight: 800; color: #028090; margin-bottom: 8px;">03</div>
+              <h4 style="font-size: 1rem; color: #014e59; font-weight: 700; margin-bottom: 6px;">Cashless Approval</h4>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0; line-height: 1.5;">Receive instant pre-authorization approval for treatment without upfront payment.</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 22px; border-radius: 16px; border-top: 4px solid #028090;">
+              <div style="font-size: 1.6rem; font-weight: 800; color: #028090; margin-bottom: 8px;">04</div>
+              <h4 style="font-size: 1rem; color: #014e59; font-weight: 700; margin-bottom: 6px;">Direct Settlement</h4>
+              <p style="font-size: 0.85rem; color: #64748b; margin: 0; line-height: 1.5;">Hospital settles hospital bill directly with TPA at discharge.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TPA Desk Contact Banner -->
+        <div style="background: linear-gradient(135deg, #014e59, #028090); color: white; padding: 32px 40px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;" class="reveal-on-scroll">
+          <div>
+            <h4 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; color: white;">Need Assistance With Insurance / Ayushman Card?</h4>
+            <p style="margin: 0; font-size: 0.9rem; color: #ccfbf1;">Visit TPA Counter at Ground Floor Lobby or Call Emergency TPA Helpdesk 24x7.</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a href="tel:+917879596337" class="btn btn-primary" style="background: white; color: #014e59; font-weight: 800; border: none;">
+              📞 Call TPA Desk: +91 7879596337
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 3. DEPARTMENTS VIEW ================= -->
+    <section id="departments-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Clinical Specialties</span>
+          <h2 class="section-title">Departments &amp; Treatments Directory</h2>
+          <p class="section-desc">Explore our full range of medical specialties and specialized procedure capabilities.</p>
+        </div>
+
+        <div class="departments-grid">
+          <!-- Populated from data -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3.5 DEDICATED DEPARTMENT DETAIL VIEW ================= -->
+    <section id="department-detail-view" class="page-view">
+      <div class="container" style="padding: 40px 40px 80px;">
+        
+        <!-- Top Back Bar & Breadcrumbs -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+          <button class="btn btn-outline" onclick="switchView('departments-view');" style="padding: 9px 18px; font-size: 0.875rem; border-radius: 10px; font-weight: 700;">
+            ← Back to All Departments
+          </button>
+          <div style="font-size: 0.85rem; color: #64748b;">
+            <a href="#home-view" onclick="switchView('home-view')" style="color: #028090; text-decoration: none;">Home</a>
+            <span style="margin: 0 6px;">/</span>
+            <a href="#departments-view" onclick="switchView('departments-view')" style="color: #028090; text-decoration: none;">Departments</a>
+            <span style="margin: 0 6px;">/</span>
+            <span id="dept-detail-breadcrumb-title" style="color: #64748b;">Department Detail</span>
+          </div>
+        </div>
+
+        <!-- Department Header Banner -->
+        <div style="background: linear-gradient(135deg, #014e59 0%, #028090 100%); color: white; padding: 36px 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(2,128,144,0.2); margin-bottom: 40px; position: relative; overflow: hidden;">
+          <div style="position: relative; z-index: 2; max-width: 800px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+              <div id="dept-detail-icon-wrap" style="width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; color: white;">
+                <i data-lucide="heart-pulse" style="width: 26px; height: 26px;"></i>
+              </div>
+              <span id="dept-detail-head-tag" style="background: rgba(255,255,255,0.2); color: white; padding: 5px 16px; border-radius: 999px; font-size: 0.825rem; font-weight: 700;">
+                Department Specialist Head
+              </span>
+            </div>
+
+            <h1 id="dept-detail-title" style="font-size: 2.3rem; font-weight: 800; color: white; margin-bottom: 12px; line-height: 1.2;">
+              Department Name
+            </h1>
+            <p id="dept-detail-shortdesc" style="font-size: 1.05rem; color: #ccfbf1; line-height: 1.6; margin-bottom: 24px;">
+              Short clinical description...
+            </p>
+
+            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="openBookingModal()" style="background: white; color: #014e59; font-weight: 800; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
+                <i data-lucide="calendar"></i> Book OPD Consultation
+              </button>
+              <a href="tel:+917879596337" class="btn btn-emergency" style="padding: 10px 20px;">
+                📞 Emergency Helpline: +91 7879596337
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Main Content Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 340px; gap: 36px; align-items: start;" class="blog-detail-grid">
+          
+          <!-- LEFT: Clinical Details Column -->
+          <div style="display: flex; flex-direction: column; gap: 36px;">
+            
+            <!-- Overview & Clinical Expertise Card -->
+            <div style="background: white; padding: 32px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin-bottom: 16px;">Clinical Overview &amp; Expertise</h3>
+              <p id="dept-detail-fulldesc" style="font-size: 1.025rem; color: #475569; line-height: 1.8; margin: 0;">
+                Full clinical overview text...
+              </p>
+            </div>
+
+            <!-- Key Procedures & Treatments Container -->
+            <div style="background: white; padding: 32px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin-bottom: 20px;">Key Procedures &amp; Specialized Treatments</h3>
+              <div id="dept-detail-procedures-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Advanced Equipment & Technology -->
+            <div style="background: white; padding: 32px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin-bottom: 20px;">Advanced Infrastructure &amp; Technology</h3>
+              <div id="dept-detail-equipment-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Assigned Doctors Section -->
+            <div style="background: white; padding: 32px; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin-bottom: 8px;">Department Doctors &amp; OPD Panel</h3>
+              <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 24px;">Consult with our expert doctors specializing in this department:</p>
+              
+              <div id="dept-detail-doctors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Sidebar Column -->
+          <aside style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Quick OPD Booking Box -->
+            <div style="background: white; padding: 24px; border-radius: 18px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h4 style="font-size: 1.1rem; color: #014e59; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span>🩺</span> Book OPD Appointment
+              </h4>
+              <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 18px; line-height: 1.5;">
+                Schedule an appointment with senior consultants of this department.
+              </p>
+              <button class="btn btn-primary" onclick="openBookingModal()" style="width: 100%; justify-content: center; font-weight: 700;">
+                Book OPD Consultation
+              </button>
+            </div>
+
+            <!-- Ayushman & TPA Card -->
+            <div style="background: #f0f9ff; padding: 24px; border-radius: 18px; border: 1px solid #bae6fd;">
+              <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <span>🛡️</span> Ayushman &amp; TPA Cashless
+              </h4>
+              <p style="font-size: 0.85rem; color: #475569; margin-bottom: 14px; line-height: 1.5;">
+                100% Cashless treatment covered under Ayushman Bharat PM-JAY &amp; 15+ major TPAs.
+              </p>
+              <a href="#accreditations-view" onclick="switchView('accreditations-view')" style="font-size: 0.85rem; font-weight: 700; color: #028090; text-decoration: none;">
+                View Empaneled Insurance →
+              </a>
+            </div>
+
+            <!-- Other Departments Widget -->
+            <div style="background: white; padding: 24px; border-radius: 18px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 800; margin-bottom: 16px;">Other Departments</h4>
+              <div id="dept-detail-other-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </aside>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 4. DOCTORS VIEW ================= -->
+    <section id="doctors-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Medical Panel</span>
+          <h2 class="section-title">Our Expert Doctors & OPD Schedule</h2>
+          <p class="section-desc">Filter by specialty to book your OPD consultation with Ambikapur's leading specialists.</p>
+        </div>
+
+        <div class="doctors-filter-bar reveal-on-scroll">
+          <input type="text" class="doctor-search-input" placeholder="Search doctor by name, specialty or qualification...">
+          <select class="form-control doctor-dept-filter" style="width: auto; min-width: 220px;">
+            <option value="all">All Specialties</option>
+            <option value="cardiology">Cardiology</option>
+            <option value="orthopedics">Orthopedics</option>
+            <option value="pediatrics">Pediatrics & NICU</option>
+            <option value="gynaecology">Gynecology</option>
+            <option value="neurology">Neurology</option>
+            <option value="surgery">Laparoscopic Surgery</option>
+            <option value="urology">Urology</option>
+          </select>
+        </div>
+
+        <div class="doctors-grid">
+          <!-- Populated from JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. FACILITIES VIEW ================= -->
+    <section id="facilities-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Hospital Infrastructure</span>
+          <h2 class="section-title">Facilities & Diagnostic Excellence</h2>
+          <p class="section-desc">Modern equipment and comfortable patient spaces designed for healing.</p>
+        </div>
+
+        <div class="facilities-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5.5 HEALTH BLOGS & ARTICLES VIEW ================= -->
+    <section id="blogs-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Health Insights & Articles</span>
+          <h2 class="section-title">Health Articles & Medical News</h2>
+          <p class="section-desc">Expert advice, disease prevention tips, and latest healthcare updates from Life Line Hospital specialists.</p>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="gallery-filters reveal-on-scroll" id="blog-category-filters" style="margin-bottom: 28px;">
+          <button class="filter-btn active" onclick="filterBlogs('all', this)">All Articles</button>
+          <button class="filter-btn" onclick="filterBlogs('Cardiology', this)">Cardiology</button>
+          <button class="filter-btn" onclick="filterBlogs('Orthopedics', this)">Orthopedics</button>
+          <button class="filter-btn" onclick="filterBlogs('Neurology', this)">Neurology</button>
+          <button class="filter-btn" onclick="filterBlogs('Pediatrics', this)">Pediatrics</button>
+          <button class="filter-btn" onclick="filterBlogs('Surgery', this)">Surgery</button>
+        </div>
+
+        <div class="blogs-grid" id="all-blogs-grid-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5.6 DEDICATED BLOG ARTICLE DETAIL VIEW ================= -->
+    <section id="blog-detail-view" class="page-view">
+      <div class="container" style="padding: 40px 60px 80px;">
+        <!-- Top Back Bar & Breadcrumbs -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+          <button class="btn btn-outline" onclick="switchView('blogs-view');" style="padding: 9px 18px; font-size: 0.875rem; border-radius: 10px; font-weight: 700;">
+            ← Back to Health Articles
+          </button>
+          <div style="font-size: 0.85rem; color: #64748b;">
+            <a href="#home-view" onclick="switchView('home-view')" style="color: #028090; text-decoration: none;">Home</a>
+            <span style="margin: 0 6px;">/</span>
+            <a href="#blogs-view" onclick="switchView('blogs-view')" style="color: #028090; text-decoration: none;">Health Blogs</a>
+            <span style="margin: 0 6px;">/</span>
+            <span id="detail-breadcrumb-cat" style="color: #64748b;">Article</span>
+          </div>
+        </div>
+
+        <!-- 2-Column Professional Editorial Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 340px; gap: 40px; align-items: start;" class="blog-detail-grid">
+          
+          <!-- LEFT: Main Article Column -->
+          <article style="background: white; padding: 36px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 4px 25px rgba(2,128,144,0.06);">
+            <!-- Badges -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+              <span id="detail-cat-badge" style="background: linear-gradient(135deg,#028090,#00c4a7); color: white; padding: 5px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Category</span>
+              <span id="detail-date-tag" style="color: #64748b; font-size: 0.875rem; font-weight: 500;">📅 Date</span>
+              <span style="color: #64748b; font-size: 0.875rem;">• ⏱️ 3 Min Read</span>
+            </div>
+
+            <!-- Title -->
+            <h1 id="detail-title" style="font-size: 2.2rem; line-height: 1.25; color: #014e59; font-weight: 800; margin-bottom: 20px;">
+              Article Title
+            </h1>
+
+            <!-- Author / Medical Reviewer Banner -->
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #f0f9ff; border-radius: 12px; border-left: 4px solid #028090; margin-bottom: 28px;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg,#028090,#00c4a7); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0;">
+                🏥
+              </div>
+              <div>
+                <div style="font-weight: 700; color: #014e59; font-size: 0.95rem;">Written &amp; Medically Reviewed by Life Line Hospital Specialist Team</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Department of Multispecialty &amp; Emergency Care • Ambikapur</div>
+              </div>
+            </div>
+
+            <!-- Cover Image Banner -->
+            <div style="width: 100%; height: 400px; border-radius: 16px; overflow: hidden; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+              <img id="detail-cover-img" src="" alt="Article Cover" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
+            <!-- Rich Body Content -->
+            <div id="detail-body-content" style="font-size: 1.075rem; color: #334155; line-height: 1.85;">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </article>
+
+          <!-- RIGHT: Sidebar Column -->
+          <aside style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- OPD Consultation Card -->
+            <div style="background: linear-gradient(145deg, #014e59 0%, #028090 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 10px 30px rgba(2,128,144,0.25);">
+              <div style="font-size: 2rem; margin-bottom: 12px;">🩺</div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: white;">Have Health Concerns?</h3>
+              <p style="font-size: 0.9rem; color: #ccfbf1; line-height: 1.6; margin-bottom: 20px;">
+                Consult our senior specialist doctors at Life Line Hospital Ambikapur for expert medical evaluation.
+              </p>
+              <button class="btn btn-primary" onclick="openBookingModal()" style="width: 100%; justify-content: center; background: white; color: #014e59; font-weight: 800; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
+                Book OPD Appointment
+              </button>
+            </div>
+
+            <!-- 24/7 Helpline Widget -->
+            <div style="background: white; padding: 24px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <span style="color: #e63946;">🚨</span> 24/7 Emergency Helpline
+              </h4>
+              <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 16px; line-height: 1.5;">
+                For cardiac arrest, stroke, trauma, or ICU admission in Surguja district:
+              </p>
+              <a href="tel:+917774234999" class="btn btn-emergency" style="width: 100%; justify-content: center; font-weight: 700; padding: 12px 16px;">
+                📞 Call +91 7774 234 999
+              </a>
+            </div>
+
+            <!-- Recent Articles Widget -->
+            <div style="background: white; padding: 24px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+              <h4 style="font-size: 1.05rem; color: #014e59; font-weight: 700; margin-bottom: 16px;">Other Health Articles</h4>
+              <div id="detail-sidebar-articles" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. MEDIA GALLERY VIEW ================= -->
+    <section id="media-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Visual Tour</span>
+          <h2 class="section-title">Hospital Media Gallery</h2>
+          <p class="section-desc">Explore infrastructure photos, health camp initiatives, and hospital facilities.</p>
+        </div>
+
+        <div class="gallery-filters reveal-on-scroll">
+          <button class="filter-btn active" onclick="filterGallery('all', this)">All Photos</button>
+          <button class="filter-btn" onclick="filterGallery('campus', this)">Hospital Campus</button>
+          <button class="filter-btn" onclick="filterGallery('infrastructure', this)">OT & ICU</button>
+          <button class="filter-btn" onclick="filterGallery('diagnostics', this)">Diagnostics & MRI</button>
+          <button class="filter-btn" onclick="filterGallery('events', this)">Health Camps</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid-container">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. CONTACT US VIEW ================= -->
+    <section id="contact-view" class="page-view">
+      <div class="container" style="padding: 70px 60px;">
+        <div class="section-header reveal-on-scroll">
+          <span class="section-subtitle">Get In Touch</span>
+          <h2 class="section-title">Contact Life Line Hospital Ambikapur</h2>
+          <p class="section-desc">Reach out for OPD bookings, emergency ambulance, diagnostic inquiries, or feedback.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info-box reveal-on-scroll delay-100">
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="map-pin"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #014e59;">Hospital Address</h4>
+                <p class="dynamic-address" style="color: #64748b; font-size: 0.925rem;">
+                  Near Ring Road, Opp. Collectorate Office Road, Ambikapur, Surguja District, Chhattisgarh - 497001
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="phone-call"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #014e59;">Emergency Helpline (24x7)</h4>
+                <p class="dynamic-emergency-phone" style="color: #64748b; font-size: 0.925rem;">
+                  +91 7774 234 999
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="message-square"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #014e59;">WhatsApp & OPD Inquiry</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  +91 94252 88990
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon"><i data-lucide="mail"></i></div>
+              <div>
+                <h4 style="font-size: 1.1rem; color: #014e59;">Email Address</h4>
+                <p style="color: #64748b; font-size: 0.925rem;">
+                  info@lifelinehospitalambikapur.com
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-box reveal-on-scroll delay-200">
+            <h3 style="font-size: 1.4rem; color: #014e59; margin-bottom: 20px;">Send Us a Message</h3>
+
+            <div id="contact-success-alert" style="display: none; padding: 14px; background: #e0f7f4; color: #00a896; border-radius: 8px; margin-bottom: 16px; font-weight: 600;">
+              ✓ Thank you! Your inquiry has been submitted. Our team will contact you shortly.
+            </div>
+
+            <form id="hospital-contact-form">
+              <div class="form-group">
+                <label>Your Full Name *</label>
+                <input type="text" class="form-control" placeholder="e.g. Rahul Sharma" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" class="form-control" placeholder="10 digit mobile number" required>
+              </div>
+              <div class="form-group">
+                <label>Department / Query Type</label>
+                <select class="form-control">
+                  <option>General OPD Inquiry</option>
+                  <option>Emergency Service</option>
+                  <option>Ayushman / Insurance Claim</option>
+                  <option>Diagnostic & CT/MRI Scan</option>
+                  <option>Feedback / Support</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Message Detail</label>
+                <textarea class="form-control" rows="4" placeholder="How can we assist you?"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Submit Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 8. DEDICATED FULL SCREEN ADMIN LOGIN DASHBOARD PAGE ================= -->
+    <section id="admin-login-view" class="page-view" style="min-height: 100vh; background: linear-gradient(135deg, #012f38 0%, #014e59 50%, #028090 100%); padding: 40px 20px; position: relative;">
+      
+      <!-- Decorative Background Orbs -->
+      <div style="position: absolute; top: -100px; left: -100px; width: 350px; height: 350px; background: rgba(0, 196, 167, 0.15); border-radius: 50%; filter: blur(60px); pointer-events: none;"></div>
+      <div style="position: absolute; bottom: -100px; right: -100px; width: 400px; height: 400px; background: rgba(2, 128, 144, 0.2); border-radius: 50%; filter: blur(80px); pointer-events: none;"></div>
+
+      <div style="width: 100%; max-width: 960px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.4); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr;">
+        
+        <!-- Left Banner Branding Column -->
+        <div style="background: linear-gradient(160deg, #014e59 0%, #012f38 100%); padding: 48px 36px; color: white; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+          <div style="position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(112, 228, 213, 0.15) 0%, transparent 60%); pointer-events: none;"></div>
+
+          <div style="position: relative; z-index: 2;">
+            <div style="display: inline-flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 24px;">
+              <i data-lucide="shield-check" style="width: 20px; height: 20px; color: #70e4d5;"></i>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #70e4d5; letter-spacing: 0.5px; text-transform: uppercase;">Secure Admin Portal</span>
+            </div>
+
+            <h2 style="font-size: 2rem; font-weight: 800; color: white; line-height: 1.25; margin-bottom: 14px;">
+              Life Line Hospital <br><span style="color: #70e4d5;">Admin Dashboard</span>
+            </h2>
+            <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin: 0;">
+              Centralized healthcare administration control system for Ambikapur hospital. Manage doctors, OPD appointments, emergency facility photos, and health publications in real-time.
+            </p>
+          </div>
+
+          <div style="position: relative; z-index: 2; margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.15);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #028090; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                +
+              </div>
+              <div>
+                <div style="font-size: 0.875rem; font-weight: 700; color: white;">Ambikapur, Surguja (C.G.)</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">24x7 Multi-Specialty Care</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Login Form Column -->
+        <div style="padding: 48px 38px; display: flex; flex-direction: column; justify-content: center; background: #ffffff;">
+          <div style="margin-bottom: 28px;">
+            <h3 style="font-size: 1.5rem; font-weight: 800; color: #014e59; margin: 0 0 6px 0;">Sign In to Account</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Enter your administrator login credentials to proceed.</p>
+          </div>
+
+          <div id="page-admin-login-error" style="display: none; background: #fef2f2; border: 1px solid #fecdd3; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;">
+            ⚠️ Invalid Username or Password. Please check your credentials.
+          </div>
+
+          <form id="page-admin-login-form" onsubmit="handleDedicatedAdminLoginSubmit(event)">
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label style="font-weight: 700; color: #014e59; font-size: 0.825rem; text-transform: uppercase; letter-spacing: 0.5px;">Username *</label>
+              <div style="position: relative;">
+                <input type="text" id="page-admin-username" class="form-control" placeholder="Enter admin username" required value="admin" style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                <i data-lucide="user" style="position: absolute; left: 14px; top: 15px; width: 19px; height: 19px; color: #028090;"></i>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 22px;">
+              <label style="font-weight: 700; color: #014e59; font-size: 0.825rem; text-transform: uppercase; letter-spacing: 0.5px;">Password *</label>
+              <div style="position: relative;">
+                <input type="password" id="page-admin-password" class="form-control" placeholder="Enter admin password" required value="admin" style="padding-left: 42px; height: 48px; font-size: 0.95rem; font-weight: 600; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                <i data-lucide="lock" style="position: absolute; left: 14px; top: 15px; width: 19px; height: 19px; color: #028090;"></i>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #475569; font-weight: 600; cursor: pointer;">
+                <input type="checkbox" id="page-admin-remember-me" checked style="width: 17px; height: 17px; accent-color: #028090; cursor: pointer;">
+                Keep session logged in
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #014e59 0%, #028090 100%); border-radius: 12px; box-shadow: 0 6px 20px rgba(2, 128, 144, 0.35); cursor: pointer;">
+              🔐 Sign In to Admin Control
+            </button>
+          </form>
+
+          <div style="margin-top: 28px; text-align: center; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+            <a href="#home-view" data-view-target="home-view" style="color: #64748b; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Return to Public Hospital Website
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 9. FULL SCREEN DEDICATED ADMIN PANEL DASHBOARD VIEW ================= -->
+    <section id="admin-view" class="page-view">
+      <div class="admin-view-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 16px;">
+          <div class="section-header" style="max-width: 800px; margin: 0; text-align: left;">
+            <span class="section-subtitle">Management System</span>
+            <h2 class="section-title">Hospital Administration Control Dashboard</h2>
+            <p class="section-desc">Real-time full-size content management panel to update doctors, hero banners, site branding, and health articles.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="adminLogout()" class="btn btn-primary" style="background: linear-gradient(135deg, #014e59 0%, #028090 100%); padding: 12px 24px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <i data-lucide="log-out"></i> Exit &amp; Lock Admin
+          </a>
+        </div>
+
+        <div class="admin-layout">
+          <!-- Sidebar -->
+          <aside class="admin-sidebar">
+            <div class="admin-brand">
+              <i data-lucide="shield-check" style="width: 28px; height: 28px; color: #70e4d5;"></i>
+              <div>
+                <div style="font-weight: 800; font-size: 1.15rem; color: white;">Admin Portal</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">Life Line Management</div>
+              </div>
+            </div>
+            <ul class="admin-nav-list">
+              <li class="admin-nav-item active" data-admin-tab="admin-tab-overview" onclick="switchAdminTab('admin-tab-overview')">
+                <i data-lucide="layout-dashboard"></i> Dashboard Stats
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-settings" onclick="switchAdminTab('admin-tab-settings')">
+                <i data-lucide="sliders"></i> Site &amp; Contact Info
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-hero" onclick="switchAdminTab('admin-tab-hero')">
+                <i data-lucide="image"></i> Hero Banner &amp; Title
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-doctors" onclick="switchAdminTab('admin-tab-doctors')">
+                <i data-lucide="user-check"></i> Doctor Roster &amp; OPD
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-blogs" onclick="switchAdminTab('admin-tab-blogs')">
+                <i data-lucide="newspaper"></i> Health Blogs &amp; Articles
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-facilities" onclick="switchAdminTab('admin-tab-facilities')">
+                <i data-lucide="building-2"></i> Facilities Management
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-appointments" onclick="switchAdminTab('admin-tab-appointments')">
+                <i data-lucide="calendar"></i> Appointments &amp; Inquiries
+                <span class="admin-tab-badge" id="admin-badge-appts" style="background:#ef4444;color:white;padding:2px 8px;border-radius:99px;font-size:0.725rem;margin-left:auto;font-weight:700;display:none;">0</span>
+              </li>
+              <li class="admin-nav-item" data-admin-tab="admin-tab-gallery" onclick="switchAdminTab('admin-tab-gallery')">
+                <i data-lucide="image"></i> Media &amp; Photo Gallery
+              </li>
+            </ul>
+            <div style="margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12);">
+              <a href="javascript:void(0)" onclick="adminLogout()" style="color: #f87171; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i data-lucide="log-out" style="width: 18px; height: 18px;"></i> Exit &amp; Lock Admin
+              </a>
+            </div>
+          </aside>
+
+          <!-- Main Content Area -->
+          <main class="admin-content-box">
+            <!-- Tab 1: Overview -->
+            <div id="admin-tab-overview" class="admin-tab-pane active">
+              <h3 style="font-size: 1.4rem; margin-bottom: 24px; color: #014e59;">System Health & Content Overview</h3>
+              <div class="admin-stats-row">
+                <div class="admin-stat-widget">
+                  <h4>Total Doctors</h4>
+                  <div class="val" id="admin-stat-docs">0</div>
+                </div>
+                <div class="admin-stat-widget">
+                  <h4>Clinical Depts</h4>
+                  <div class="val" id="admin-stat-depts">0</div>
+                </div>
+                <div class="admin-stat-widget">
+                  <h4>Health Articles</h4>
+                  <div class="val" id="admin-stat-blogs">0</div>
+                </div>
+                <div class="admin-stat-widget">
+                  <h4>System Health</h4>
+                  <div class="val" style="color: #2a9d8f;">100%</div>
+                </div>
+              </div>
+
+              <div style="background: #f8fafc; border: 1px dashed #028090; padding: 24px; border-radius: 12px;">
+                <h4 style="color: #014e59; margin-bottom: 8px; font-size: 1.1rem;">💡 Real-time State Synchronization Active</h4>
+                <p style="font-size: 0.925rem; color: #64748b; line-height: 1.6;">
+                  All updates made in this panel are stored locally and reflected instantly on the main hospital website. You can connect your database API endpoints later whenever you are ready!
+                </p>
+              </div>
+            </div>
+
+            <!-- Tab 2: Site Settings -->
+            <div id="admin-tab-settings" class="admin-tab-pane">
+              <h3 style="font-size: 1.4rem; margin-bottom: 24px; color: #014e59;">Hospital Branding & Contact Settings</h3>
+              <form id="admin-site-settings-form">
+                <div class="form-group">
+                  <label>Hospital Name *</label>
+                  <input type="text" id="admin-input-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Top Announcement Bar Text *</label>
+                  <input type="text" id="admin-input-announcement" class="form-control" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="form-group">
+                    <label>Emergency Hotline 24x7 *</label>
+                    <input type="text" id="admin-input-emergency" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label>OPD Phone *</label>
+                    <input type="text" id="admin-input-opd" class="form-control" required>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="form-group">
+                    <label>WhatsApp Support Number *</label>
+                    <input type="text" id="admin-input-whatsapp" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Contact Email *</label>
+                    <input type="email" id="admin-input-email" class="form-control" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Full Hospital Address *</label>
+                  <textarea id="admin-input-address" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; padding: 12px 28px;">Save Branding Settings</button>
+              </form>
+            </div>
+
+            <!-- Tab 3: Hero Banner -->
+            <div id="admin-tab-hero" class="admin-tab-pane">
+              <h3 style="font-size: 1.4rem; margin-bottom: 24px; color: #014e59;">Hero Banner & Headline Settings</h3>
+              <form id="admin-hero-settings-form">
+                <div class="form-group">
+                  <label>Hero Top Badge Text *</label>
+                  <input type="text" id="admin-hero-badge" class="form-control" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="form-group">
+                    <label>Headline Main Text *</label>
+                    <input type="text" id="admin-hero-title-main" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Headline Highlighted Word *</label>
+                    <input type="text" id="admin-hero-title-highlight" class="form-control" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Hero Description Paragraph *</label>
+                  <textarea id="admin-hero-desc" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label style="font-weight:700;color:#014e59;font-size:0.9rem;letter-spacing:0.5px;">HERO BANNER IMAGE</label>
+
+                  <!-- Preview Card -->
+                  <div id="hero-img-preview-wrap" style="
+                      width: 100%;
+                      max-width: 480px;
+                      aspect-ratio: 16 / 9;
+                      border-radius: 12px;
+                      overflow: hidden;
+                      margin: 10px 0 16px;
+                      position: relative;
+                      background: linear-gradient(135deg, #e0f7f4 0%, #f0f9ff 100%);
+                      border: 2px dashed rgba(2,128,144,0.3);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      box-shadow: 0 4px 20px rgba(2,128,144,0.08);
+                      transition: border-color 0.3s ease, box-shadow 0.3s ease;">
+
+                    <!-- Actual preview img -->
+                    <img id="hero-img-preview" src="" alt="Hero Banner Preview"
+                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:none;transition:opacity 0.4s ease;">
+
+                    <!-- Overlay: LIVE PREVIEW badge (shown when image is loaded) -->
+                    <div id="hero-preview-badge" style="
+                        display:none;
+                        position:absolute;top:12px;left:12px;
+                        background:rgba(0,0,0,0.45);
+                        backdrop-filter:blur(8px);
+                        color:white;font-size:0.72rem;font-weight:800;
+                        letter-spacing:1px;padding:5px 12px;
+                        border-radius:999px;border:1px solid rgba(255,255,255,0.2);">
+                      ✦ LIVE PREVIEW
+                    </div>
+
+                    <!-- Clear / Remove button -->
+                    <button type="button" id="hero-img-clear-btn"
+                      onclick="clearHeroImgPreview()"
+                      style="display:none;position:absolute;top:12px;right:12px;
+                        background:rgba(220,38,38,0.85);backdrop-filter:blur(6px);
+                        color:white;border:none;border-radius:8px;padding:6px 12px;
+                        font-size:0.78rem;font-weight:700;cursor:pointer;
+                        transition:background 0.2s ease;">
+                      ✕ Remove
+                    </button>
+
+                    <!-- Placeholder (shown when no image) -->
+                    <div id="hero-img-preview-placeholder" style="
+                        display:flex;flex-direction:column;align-items:center;
+                        gap:10px;color:#94a3b8;text-align:center;padding:24px;">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                      </svg>
+                      <span style="font-size:0.9rem;font-weight:500;">Image preview will appear here</span>
+                      <span style="font-size:0.78rem;opacity:0.7;">Upload a file or paste a URL below</span>
+                    </div>
+                  </div>
+
+                  <!-- Action Row: Upload + URL -->
+                  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;">
+                    <!-- Upload Button -->
+                    <label for="admin-hero-img-file" style="
+                        display:inline-flex;align-items:center;gap:8px;
+                        background:linear-gradient(135deg,#028090 0%,#00c4a7 100%);
+                        color:white;padding:11px 20px;border-radius:11px;
+                        cursor:pointer;font-size:0.875rem;font-weight:700;
+                        box-shadow:0 4px 14px rgba(2,128,144,0.28);
+                        white-space:nowrap;flex-shrink:0;
+                        transition:transform 0.2s ease, box-shadow 0.2s ease;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                      </svg>
+                      Upload from Device
+                    </label>
+                    <input type="file" id="admin-hero-img-file" accept="image/*"
+                      style="display:none;" onchange="handleHeroImageUpload(this)">
+
+                    <!-- URL Input -->
+                    <input type="text" id="admin-hero-img" class="form-control"
+                      placeholder="https://example.com/hospital-banner.jpg"
+                      oninput="updateHeroImgPreview(this.value)"
+                      style="height:44px;margin-bottom:0;">
+                  </div>
+
+                  <p style="font-size:0.76rem;color:#94a3b8;margin-top:8px;display:flex;align-items:center;gap:6px;">
+                    <span>📎</span>
+                    Supports JPG, PNG, WebP · Max 5MB for device upload · Base64 stored locally until DB connected
+                  </p>
+                </div>
+                <!-- OVERVIEW BUILDING IMAGE MANAGER -->
+                <div class="form-group" style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
+                  <label style="font-weight:700;color:#014e59;font-size:0.9rem;letter-spacing:0.5px;">OVERVIEW &amp; VISION BUILDING PHOTO</label>
+                  <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">Manage the building photo shown on the Overview &amp; Vision page. If removed, the text will take full width.</p>
+
+                  <div id="overview-img-preview-wrap" style="
+                      width: 100%;
+                      max-width: 480px;
+                      aspect-ratio: 16 / 9;
+                      border-radius: 12px;
+                      overflow: hidden;
+                      margin: 10px 0 16px;
+                      position: relative;
+                      background: linear-gradient(135deg, #e0f7f4 0%, #f0f9ff 100%);
+                      border: 2px dashed rgba(2,128,144,0.3);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;">
+
+                    <img id="overview-img-preview" src="" alt="Overview Image Preview"
+                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+
+                    <button type="button" id="overview-img-clear-btn"
+                      onclick="clearOverviewImgPreview()"
+                      style="display:none;position:absolute;top:12px;right:12px;
+                        background:rgba(220,38,38,0.85);backdrop-filter:blur(6px);
+                        color:white;border:none;border-radius:8px;padding:6px 12px;
+                        font-size:0.78rem;font-weight:700;cursor:pointer;">
+                      ✕ Remove Photo
+                    </button>
+
+                    <div id="overview-img-preview-placeholder" style="
+                        display:flex;flex-direction:column;align-items:center;
+                        gap:8px;color:#94a3b8;text-align:center;padding:24px;">
+                      <span style="font-size:0.9rem;font-weight:500;">No Overview Image Set</span>
+                      <span style="font-size:0.78rem;opacity:0.7;">Upload a custom building photo or leave empty</span>
+                    </div>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;">
+                    <label for="admin-overview-img-file" style="
+                        display:inline-flex;align-items:center;gap:8px;
+                        background:linear-gradient(135deg,#028090 0%,#00c4a7 100%);
+                        color:white;padding:11px 20px;border-radius:11px;
+                        cursor:pointer;font-size:0.875rem;font-weight:700;
+                        box-shadow:0 4px 14px rgba(2,128,144,0.28);white-space:nowrap;flex-shrink:0;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                      </svg>
+                      Upload &amp; Crop Photo
+                    </label>
+                    <input type="file" id="admin-overview-img-file" accept="image/*"
+                      style="display:none;" onchange="handleOverviewImageUpload(this)">
+
+                    <input type="text" id="admin-overview-img" class="form-control"
+                      placeholder="https://example.com/building.jpg"
+                      oninput="updateOverviewImgPreview(this.value)"
+                      style="height:44px;margin-bottom:0;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                  <div class="form-group">
+                    <label>Floating Card Title *</label>
+                    <input type="text" id="admin-hero-float-title" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Floating Card Subtitle *</label>
+                    <input type="text" id="admin-hero-float-sub" class="form-control" required>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px; padding: 12px 28px;">Save Hero &amp; Overview Settings</button>
+              </form>
+            </div>
+
+            <!-- Tab 4: Doctor Roster & OPD Manager (New UI) -->
+            <div id="admin-tab-doctors" class="admin-tab-pane">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; background: white; padding: 24px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(2,128,144,0.06);">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                    <h3 style="font-size: 1.4rem; color: #014e59; font-weight: 800; margin: 0;">Doctor Roster &amp; OPD Manager</h3>
+                    <span style="background: linear-gradient(135deg, #028090, #00c4a7); color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.725rem; font-weight: 700;">Live Control Panel</span>
+                  </div>
+                  <p style="font-size:0.875rem; color:#64748b; margin:0;">Add specialists, update consultation fees, OPD timings, and manage active hospital doctors.</p>
+                </div>
+                <button type="button" onclick="openDoctorEditorModal()" class="btn btn-primary" style="padding: 12px 24px; font-size: 0.9rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(2,128,144,0.25);">
+                  <i data-lucide="plus-circle" style="width:18px;height:18px;"></i>
+                  Add New Doctor
+                </button>
+              </div>
+
+              <!-- Quick Search & Filter Controls Bar -->
+              <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                <div style="display: flex; gap: 12px; flex: 1; min-width: 280px;">
+                  <div style="position: relative; flex: 1;">
+                    <input type="text" id="admin-doc-search" placeholder="Search doctor by name, specialty, or degree..." oninput="renderAdminDoctorsGrid()" class="form-control" style="padding-left: 38px; height: 42px; font-size: 0.875rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="position: absolute; left: 12px; top: 12px;">
+                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                  </div>
+                  <select id="admin-doc-dept-filter" onchange="renderAdminDoctorsGrid()" class="form-control" style="width: 220px; height: 42px; font-size: 0.875rem;">
+                    <option value="all">All Departments</option>
+                    <option value="general">General Medicine &amp; Critical Care</option>
+                    <option value="cardiology">Cardiology &amp; Cath Lab</option>
+                    <option value="orthopedics">Orthopedics &amp; Joint Care</option>
+                    <option value="neurology">Neurology &amp; Neurosurgery</option>
+                    <option value="pediatrics">Pediatrics &amp; Neonatology</option>
+                    <option value="gynecology">Obstetrics &amp; Gynecology</option>
+                    <option value="surgery">General &amp; Laparoscopic Surgery</option>
+                    <option value="urology">Urology &amp; Kidney Care</option>
+                    <option value="radiology">Radiology &amp; Imaging</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Live Doctor Roster Cards Grid -->
+              <div id="admin-doctors-roster-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 28px;">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Doctor Add / Edit Modal Drawer -->
+            <div id="doctor-editor-modal" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.25s ease;">
+              <div style="background: white; width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 1px solid rgba(2,128,144,0.2); padding: 28px;">
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px;">
+                  <div>
+                    <h3 id="doctor-modal-title" style="margin: 0; color: #014e59; font-size: 1.25rem; font-weight: 800;">Add New Specialist Doctor</h3>
+                    <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Fill in details below to publish or update doctor profile live.</p>
+                  </div>
+                  <button type="button" onclick="closeDoctorEditorModal()" style="background: #f1f5f9; border: none; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: 700; cursor: pointer;">✕</button>
+                </div>
+
+                <form id="admin-doctor-form" onsubmit="saveDoctorProfile(event)">
+                  <input type="hidden" id="admin-doc-id">
+
+                  <div style="display: grid; grid-template-columns: 160px 1fr; gap: 24px; align-items: start; margin-bottom: 20px;">
+                    <!-- LEFT: Photo Preview -->
+                    <div>
+                      <label style="font-weight:700; color:#014e59; font-size:0.8rem; display:block; margin-bottom:8px;">DOCTOR PHOTO</label>
+                      <div id="doc-img-preview-wrap" style="width: 150px; height: 150px; border-radius: 16px; overflow: hidden; background: #e6f7f5; border: 2px dashed rgba(2,128,144,0.3); display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 10px;">
+                        <img id="doc-img-preview" src="" alt="Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <div id="doc-img-placeholder" style="text-align: center; color: #94a3b8; font-size: 0.75rem;">
+                          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.5;">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                          </svg>
+                          <div>Photo Preview</div>
+                        </div>
+                      </div>
+                      <label for="admin-doc-img-file" style="display: block; text-align: center; background: linear-gradient(135deg, #028090, #00c4a7); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; margin-bottom: 6px;">
+                        Upload Photo
+                      </label>
+                      <input type="file" id="admin-doc-img-file" accept="image/*" style="display: none;" onchange="handleDocImageUpload(this)">
+                      <input type="text" id="admin-doc-image" class="form-control" placeholder="or paste image URL" oninput="updateDocImgPreview(this.value)" style="font-size: 0.75rem; height: 34px;">
+                    </div>
+
+                    <!-- RIGHT: Form Fields -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                      <div class="form-group">
+                        <label>Doctor Name *</label>
+                        <input type="text" id="admin-doc-name" class="form-control" placeholder="e.g. Dr. Amit Asati" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group">
+                        <label>Designation Title *</label>
+                        <input type="text" id="admin-doc-designation" class="form-control" placeholder="e.g. Senior Consultant Physician" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group">
+                        <label>Specialty Department *</label>
+                        <select id="admin-doc-specialty" class="form-control" required style="height: 38px; font-size: 0.85rem; padding: 6px 12px;">
+                          <option value="general">General Medicine &amp; Critical Care</option>
+                          <option value="cardiology">Cardiology &amp; Cath Lab</option>
+                          <option value="orthopedics">Orthopedics &amp; Joint Care</option>
+                          <option value="neurology">Neurology &amp; Neurosurgery</option>
+                          <option value="pediatrics">Pediatrics &amp; Neonatology</option>
+                          <option value="gynecology">Obstetrics &amp; Gynecology</option>
+                          <option value="surgery">General &amp; Laparoscopic Surgery</option>
+                          <option value="urology">Urology &amp; Kidney Care</option>
+                          <option value="radiology">Radiology &amp; Imaging</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Specialty Badge Label *</label>
+                        <input type="text" id="admin-doc-specialty-name" class="form-control" placeholder="e.g. General Medicine" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Degree &amp; Qualifications *</label>
+                        <input type="text" id="admin-doc-degree" class="form-control" placeholder="e.g. MD (Med), Senior Consultant" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group">
+                        <label>Experience Badge *</label>
+                        <input type="text" id="admin-doc-exp" class="form-control" placeholder="e.g. 15+ Years Exp" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group">
+                        <label>OPD Consultation Fee *</label>
+                        <input type="text" id="admin-doc-fee" class="form-control" placeholder="e.g. ₹500" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                      <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>OPD Timings *</label>
+                        <input type="text" id="admin-doc-timings" class="form-control" placeholder="e.g. 05:00 AM - 12:00 PM" required style="height: 38px; font-size: 0.85rem;">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+                    <button type="button" onclick="closeDoctorEditorModal()" style="padding: 10px 20px; background: transparent; border: 1px solid #cbd5e1; border-radius: 8px; color: #64748b; font-weight: 700; cursor: pointer;">Cancel</button>
+                    <button type="button" id="admin-save-doctor-btn" onclick="saveDoctorProfile(event)" class="btn btn-primary" style="padding: 11px 32px; font-size: 0.95rem; font-weight: 700; cursor: pointer;">
+                      Save Doctor Profile
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+
+
+            <!-- Tab 5: Health Blogs & News -->
+            <div id="admin-tab-blogs" class="admin-tab-pane">
+              <h3 style="font-size: 1.4rem; margin-bottom: 4px; color: #014e59; font-weight: 800;">Health Articles & News Management</h3>
+              <p style="font-size:0.875rem;color:#64748b;margin-bottom:20px;">
+                Articles published here automatically appear on the Homepage under <strong>"Latest Medical Blogs & News"</strong>.
+              </p>
+
+              <form id="admin-blog-form" style="background: var(--bg-page); padding: 28px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 28px; box-shadow: 0 4px 20px rgba(2,128,144,0.06);">
+                <h4 style="margin-bottom: 20px; color: #014e59; font-size: 1.1rem; font-weight:700; display:flex; align-items:center; gap:10px;">
+                  <span style="background:var(--grad-primary);color:white;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:0.8rem;">📝</span>
+                  Publish / Edit Health Article
+                </h4>
+                <input type="hidden" id="admin-blog-id">
+
+                <div class="form-group">
+                  <label>Article Title *</label>
+                  <input type="text" id="admin-blog-title" class="form-control" placeholder="e.g. Understanding Golden Hour in Cardiac Arrest" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group">
+                    <label>Category *</label>
+                    <input type="text" id="admin-blog-cat" class="form-control" placeholder="e.g. Cardiology / Orthopedics / Health Tips" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Article Date</label>
+                    <input type="date" id="admin-blog-date" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Cover Image Upload & Live Preview -->
+                <div class="form-group">
+                  <label style="font-weight:700;color:#014e59;font-size:0.85rem;letter-spacing:0.5px;">COVER IMAGE</label>
+
+                  <!-- Preview Card -->
+                  <div id="blog-img-preview-wrap" style="
+                      width: 100%;
+                      max-width: 480px;
+                      aspect-ratio: 16 / 9;
+                      border-radius: 12px;
+                      overflow: hidden;
+                      margin: 8px 0 12px;
+                      position: relative;
+                      background: linear-gradient(135deg, #e0f7f4 0%, #f0f9ff 100%);
+                      border: 2px dashed rgba(2,128,144,0.3);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      box-shadow: 0 4px 20px rgba(2,128,144,0.08);
+                      transition: border-color 0.3s ease, box-shadow 0.3s ease;">
+
+                    <img id="blog-img-preview" src="" alt="Blog Cover Preview"
+                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:none;transition:opacity 0.4s ease;">
+
+                    <div id="blog-preview-badge" style="
+                        display:none;
+                        position:absolute;top:10px;left:10px;
+                        background:rgba(0,0,0,0.45);
+                        backdrop-filter:blur(8px);
+                        color:white;font-size:0.7rem;font-weight:800;
+                        letter-spacing:1px;padding:4px 10px;
+                        border-radius:999px;border:1px solid rgba(255,255,255,0.2);">
+                      ✦ COVER PREVIEW
+                    </div>
+
+                    <button type="button" id="blog-img-clear-btn" onclick="clearBlogImgPreview()"
+                      style="display:none;position:absolute;top:10px;right:10px;
+                        background:rgba(220,38,38,0.85);backdrop-filter:blur(6px);
+                        color:white;border:none;border-radius:6px;padding:4px 10px;
+                        font-size:0.75rem;font-weight:700;cursor:pointer;">
+                      ✕ Remove
+                    </button>
+
+                    <div id="blog-img-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:8px;color:#94a3b8;text-align:center;padding:16px;">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                      </svg>
+                      <span style="font-size:0.85rem;font-weight:500;">Article cover image preview</span>
+                    </div>
+                  </div>
+
+                  <!-- Upload Row -->
+                  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;">
+                    <label for="admin-blog-img-file" style="
+                        display:inline-flex;align-items:center;gap:8px;
+                        background:linear-gradient(135deg,#028090 0%,#00c4a7 100%);
+                        color:white;padding:10px 18px;border-radius:10px;
+                        cursor:pointer;font-size:0.85rem;font-weight:700;
+                        box-shadow:0 4px 14px rgba(2,128,144,0.25);
+                        white-space:nowrap;flex-shrink:0;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                      </svg>
+                      Upload from Device
+                    </label>
+                    <input type="file" id="admin-blog-img-file" accept="image/*" style="display:none;" onchange="handleBlogImageUpload(this)">
+
+                    <input type="text" id="admin-blog-image" class="form-control"
+                      placeholder="https://example.com/cover.jpg"
+                      oninput="updateBlogImgPreview(this.value)"
+                      style="height:42px;margin-bottom:0;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Short Summary Excerpt * (Appears on blog card)</label>
+                  <textarea id="admin-blog-excerpt" class="form-control" rows="2" placeholder="Brief 1-2 sentence summary for article card..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label style="font-weight:700; color:#014e59;">Full Article Content (Detailed Body) *</label>
+                  <textarea id="admin-blog-content" class="form-control" rows="10" placeholder="Write full detailed article here... You can write long paragraphs, lists, health guidelines, etc." style="font-family: inherit; font-size: 0.95rem; line-height: 1.6; padding: 14px;" required></textarea>
+                  <p style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">
+                    💡 Paragraphs separated by a new line will render as beautifully formatted reading blocks on the article page.
+                  </p>
+                </div>
+
+                <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+                  <button type="submit" class="btn btn-primary" style="padding: 13px 32px; font-size:0.95rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;vertical-align:middle;margin-right:6px;">
+                      <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    Publish Article
+                  </button>
+                  <button type="button" onclick="clearBlogForm()" style="
+                      padding: 13px 28px; font-size:0.95rem; font-weight:700;
+                      background: transparent; color: #64748b;
+                      border: 2px solid #e2e8f0; border-radius: var(--radius-sm);
+                      cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/>
+                    </svg>
+                    Clear Form
+                  </button>
+                </div>
+              </form>
+
+              <h4 style="margin-bottom: 16px; color: #014e59; font-size: 1.1rem;">Published Articles</h4>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-blogs-table-body">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 6: Facilities Management -->
+            <div id="admin-tab-facilities" class="admin-tab-pane">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                <div>
+                  <h3 style="font-size: 1.4rem; color: #014e59; margin: 0;">Manage Facilities &amp; Diagnostic Infrastructure</h3>
+                  <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">Edit hospital facilities, upload &amp; crop custom photos, or manage feature bullet points.</p>
+                </div>
+                <button class="btn btn-outline" onclick="clearFacilityForm()" style="padding: 8px 18px; font-size: 0.85rem;">
+                  + Add New Facility
+                </button>
+              </div>
+
+              <!-- Facility Edit / Add Form -->
+              <div class="admin-card" style="margin-bottom: 30px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px;">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #014e59; margin-bottom: 16px;" id="admin-fac-form-title">
+                  Edit Facility / Upload Photo
+                </h4>
+
+                <form id="admin-facility-form" onsubmit="handleFacilityFormSubmit(event)">
+                  <input type="hidden" id="admin-fac-id">
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                      <label>Facility Title *</label>
+                      <input type="text" id="admin-fac-title" class="form-control" placeholder="e.g. Super Deluxe Emergency &amp; 24x7 Casualty" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Category Badge *</label>
+                      <input type="text" id="admin-fac-category" class="form-control" placeholder="e.g. 24x7 Emergency" required>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                      <label>Icon Badge</label>
+                      <select id="admin-fac-icon" class="form-control">
+                        <option value="siren">🚨 Siren (Emergency)</option>
+                        <option value="heart-pulse">💗 Heart Pulse (ICU &amp; Critical Care)</option>
+                        <option value="scissors">✂️ Scissors (Operation Theatre)</option>
+                        <option value="bed">🛏️ Bed (Inpatient Wards)</option>
+                        <option value="heart">❤️ Heart (Cath Lab / Cardiac)</option>
+                        <option value="scan">🔬 Scan (CT-Scan / X-Ray / USG)</option>
+                        <option value="pill">💊 Pill (Pharmacy)</option>
+                        <option value="truck">🚑 Truck (Ambulance)</option>
+                        <option value="shield-check">🛡️ Shield Check (Govt. Schemes)</option>
+                        <option value="activity">⚡ Activity (General)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Short Description *</label>
+                      <input type="text" id="admin-fac-desc" class="form-control" placeholder="Short description of facility" required>
+                    </div>
+                  </div>
+
+                  <!-- Feature Bullets -->
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label style="font-size: 0.8rem;">Feature Bullet 1</label>
+                      <input type="text" id="admin-fac-f1" class="form-control" placeholder="e.g. 24x7 Resident RMOs">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label style="font-size: 0.8rem;">Feature Bullet 2</label>
+                      <input type="text" id="admin-fac-f2" class="form-control" placeholder="e.g. Super Deluxe Trauma Beds">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label style="font-size: 0.8rem;">Feature Bullet 3</label>
+                      <input type="text" id="admin-fac-f3" class="form-control" placeholder="e.g. Immediate Trauma Response">
+                    </div>
+                  </div>
+
+                  <!-- Facility Photo Manager -->
+                  <div class="form-group" style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed #cbd5e1;">
+                    <label style="font-weight:700;color:#014e59;font-size:0.85rem;">FACILITY PHOTO (OPTIONAL)</label>
+                    <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 10px;">Upload a custom cropped photo for this facility. If removed/empty, clean icon badge layout will display.</p>
+
+                    <div id="fac-img-preview-wrap" style="
+                        width: 100%;
+                        max-width: 380px;
+                        aspect-ratio: 16 / 9;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        margin: 8px 0 14px;
+                        position: relative;
+                        background: linear-gradient(135deg, #e0f7f4 0%, #f0f9ff 100%);
+                        border: 2px dashed rgba(2,128,144,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;">
+
+                      <img id="fac-img-preview" src="" alt="Facility Photo Preview"
+                        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+
+                      <button type="button" id="fac-img-clear-btn"
+                        onclick="clearFacImgPreview()"
+                        style="display:none;position:absolute;top:10px;right:10px;
+                          background:rgba(220,38,38,0.85);backdrop-filter:blur(6px);
+                          color:white;border:none;border-radius:8px;padding:5px 10px;
+                          font-size:0.75rem;font-weight:700;cursor:pointer;">
+                        ✕ Remove Photo
+                      </button>
+
+                      <div id="fac-img-placeholder" style="
+                          display:flex;flex-direction:column;align-items:center;
+                          gap:6px;color:#94a3b8;text-align:center;padding:16px;">
+                        <span style="font-size:0.85rem;font-weight:500;">No Photo Set (Using Clean Icon Layout)</span>
+                        <span style="font-size:0.75rem;opacity:0.7;">Upload a photo or leave empty</span>
+                      </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;">
+                      <label for="admin-fac-img-file" style="
+                          display:inline-flex;align-items:center;gap:6px;
+                          background:linear-gradient(135deg,#028090 0%,#00c4a7 100%);
+                          color:white;padding:10px 18px;border-radius:10px;
+                          cursor:pointer;font-size:0.825rem;font-weight:700;
+                          box-shadow:0 4px 12px rgba(2,128,144,0.25);white-space:nowrap;flex-shrink:0;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Upload &amp; Crop Facility Photo
+                      </label>
+                      <input type="file" id="admin-fac-img-file" accept="image/*" style="display:none;" onchange="handleFacilityImageUpload(this)">
+
+                      <input type="text" id="admin-fac-image" class="form-control" placeholder="Image URL (auto-filled on crop)" oninput="updateFacImgPreview(this.value)" style="height:40px;margin-bottom:0;">
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">Save Facility</button>
+                    <button type="button" class="btn btn-outline" onclick="clearFacilityForm()" style="padding: 10px 18px;">Cancel / Clear</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Facilities Table -->
+              <h4 style="margin-bottom: 16px; color: #014e59; font-size: 1.1rem;">Hospital Facilities List</h4>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Facility Title</th>
+                      <th>Category</th>
+                      <th>Icon Badge</th>
+                      <th>Photo Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-facilities-table-body">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 7: Appointments & Inquiries -->
+            <div id="admin-tab-appointments" class="admin-tab-pane">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <h3 style="font-size: 1.4rem; color: #014e59; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <span>📋</span> Patient Appointments &amp; OPD Inquiries
+                  </h3>
+                  <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">View, confirm, edit, or manage all OPD bookings &amp; hospital inquiries in real-time.</p>
+                </div>
+                <button class="btn btn-primary" onclick="openManualApptModal()" style="padding: 10px 20px; font-size: 0.85rem; font-weight: 700;">
+                  + Add Walk-In Patient
+                </button>
+              </div>
+
+              <!-- Stats Cards Row -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Total Bookings</div>
+                  <div style="font-size: 1.8rem; font-weight: 800; color: #014e59; margin-top: 4px;" id="stat-total-appts">0</div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #fed7aa; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #c2410c;">Pending Review</div>
+                  <div style="font-size: 1.8rem; font-weight: 800; color: #ea580c; margin-top: 4px;" id="stat-pending-appts">0</div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #bbf7d0; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #15803d;">Confirmed</div>
+                  <div style="font-size: 1.8rem; font-weight: 800; color: #16a34a; margin-top: 4px;" id="stat-confirmed-appts">0</div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #99f6e4; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #0f766e;">Completed Patients</div>
+                  <div style="font-size: 1.8rem; font-weight: 800; color: #028090; margin-top: 4px;" id="stat-completed-appts">0</div>
+                </div>
+              </div>
+
+              <!-- Filter & Search Bar -->
+              <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; background: #f8fafc; padding: 14px; border-radius: 14px; border: 1px solid #e2e8f0;">
+                <div style="flex: 1; min-width: 220px;">
+                  <input type="text" id="admin-appt-search" class="form-control" placeholder="🔍 Search patient name, mobile, or ref ID..." oninput="renderAdminAppointmentsTable()" style="margin-bottom: 0; height: 42px;">
+                </div>
+                <div style="width: 180px;">
+                  <select id="admin-appt-filter-status" class="form-control" onchange="renderAdminAppointmentsTable()" style="margin-bottom: 0; height: 42px;">
+                    <option value="ALL">All Statuses</option>
+                    <option value="Pending">Pending Review</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <button type="button" onclick="clearApptFilters()" style="padding: 10px 16px; background: white; border: 1px solid #cbd5e1; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; color: #475569;">
+                  Reset Filters
+                </button>
+              </div>
+
+              <!-- Edit Booking Form Container -->
+              <div id="admin-edit-appt-card" class="admin-card" style="display: none; margin-bottom: 24px; background: #f0f9ff; border: 1.5px solid #028090; border-radius: 16px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                  <h4 style="font-size: 1.05rem; font-weight: 800; color: #014e59; margin: 0;" id="admin-edit-appt-title">Edit Patient Booking</h4>
+                  <button type="button" onclick="closeEditApptForm()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b;">✕</button>
+                </div>
+                
+                <form id="admin-edit-appt-form" onsubmit="handleSaveEditAppt(event)">
+                  <input type="hidden" id="edit-appt-id">
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                      <label>Patient Name *</label>
+                      <input type="text" id="edit-appt-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Mobile Number *</label>
+                      <input type="tel" id="edit-appt-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Booking Status</label>
+                      <select id="edit-appt-status" class="form-control">
+                        <option value="Pending">Pending Review</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                      <label>Specialty / Department</label>
+                      <input type="text" id="edit-appt-dept" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label>Assigned Doctor</label>
+                      <input type="text" id="edit-appt-doc" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label>Scheduled Date</label>
+                      <input type="text" id="edit-appt-date" class="form-control">
+                    </div>
+                  </div>
+
+                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-outline" onclick="closeEditApptForm()" style="padding: 8px 18px;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 24px; font-weight: 700;">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Mass Actions Control Bar -->
+              <div id="admin-appt-mass-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; background: #fff1f2; border: 1px solid #fecdd3; padding: 12px 18px; border-radius: 14px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #991b1b; font-size: 0.875rem; cursor: pointer;">
+                    <input type="checkbox" id="admin-select-all-appts" onchange="toggleSelectAllAppts(this)" style="width: 18px; height: 18px; cursor: pointer; accent-color: #e11d48;">
+                    Select All Visible (<span id="admin-selected-count">0</span> Selected)
+                  </label>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" onclick="massConfirmAppts()" class="admin-btn" style="background: #16a34a; color: white; border: none; padding: 7px 14px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer;">
+                    ✓ Mark Selected Confirmed
+                  </button>
+                  <button type="button" onclick="massDeleteAppts()" class="admin-btn" style="background: #e11d48; color: white; border: none; padding: 7px 16px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px rgba(225,29,72,0.3);">
+                    🗑️ Mass Delete Selected
+                  </button>
+                  <button type="button" onclick="deleteAllAppts()" class="admin-btn" style="background: #881337; color: white; border: none; padding: 7px 14px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer;">
+                    ⚠️ Delete ALL Bookings
+                  </button>
+                </div>
+              </div>
+
+              <!-- Appointments Table -->
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px; text-align: center;">
+                        <input type="checkbox" id="admin-select-all-head" onchange="toggleSelectAllAppts(this)" style="width: 16px; height: 16px; cursor: pointer; accent-color: #e11d48;">
+                      </th>
+                      <th>Ref ID</th>
+                      <th>Patient Details</th>
+                      <th>Specialty &amp; Doctor</th>
+                      <th>Scheduled Date</th>
+                      <th>Booking Type</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-appointments-table-body">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+
+            <!-- Tab 8: Media & Photo Gallery Management -->
+            <div id="admin-tab-gallery" class="admin-tab-pane">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <h3 style="font-size: 1.4rem; color: #014e59; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <span>🖼️</span> Hospital Media &amp; Photo Gallery
+                  </h3>
+                  <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 0 0;">Upload, crop, edit, or delete photo gallery items shown on the main website.</p>
+                </div>
+                <button class="btn btn-primary" onclick="clearGalleryForm()" style="padding: 10px 20px; font-size: 0.85rem; font-weight: 700;">
+                  + Add New Photo
+                </button>
+              </div>
+
+              <!-- Gallery Add / Edit Form -->
+              <div class="admin-card" style="margin-bottom: 28px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px;">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #014e59; margin-bottom: 16px;" id="admin-gal-form-title">
+                  Upload &amp; Add Gallery Photo
+                </h4>
+
+                <form id="admin-gallery-form" onsubmit="handleGalleryFormSubmit(event)">
+                  <input type="hidden" id="admin-gal-id">
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                      <label>Photo Title *</label>
+                      <input type="text" id="admin-gal-title" class="form-control" placeholder="e.g. Advanced Modular Operation Theatre (OT)" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Category Tag *</label>
+                      <select id="admin-gal-category" class="form-control" required>
+                        <option value="Hospital Campus">Hospital Campus</option>
+                        <option value="OT &amp; ICU">OT &amp; ICU</option>
+                        <option value="Diagnostics &amp; MRI">Diagnostics &amp; MRI</option>
+                        <option value="Health Camps">Health Camps &amp; Events</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Short Caption / Description</label>
+                    <input type="text" id="admin-gal-caption" class="form-control" placeholder="e.g. Sterile Laminar Airflow Operating Suite with HEPA filters">
+                  </div>
+
+                  <!-- Photo Uploader & Cropper -->
+                  <div class="form-group" style="margin-top: 18px; padding-top: 16px; border-top: 1px dashed #cbd5e1;">
+                    <label style="font-weight:700;color:#014e59;font-size:0.85rem;">GALLERY PHOTO *</label>
+                    
+                    <div id="gal-img-preview-wrap" style="
+                        width: 100%; max-width: 380px; aspect-ratio: 16 / 9;
+                        border-radius: 12px; overflow: hidden; margin: 8px 0 14px;
+                        position: relative; background: linear-gradient(135deg, #e0f7f4 0%, #f0f9ff 100%);
+                        border: 2px dashed rgba(2,128,144,0.3); display: flex;
+                        align-items: center; justify-content: center;">
+
+                      <img id="gal-img-preview" src="" alt="Gallery Preview" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+
+                      <button type="button" id="gal-img-clear-btn" onclick="clearGalImgPreview()" style="display:none;position:absolute;top:10px;right:10px;background:rgba(220,38,38,0.85);backdrop-filter:blur(6px);color:white;border:none;border-radius:8px;padding:5px 10px;font-size:0.75rem;font-weight:700;cursor:pointer;">
+                        ✕ Remove Photo
+                      </button>
+
+                      <div id="gal-img-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;color:#94a3b8;text-align:center;padding:16px;">
+                        <span style="font-size:0.85rem;font-weight:500;">No Photo Selected</span>
+                        <span style="font-size:0.75rem;opacity:0.7;">Upload a photo from your computer</span>
+                      </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;">
+                      <label for="admin-gal-img-file" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#028090 0%,#00c4a7 100%);color:white;padding:10px 18px;border-radius:10px;cursor:pointer;font-size:0.825rem;font-weight:700;box-shadow:0 4px 12px rgba(2,128,144,0.25);white-space:nowrap;flex-shrink:0;">
+                        📷 Upload &amp; Crop Gallery Photo
+                      </label>
+                      <input type="file" id="admin-gal-img-file" accept="image/*" style="display:none;" onchange="handleGalleryImageUpload(this)">
+
+                      <input type="text" id="admin-gal-image" class="form-control" placeholder="Image URL (auto-filled on upload)" oninput="updateGalImgPreview(this.value)" style="height:40px;margin-bottom:0;" required>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">Save Gallery Photo</button>
+                    <button type="button" class="btn btn-outline" onclick="clearGalleryForm()" style="padding: 10px 18px;">Cancel / Clear</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Gallery Admin Table -->
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Photo Preview</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Caption</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-gallery-table-body">
+                    <!-- Dynamic Gallery Rows -->
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>LIFE LINE HOSPITAL</h3>
+          <p>Ambikapur's premier multispecialty hospital and trauma center, providing round-the-clock medical excellence, emergency care, and advanced surgeries to Chhattisgarh.</p>
+          <div style="display: flex; gap: 12px;">
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="facebook"></i></a>
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="youtube"></i></a>
+            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home-view" data-view-target="home-view">Home</a></li>
+            <li><a href="#about-view" data-view-target="about-view">About Us</a></li>
+            <li><a href="#departments-view" data-view-target="departments-view">Clinical Departments</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Our Specialists</a></li>
+            <li><a href="#facilities-view" data-view-target="facilities-view">Facilities</a></li>
+            <li><a href="#contact-view" data-view-target="contact-view">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Specialties</h4>
+          <ul>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Cardiology</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Orthopedics & Joint Replacement</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Pediatrics & NICU</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Laparoscopic Surgery</a></li>
+            <li><a href="#doctors-view" data-view-target="doctors-view">Neurology & Brain Surgery</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>24x7 Emergency &amp; Info</h4>
+          <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 8px;">
+            Emergency Helpline: <strong class="dynamic-emergency-phone" style="color: #f4a261;">+91 7879596337, +91 7879714048</strong>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 8px;">
+            Email: <strong style="color: #70e4d5;">Lifelinehospitalabikapur2017@gmail.com</strong>
+          </p>
+          <p class="dynamic-address" style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 16px;">
+            Namnakala, opposite to the Polytechnic College on the Outer Ring Road in Ambikapur, Chhattisgarh (Pin: 497001)
+          </p>
+          <button class="btn btn-emergency" onclick="openBookingModal()" style="width: 100%;">
+            Book Appointment
+          </button>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Life Line Hospital Ambikapur. All rights reserved. Designed for excellence in healthcare.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- APPOINTMENT BOOKING MODAL -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Book OPD Appointment</h3>
+        <button class="modal-close-btn" id="close-booking-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="appointment-booking-form">
+          <div class="form-group">
+            <label>Patient Full Name *</label>
+            <input type="text" id="patient-name" class="form-control" placeholder="Enter patient name" required>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="patient-phone" class="form-control" placeholder="10-digit mobile number" required>
+          </div>
+          <div class="form-group">
+            <label>Select Department *</label>
+            <select id="modal-dept-select" class="form-control" required>
+              <!-- JS Populated -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Doctor (Optional)</label>
+            <select id="modal-doc-select" class="form-control">
+              <!-- JS Populated -->
+            </select>
+          </div>
+          <div class="form-group" id="other-checkup-group" style="display: none;">
+            <label>Checkup / Symptom Details (Optional)</label>
+            <input type="text" id="patient-checkup-detail" class="form-control" placeholder="e.g. Fever, Blood Test, General Checkup, Receptionist Decision">
+          </div>
+          <div class="form-group">
+            <label>Preferred Date *</label>
+            <input type="date" id="appointment-date" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">
+            Confirm OPD Booking
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN AUTHENTICATION LOGIN MODAL OVERLAY -->
+  <div id="admin-login-modal" class="modal-overlay" style="display: none; z-index: 100000; background: rgba(1, 47, 56, 0.88); backdrop-filter: blur(12px);">
+    <div class="modal-card" style="max-width: 440px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); overflow: hidden; background: #ffffff; padding: 0;">
+      <div style="background: linear-gradient(135deg, #014e59 0%, #028090 100%); padding: 28px 24px; text-align: center; color: white;">
+        <div style="width: 56px; height: 56px; background: rgba(255,255,255,0.15); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; border: 1px solid rgba(255,255,255,0.3);">
+          <i data-lucide="shield-check" style="width: 32px; height: 32px; color: #70e4d5;"></i>
+        </div>
+        <h3 style="font-weight: 800; font-size: 1.4rem; margin: 0; color: white;">Admin Security Portal</h3>
+        <p style="font-size: 0.825rem; color: #cbd5e1; margin: 4px 0 0 0;">Life Line Hospital Administration Control</p>
+      </div>
+
+      <div style="padding: 28px 24px;">
+        <div id="admin-login-error" style="display: none; background: #fef2f2; border: 1px solid #fecdd3; color: #991b1b; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; margin-bottom: 18px; text-align: center;">
+          ⚠️ Invalid Username or Password. Please try again.
+        </div>
+
+        <form id="admin-login-form" onsubmit="handleAdminLoginSubmit(event)">
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label style="font-weight: 700; color: #014e59; font-size: 0.85rem;">ADMIN USERNAME</label>
+            <div style="position: relative;">
+              <input type="text" id="admin-username" class="form-control" placeholder="Enter username" required value="admin" style="padding-left: 40px; height: 44px; font-weight: 600;">
+              <i data-lucide="user" style="position: absolute; left: 12px; top: 13px; width: 18px; height: 18px; color: #028090;"></i>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 22px;">
+            <label style="font-weight: 700; color: #014e59; font-size: 0.85rem;">PASSWORD</label>
+            <div style="position: relative;">
+              <input type="password" id="admin-password" class="form-control" placeholder="Enter password" required value="admin" style="padding-left: 40px; height: 44px; font-weight: 600;">
+              <i data-lucide="lock" style="position: absolute; left: 12px; top: 13px; width: 18px; height: 18px; color: #028090;"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.825rem; color: #475569; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="admin-remember-me" checked style="width: 16px; height: 16px; accent-color: #028090;">
+              Remember login session
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; height: 46px; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, #014e59 0%, #028090 100%); border-radius: 12px; box-shadow: 0 4px 14px rgba(2,128,144,0.3);">
+            🔐 Authenticate &amp; Login
+          </button>
+
+          <button type="button" onclick="closeAdminLoginModal()" style="width: 100%; margin-top: 12px; background: none; border: none; color: #64748b; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: underline;">
+            Return to Main Website
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX GALLERY MODAL -->
+  <div class="modal-backdrop" id="lightbox-modal">
+    <div class="modal-content" style="max-width: 800px; background: #000; color: white;">
+      <div class="modal-header" style="background: #111; border-color: #333;">
+        <h3 class="modal-title" id="lightbox-title" style="color: white;">Gallery Image</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('lightbox-modal').classList.remove('active')" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center; padding: 20px;">
+        <img id="lightbox-img" src="" alt="" style="max-height: 500px; margin: 0 auto 16px auto; border-radius: 8px;">
+        <p id="lightbox-caption" style="color: #cbd5e1; font-size: 0.9rem;"></p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- FLOATING ACTION WIDGETS -->
+  <div class="floating-widgets">
+    <button class="float-btn back-to-top-btn" id="back-to-top-btn" aria-label="Back to Top" title="Back to top">
+      <i data-lucide="arrow-up"></i>
+    </button>
+    <a href="https://wa.me/919425288990?text=Hello%20Life%20Line%20Hospital%20Ambikapur,%20I%20want%20to%20inquire%20about%20OPD%20appointment" target="_blank" rel="noopener" class="float-btn float-whatsapp" title="WhatsApp Chat">
+      <i data-lucide="message-circle"></i>
+    </a>
+    <a href="tel:+917774234999" class="float-btn float-call" title="Emergency Call">
+      <i data-lucide="phone"></i>
+    </a>
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR — APP STYLE -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <div class="mobile-bottom-nav-inner">
+      <a href="#home-view" class="mobile-bottom-nav-item active" data-view-target="home-view" id="mbn-home">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#doctors-view" class="mobile-bottom-nav-item" data-view-target="doctors-view" id="mbn-doctors">
+        <i data-lucide="stethoscope"></i>
+        <span>Doctors</span>
+      </a>
+      <button class="mobile-bottom-nav-cta" onclick="openBookingModal();" aria-label="Book Appointment">
+        <i data-lucide="calendar-check"></i>
+      </button>
+      <a href="#facilities-view" class="mobile-bottom-nav-item" data-view-target="facilities-view" id="mbn-facilities">
+        <i data-lucide="building-2"></i>
+        <span>Facilities</span>
+      </a>
+      <a href="#contact-view" class="mobile-bottom-nav-item" data-view-target="contact-view" id="mbn-contact">
+        <i data-lucide="phone-call"></i>
+        <span>Contact</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- IMAGE CROPPER & RESIZER MODAL -->
+  <div id="cropper-modal" class="modal-overlay" style="display: none; z-index: 10000; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);">
+    <div class="modal-card" style="max-width: 740px; width: 92%; padding: 24px; border-radius: 24px; background: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+      
+      <!-- Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0;">
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: #014e59; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>✂️</span> Crop &amp; Adjust Image
+          </h3>
+          <p style="font-size: 0.8rem; color: #64748b; margin: 2px 0 0 0;">Drag, zoom, rotate, and select the frame for optimal display.</p>
+        </div>
+        <button type="button" onclick="closeCropperModal()" style="background: #f1f5f9; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center;">✕</button>
+      </div>
+
+      <!-- Cropper Canvas Container -->
+      <div style="width: 100%; max-height: 380px; height: 380px; background: #020617; border-radius: 16px; overflow: hidden; position: relative; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+        <img id="cropper-modal-img" src="" alt="Target Crop Image" style="max-width: 100%; display: block;">
+      </div>
+
+      <!-- Control Toolbar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; background: #f8fafc; padding: 12px 16px; border-radius: 14px; border: 1px solid #e2e8f0;">
+        
+        <!-- Aspect Ratio Controls -->
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-right: 4px;">Aspect Ratio:</span>
+          <button type="button" class="cropper-ratio-btn active" onclick="setCropRatio(16/9, this)" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; font-weight: 700; border: 1px solid #cbd5e1; background: white; cursor: pointer;">16:9 Banner</button>
+          <button type="button" class="cropper-ratio-btn" onclick="setCropRatio(4/3, this)" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; font-weight: 700; border: 1px solid #cbd5e1; background: white; cursor: pointer;">4:3 Photo</button>
+          <button type="button" class="cropper-ratio-btn" onclick="setCropRatio(1/1, this)" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; font-weight: 700; border: 1px solid #cbd5e1; background: white; cursor: pointer;">1:1 Square</button>
+          <button type="button" class="cropper-ratio-btn" onclick="setCropRatio(3/4, this)" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; font-weight: 700; border: 1px solid #cbd5e1; background: white; cursor: pointer;">3:4 Portrait</button>
+          <button type="button" class="cropper-ratio-btn" onclick="setCropRatio(NaN, this)" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; font-weight: 700; border: 1px solid #cbd5e1; background: white; cursor: pointer;">Free Form</button>
+        </div>
+
+        <!-- Rotate & Zoom Buttons -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button type="button" onclick="cropperRotate(-90)" title="Rotate Left" style="padding: 6px 12px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: #014e59;">↺ Rotate</button>
+          <button type="button" onclick="cropperRotate(90)" title="Rotate Right" style="padding: 6px 12px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: #014e59;">↻ Rotate</button>
+          <button type="button" onclick="cropperZoom(0.1)" title="Zoom In" style="padding: 6px 12px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: #014e59;">🔍+</button>
+          <button type="button" onclick="cropperZoom(-0.1)" title="Zoom Out" style="padding: 6px 12px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: #014e59;">🔍-</button>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn btn-outline" onclick="closeCropperModal()" style="padding: 10px 20px; font-weight: 700;">Cancel</button>
+        <button type="button" id="cropper-apply-btn" class="btn btn-primary" onclick="applyCroppedImage()" style="padding: 10px 24px; font-weight: 800; background: linear-gradient(135deg,#028090,#00c4a7); border: none;">
+          ✂️ Crop, Save &amp; Upload
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Custom Script -->
+  <script type="module" src="/src/scripts/main.js"></script>
+
+</body>
+</html>
