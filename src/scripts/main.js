@@ -505,37 +505,8 @@ function renderHeroAndHeaderFromData() {
     
     const LOCAL_HERO = '/assets/images/hospital_hero.png';
     let imgUrl = (appState.hero && appState.hero.imageUrl) ? appState.hero.imageUrl : LOCAL_HERO;
-    const isLocal = imgUrl.startsWith('/') || imgUrl.startsWith('data:image');
-    const isExternal = imgUrl.startsWith('http');
-
-    if (isLocal) {
-      // Local path — set directly, no flicker
-      if (heroImgEl) heroImgEl.src = imgUrl;
-      if (heroImgMobileEl) heroImgMobileEl.src = imgUrl;
-    } else if (isExternal) {
-      // External/Supabase URL — show hospital_hero.png FIRST (already in HTML),
-      // then preload new image and swap ONLY when fully loaded — zero flicker
-      if (heroImgEl) heroImgEl.src = LOCAL_HERO;  // ensure local default is shown
-      if (heroImgMobileEl) heroImgMobileEl.src = LOCAL_HERO;
-      const preloader = new Image();
-      preloader.onload = () => {
-        // Smooth fade swap
-        if (heroImgEl) {
-          heroImgEl.style.transition = 'opacity 0.4s';
-          heroImgEl.style.opacity = '0';
-          setTimeout(() => {
-            heroImgEl.src = imgUrl;
-            heroImgEl.style.opacity = '1';
-          }, 200);
-        }
-        if (heroImgMobileEl) heroImgMobileEl.src = imgUrl;
-      };
-      preloader.onerror = () => {
-        // Uploaded image failed to load — stay on local default
-        if (heroImgEl) heroImgEl.src = LOCAL_HERO;
-      };
-      preloader.src = imgUrl;
-    }
+    if (heroImgEl && heroImgEl.src !== imgUrl) heroImgEl.src = imgUrl;
+    if (heroImgMobileEl && heroImgMobileEl.src !== imgUrl) heroImgMobileEl.src = imgUrl;
 
     if (floatingTitleEl && appState.hero.floatingTitle) floatingTitleEl.textContent = appState.hero.floatingTitle;
     if (floatingSubEl && appState.hero.floatingSubtitle) floatingSubEl.textContent = appState.hero.floatingSubtitle;
@@ -603,8 +574,15 @@ function handleRouteHash() {
   }
 
   if (route === 'admin') {
-    // Auto-lock permanent admin authentication
-    localStorage.setItem('admin_authenticated', 'true');
+    if (!isAdminAuthenticated()) {
+      window.location.hash = 'login';
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+      const loginView = document.getElementById('admin-login-view');
+      if (loginView) loginView.classList.add('active-view');
+      document.body.classList.add('admin-mode-active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
 
     document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
     const adminView = document.getElementById('admin-view');

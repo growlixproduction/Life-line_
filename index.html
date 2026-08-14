@@ -282,7 +282,17 @@
 
           <div class="hero-image-card reveal-on-scroll delay-200">
             <div class="hero-image-wrap">
-              <img id="hero-banner-img" src="/assets/images/hospital_hero.png" alt="Life Line Hospital Ambikapur Building">
+              <img id="hero-banner-img" src="" alt="Life Line Hospital Ambikapur Building">
+              <script>
+                (function() {
+                  try {
+                    var d = JSON.parse(localStorage.getItem('lifeLineHospitalData') || '{}');
+                    var img = (d && d.hero && d.hero.imageUrl) ? d.hero.imageUrl : '/assets/images/hospital_hero.png';
+                    var el = document.getElementById('hero-banner-img');
+                    if (el) el.src = img;
+                  } catch(e) {}
+                })();
+              </script>
             </div>
             <div class="hero-floating-card">
               <div class="floating-icon">
