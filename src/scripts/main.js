@@ -430,18 +430,17 @@ window.deleteDeptInAdmin = async function(deptId) {
 
   if (confirm(`Are you sure you want to delete the department "${name}"?\nWarning: This will also remove it from selection filters.`)) {
     try {
+      await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments?id=eq.${deptId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
       if (isLocal) {
-        await fetch(`/api/departments/${deptId}`, { method: 'DELETE' });
-      } else {
-        await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments?id=eq.${deptId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
-            'apiKey': SUPABASE_STORAGE_KEY
-          }
-        });
+        try { await fetch(`/api/departments/${deptId}`, { method: 'DELETE' }); } catch(e){}
       }
-      showToast('Specialty Department deleted successfully!');
+      showToast('Specialty Department deleted live from Database!');
       
       appState.departments = depts.filter(d => d.id !== deptId);
       saveHospitalData(appState);
@@ -2442,33 +2441,35 @@ window.submitDoctorProfile = window.handleDoctorFormSubmit;
       }
 
       try {
+        const payload = {
+          id,
+          name,
+          icon,
+          head,
+          short_desc: shortDesc,
+          full_description: fullDescription,
+          key_treatments: procedures.join('\n')
+        };
+        const supaRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+            'apiKey': SUPABASE_STORAGE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify(payload)
+        });
         if (isLocal) {
-          await fetch('/api/departments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(deptData)
-          });
-        } else {
-          const payload = {
-            id,
-            name,
-            icon,
-            short_desc: shortDesc,
-            full_description: fullDescription,
-            key_treatments: procedures.join('\n')
-          };
-          await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/departments`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
-              'apiKey': SUPABASE_STORAGE_KEY,
-              'Content-Type': 'application/json',
-              'Prefer': 'resolution=merge-duplicates'
-            },
-            body: JSON.stringify(payload)
-          });
+          try {
+            await fetch('/api/departments', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(deptData)
+            });
+          } catch(e){}
         }
-        showToast('Specialty Department Saved Live!');
+        showToast('⚡ Specialty Department Saved Live to Database!');
       } catch (err) {
         console.warn('DB save notice:', err);
       }
@@ -4008,42 +4009,39 @@ async function saveDoctorToSupabase(newDoctor) {
 
   try {
     let saveSuccess = false;
+    const docPayload = {
+      id: newDoctor.id,
+      name: newDoctor.name,
+      specialty_id: newDoctor.specialty || 'general',
+      specialty_name: newDoctor.specialtyName || 'General OPD',
+      qualifications: newDoctor.degree || '',
+      experience: newDoctor.experience || '10+ Years',
+      opd_time: newDoctor.timings || '10:00 AM - 04:00 PM',
+      fee: parseFloat(String(newDoctor.fee || '').replace(/[^0-9.]/g, '')) || 500,
+      image: newDoctor.image || ''
+    };
+    const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'apiKey': SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(docPayload)
+    });
+    if (dbRes.ok) {
+      saveSuccess = true;
+      console.log('⚡ Doctor saved directly to Supabase REST API successfully.');
+    }
     if (isLocal) {
-      const res = await fetch('/api/doctors', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newDoctor)
-      });
-      if (res.ok) {
-        saveSuccess = true;
-        console.log('⚡ Doctor saved live via backend successfully.');
-      }
-    } else {
-      const docPayload = {
-        id: newDoctor.id,
-        name: newDoctor.name,
-        specialty_id: newDoctor.specialty || 'general',
-        specialty_name: newDoctor.specialtyName || 'General OPD',
-        qualifications: newDoctor.degree || '',
-        experience: newDoctor.experience || '10+ Years',
-        opd_time: newDoctor.timings || '10:00 AM - 04:00 PM',
-        fee: parseFloat(String(newDoctor.fee || '').replace(/[^0-9.]/g, '')) || 500,
-        image: newDoctor.image || ''
-      };
-      const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'apiKey': SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify(docPayload)
-      });
-      if (dbRes.ok) {
-        saveSuccess = true;
-        console.log('⚡ Doctor saved directly to Supabase REST API successfully.');
-      }
+      try {
+        await fetch('/api/doctors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newDoctor)
+        });
+      } catch(e) {}
     }
 
     if (saveSuccess) {
@@ -4065,26 +4063,15 @@ async function saveDoctorToSupabase(newDoctor) {
 }
 
 async function deleteDoctorFromSupabase(docId) {
+  const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors?id=eq.${docId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'apiKey': SUPABASE_ANON_KEY
+    }
+  });
   if (isLocal) {
-    const res = await fetch(`/api/doctors/${encodeURIComponent(docId)}`, {
-      method: 'DELETE'
-    });
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(errText);
-    }
-  } else {
-    const dbRes = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/doctors?id=eq.${docId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apiKey': SUPABASE_ANON_KEY
-      }
-    });
-    if (!dbRes.ok) {
-      const errText = await dbRes.text();
-      throw new Error(errText);
-    }
+    try { await fetch(`/api/doctors/${encodeURIComponent(docId)}`, { method: 'DELETE' }); } catch(e){}
   }
 }
 
@@ -4134,16 +4121,15 @@ window.editBlogInAdmin = function(blogId) {
 window.deleteBlogInAdmin = async function(blogId) {
   if (confirm('Delete this health blog article?')) {
     try {
+      await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apiKey': SUPABASE_ANON_KEY
+        }
+      });
       if (isLocal) {
-        await fetch('/api/blogs/' + blogId, { method: 'DELETE' });
-      } else {
-        await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'apiKey': SUPABASE_ANON_KEY
-          }
-        });
+        try { await fetch('/api/blogs/' + blogId, { method: 'DELETE' }); } catch(e){}
       }
       showToast('Blog article deleted live from Supabase!');
       await syncFromSupabase();

@@ -2361,3 +2361,36 @@ body.admin-mode-active .mobile-bottom-nav {
 body.admin-mode-active .mobile-bottom-nav {
   display: none !important;
 }
+
+
+/* ===================================================
+   DIRECTOR SPOTLIGHT MOBILE RESPONSIVE STYLES
+   =================================================== */
+.director-spotlight-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 50px;
+  align-items: center;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+@media (max-width: 992px) {
+  #director-spotlight-section {
+    padding: 40px 16px !important;
+  }
+  .director-spotlight-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    max-width: 500px !important;
+  }
+  .director-spotlight-photo-wrap {
+    max-width: 300px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+  }
+  #home-director-watermark {
+    font-size: 80px !important;
+    display: none !important;
+  }
+}

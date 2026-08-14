@@ -363,10 +363,10 @@
         <div id="home-director-watermark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(80px,14vw,200px);font-weight:900;color:rgba(2,128,144,0.06);white-space:nowrap;pointer-events:none;letter-spacing:0.05em;line-height:1;user-select:none;z-index:0;font-family:'Segoe UI',sans-serif;text-transform:uppercase;"></div>
 
         <div class="container" style="position:relative;z-index:1;">
-          <div style="display:grid;grid-template-columns:380px 1fr;gap:60px;align-items:center;max-width:1050px;margin:0 auto;">
+          <div class="director-spotlight-grid">
 
             <!-- LEFT: Photo Card -->
-            <div style="position:relative;flex-shrink:0;">
+            <div class="director-spotlight-photo-wrap" style="position:relative;flex-shrink:0;">
               <div style="position:absolute;top:-20px;left:-20px;width:calc(100% + 40px);height:calc(100% + 40px);border-radius:28px;background:linear-gradient(135deg,rgba(0,196,167,0.18),rgba(2,128,144,0.10));filter:blur(28px);z-index:0;"></div>
 
               <div style="position:relative;z-index:1;border-radius:24px;overflow:hidden;aspect-ratio:3/4;background:linear-gradient(160deg,#014e59 0%,#028090 60%,#00c4a7 100%);border:1px solid rgba(0,196,167,0.3);box-shadow:0 24px 60px rgba(2,128,144,0.2);">
@@ -2680,10 +2680,21 @@
         <div class="footer-brand">
           <h3>LIFE LINE HOSPITAL</h3>
           <p>Ambikapur's premier multispecialty hospital and trauma center, providing round-the-clock medical excellence, emergency care, and advanced surgeries to Chhattisgarh.</p>
-          <div style="display: flex; gap: 12px;">
-            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="facebook"></i></a>
-            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="youtube"></i></a>
-            <a href="#" style="background: rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><i data-lucide="instagram"></i></a>
+          <div style="display: flex; gap: 14px; align-items: center; margin-top: 16px;">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/917879596337" target="_blank" title="WhatsApp (+91 7879596337)" style="background: #25D366; color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 14px rgba(37,211,102,0.4);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.15 4.195 4.343-1.144z"/></svg>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/lifelinehospital13" target="_blank" title="Instagram @lifelinehospital13" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 14px rgba(220,39,67,0.4);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+
+            <!-- Justdial -->
+            <a href="https://www.justdial.com/Ambikapur/Life-Line-Hospital-Opposite-Polytechnic-College-Ambikavani/9999P7774-7774-190110102953-C6L1_BZDET" target="_blank" title="Justdial - Life Line Hospital Ambikapur" style="background: #ff6a00; color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 900; font-size: 1rem; font-family: system-ui, -apple-system, sans-serif; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 14px rgba(255,106,0,0.4);" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+              JD
+            </a>
           </div>
         </div>
 
