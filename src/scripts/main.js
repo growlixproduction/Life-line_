@@ -207,6 +207,9 @@ async function syncFromSupabase() {
       if (settings.director && typeof settings.director === 'object' && settings.director.name) {
         appState.director = { ...defaultHospitalData.director, ...settings.director };
       }
+      if (settings.departments && Array.isArray(settings.departments) && settings.departments.length > 0) {
+        appState.departments = settings.departments;
+      }
     }
 
     // 2. Fetch Doctors directly from Supabase REST API (with /api/doctors fallback)
@@ -444,6 +447,7 @@ window.deleteDeptInAdmin = async function(deptId) {
       
       appState.departments = depts.filter(d => d.id !== deptId);
       saveHospitalData(appState);
+      saveSettingToSupabase('departments', appState.departments);
       
       populateDepartmentDropdowns();
       renderAdminDepartmentsTable();
@@ -2444,8 +2448,7 @@ window.submitDoctorProfile = window.handleDoctorFormSubmit;
         const payload = {
           id,
           name,
-          icon,
-          head,
+          icon: icon || 'activity',
           short_desc: shortDesc,
           full_description: fullDescription,
           key_treatments: procedures.join('\n')
@@ -2480,6 +2483,7 @@ window.submitDoctorProfile = window.handleDoctorFormSubmit;
       else appState.departments.push(deptData);
 
       saveHospitalData(appState);
+      saveSettingToSupabase('departments', appState.departments);
       clearDeptForm();
       populateDepartmentDropdowns();
       renderAdminDepartmentsTable();
