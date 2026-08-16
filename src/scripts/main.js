@@ -741,6 +741,28 @@ function handleRouteHash() {
   }
 
   if (route === 'admin') {
+    // 🔐 Auth gate — must be logged in to see dashboard
+    const isAuthed = localStorage.getItem('admin_authenticated') === 'true' ||
+                     sessionStorage.getItem('admin_authenticated') === 'true';
+    if (!isAuthed) {
+      // Not logged in — send to login page
+      window.location.hash = 'login';
+      document.querySelectorAll('.page-view').forEach(v => {
+        v.classList.remove('active-view');
+        v.style.display = 'none';
+      });
+      const loginView = document.getElementById('admin-login-view');
+      if (loginView) {
+        loginView.classList.add('active-view');
+        loginView.style.display = 'flex';
+      }
+      document.body.classList.add('admin-mode-active');
+      document.documentElement.classList.add('admin-mode-active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (window.lucide) window.lucide.createIcons();
+      return;
+    }
+
     document.querySelectorAll('.page-view').forEach(v => {
       v.classList.remove('active-view');
       v.style.display = 'none';
@@ -990,12 +1012,9 @@ window.adminLogout = function() {
   localStorage.removeItem('admin_authenticated');
   sessionStorage.removeItem('admin_authenticated');
   document.body.classList.remove('admin-mode-active');
+  document.documentElement.classList.remove('admin-mode-active');
 
-  // Cleanly switch active views to login
-  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-  const loginView = document.getElementById('admin-login-view');
-  if (loginView) loginView.classList.add('active-view');
-
+  // Route to login page
   window.location.hash = 'login';
   handleRouteHash();
   showToast('🔒 Admin session locked & logged out.');
