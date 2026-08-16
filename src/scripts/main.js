@@ -952,10 +952,19 @@ window.adminLogout = function() {
 };
 
 window.openAdminPortal = function() {
-  if (!isAdminAuthenticated()) {
+  window.location.hash = 'admin';
+  handleRouteHash();
+};
+
+window.switchView = function(viewId) {
+  if (!viewId) return;
+  const cleanId = viewId.replace('#', '');
+  if (cleanId === 'admin' || cleanId === 'admin-view') {
+    window.location.hash = 'admin';
+  } else if (cleanId === 'login' || cleanId === 'admin-login' || cleanId === 'admin-login-view') {
     window.location.hash = 'login';
   } else {
-    window.location.hash = 'admin';
+    window.location.hash = cleanId;
   }
   handleRouteHash();
 };
