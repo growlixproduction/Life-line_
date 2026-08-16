@@ -2495,3 +2495,357 @@ body.admin-mode-active .mobile-bottom-nav {
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* =====================================================
+   ADMIN LOGIN PORTAL — MOBILE OPTIMIZED APP LAYOUT
+   ===================================================== */
+.admin-login-wrapper {
+  width: 100%;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .admin-login-wrapper {
+    grid-template-columns: 1fr !important;
+    max-width: 480px;
+    border-radius: 20px;
+  }
+  .admin-login-left-banner {
+    padding: 24px 20px !important;
+  }
+  .admin-login-left-banner h2 {
+    font-size: 1.4rem !important;
+    margin-bottom: 6px !important;
+  }
+  .admin-login-left-banner p {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+  }
+  .admin-login-form-box {
+    padding: 24px 18px !important;
+  }
+  .admin-login-left-footer {
+    display: none !important;
+  }
+}
+
+/* =====================================================
+   ADMIN PORTAL — NATIVE MOBILE APP UX & BOTTOM NAV
+   ===================================================== */
+
+/* Mobile Top Sticky Bar for Admin */
+.admin-mobile-topbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 14px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.admin-mobile-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+.admin-mobile-pill {
+  background: rgba(2, 128, 144, 0.25);
+  border: 1px solid rgba(112, 228, 213, 0.4);
+  color: #70e4d5;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-mobile-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-mobile-icon-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-mobile-icon-btn:hover,
+.admin-mobile-icon-btn:active {
+  background: rgba(2, 128, 144, 0.5);
+  color: #70e4d5;
+}
+
+/* Horizontal Quick Category Chips Scroll Bar */
+.admin-quicktabs-bar {
+  display: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: sticky;
+  top: 56px;
+  z-index: 999;
+}
+
+.admin-quicktabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-quicktab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.admin-quicktab-chip:hover {
+  background: #e2e8f0;
+  color: #014e59;
+}
+
+.admin-quicktab-chip.active {
+  background: linear-gradient(135deg, #014e59 0%, #028090 100%);
+  color: white !important;
+  border-color: #014e59;
+  box-shadow: 0 3px 12px rgba(2, 128, 144, 0.3);
+}
+
+/* Admin Mobile App Bottom Navigation Bar */
+.admin-app-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2500;
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+  padding: 4px 6px calc(4px + env(safe-area-inset-bottom));
+  height: 60px;
+  box-sizing: border-box;
+}
+
+.admin-app-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.admin-app-bottom-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: #94a3b8;
+  text-decoration: none;
+  flex: 1;
+  max-width: 68px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.admin-app-bottom-item svg {
+  width: 19px;
+  height: 19px;
+  color: #94a3b8;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.admin-app-bottom-item span {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94a3b8;
+  line-height: 1;
+}
+
+.admin-app-bottom-item.active {
+  color: #70e4d5 !important;
+}
+
+.admin-app-bottom-item.active svg {
+  color: #70e4d5 !important;
+  transform: scale(1.15);
+}
+
+.admin-app-bottom-item.active span {
+  color: #70e4d5 !important;
+}
+
+.admin-bottom-badge {
+  position: absolute;
+  top: 2px;
+  right: 14px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 10px;
+}
+
+/* Center Action Button in Mobile Admin */
+.admin-app-bottom-cta {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #028090 0%, #00c4a7 100%);
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(0, 196, 167, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-8px);
+  border: 2px solid #0f172a;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.admin-app-bottom-cta svg {
+  color: white !important;
+  width: 22px;
+  height: 22px;
+}
+
+/* Slide-out Mobile Admin Drawer */
+.admin-mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.admin-mobile-drawer.open {
+  display: block !important;
+  opacity: 1;
+}
+
+.admin-mobile-drawer-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 84vw;
+  max-width: 320px;
+  background: #0f172a;
+  color: white;
+  padding: 24px 18px;
+  overflow-y: auto;
+  box-shadow: 10px 0 40px rgba(0,0,0,0.5);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-mobile-drawer.open .admin-mobile-drawer-content {
+  transform: translateX(0);
+}
+
+/* Responsive Overrides for Admin on Mobile */
+@media (max-width: 992px) {
+  .admin-mobile-topbar { display: flex !important; }
+  .admin-quicktabs-bar { display: flex !important; }
+  .admin-app-bottom-nav { display: flex !important; }
+  
+  .admin-sidebar { display: none !important; }
+  .admin-layout {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .admin-view-container {
+    padding: 12px 10px 80px 10px !important;
+  }
+  .admin-content-box {
+    padding: 18px 14px !important;
+    border-radius: 16px !important;
+  }
+  .admin-view-container > div:first-child {
+    display: none !important; /* hide desktop header on mobile */
+  }
+  .admin-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .admin-stat-widget {
+    padding: 16px 14px !important;
+  }
+  .admin-stat-widget .val {
+    font-size: 1.6rem !important;
+  }
+  
+  /* Make admin table views smoothly horizontally scrollable on mobile */
+  .admin-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+  }
+  .admin-table-responsive table {
+    min-width: 600px;
+  }
+}

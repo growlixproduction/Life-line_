@@ -722,6 +722,82 @@ function handleRouteHash() {
   setTimeout(initScrollAnimations, 50);
 }
 
+window.switchAdminTab = function(tabId) {
+  if (!tabId) return;
+
+  const navItems = document.querySelectorAll('.admin-nav-item');
+  const tabPanes = document.querySelectorAll('.admin-tab-pane');
+  const quickChips = document.querySelectorAll('.admin-quicktab-chip');
+  const bottomItems = document.querySelectorAll('.admin-app-bottom-item');
+
+  navItems.forEach(item => {
+    if (item.getAttribute('data-admin-tab') === tabId) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
+  quickChips.forEach(chip => {
+    if (chip.getAttribute('data-admin-tab') === tabId) {
+      chip.classList.add('active');
+      try {
+        chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } catch (err) {}
+    } else {
+      chip.classList.remove('active');
+    }
+  });
+
+  bottomItems.forEach(item => {
+    if (item.getAttribute('data-admin-tab') === tabId) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
+  tabPanes.forEach(pane => {
+    if (pane.id === tabId) {
+      pane.classList.add('active');
+    } else {
+      pane.classList.remove('active');
+    }
+  });
+
+  // Update mobile topbar active pill
+  const pillEl = document.getElementById('admin-mobile-active-pill');
+  if (pillEl) {
+    const titles = {
+      'admin-tab-overview': '📊 Overview',
+      'admin-tab-doctors': '👨‍⚕️ Doctors',
+      'admin-tab-appointments': '📅 Appts',
+      'admin-tab-blogs': '📝 Blogs',
+      'admin-tab-departments': '🏥 Depts',
+      'admin-tab-facilities': '🏢 Facilities',
+      'admin-tab-gallery': '🖼️ Gallery',
+      'admin-tab-director': '👤 Director',
+      'admin-tab-settings': '⚙️ Site Info',
+      'admin-tab-hero': '🖼️ Hero Banner'
+    };
+    pillEl.textContent = titles[tabId] || 'Admin Console';
+  }
+
+  if (typeof toggleAdminMobileDrawer === 'function') {
+    toggleAdminMobileDrawer(false);
+  }
+
+  if (tabId === 'admin-tab-overview' && typeof populateAdminForms === 'function') populateAdminForms();
+  if (tabId === 'admin-tab-doctors' && typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+  if (tabId === 'admin-tab-blogs' && typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
+  if (tabId === 'admin-tab-facilities' && typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
+  if (tabId === 'admin-tab-appointments' && typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
+  if (tabId === 'admin-tab-gallery' && typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (window.lucide) window.lucide.createIcons();
+};
+
 /* ===================================================
    ADMIN AUTHENTICATION & SECURITY ENGINE
    =================================================== */
@@ -764,6 +840,39 @@ window.handleDedicatedAdminLoginSubmit = function(e) {
   } else {
     if (errorEl) errorEl.style.display = 'block';
   }
+};
+
+window.quickFillAdminLogin = function() {
+  const userEl = document.getElementById('page-admin-username');
+  const passEl = document.getElementById('page-admin-password');
+  if (userEl) userEl.value = 'admin';
+  if (passEl) passEl.value = 'admin';
+  showToast('⚡ Demo credentials filled (admin / admin)');
+};
+
+window.togglePasswordVisibility = function(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    if (btn) btn.innerHTML = '<i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>';
+  } else {
+    input.type = 'password';
+    if (btn) btn.innerHTML = '<i data-lucide="eye" style="width: 18px; height: 18px;"></i>';
+  }
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.toggleAdminMobileDrawer = function(forceOpen) {
+  const drawer = document.getElementById('admin-mobile-drawer');
+  if (!drawer) return;
+  if (typeof forceOpen === 'boolean') {
+    if (forceOpen) drawer.classList.add('open');
+    else drawer.classList.remove('open');
+  } else {
+    drawer.classList.toggle('open');
+  }
+  if (window.lucide) window.lucide.createIcons();
 };
 
 window.handleAdminLoginSubmit = function(e) {
@@ -3636,9 +3745,7 @@ function renderAdminAppointmentsTable() {
 
   if (statTotal) statTotal.textContent = totalCount;
   if (statPending) statPending.textContent = pendingCount;
-  if (statConfirmed) statConfirmed.textContent = confirmedCount;
-  if (statCompleted) statCompleted.textContent = completedCount;
-
+  const bottomBadgeEl = document.getElementById('admin-bottom-badge-appts');
   if (badgeEl) {
     if (pendingCount > 0) {
       badgeEl.textContent = pendingCount;
@@ -3647,6 +3754,16 @@ function renderAdminAppointmentsTable() {
       badgeEl.style.display = 'none';
     }
   }
+  if (bottomBadgeEl) {
+    if (pendingCount > 0) {
+      bottomBadgeEl.textContent = pendingCount;
+      bottomBadgeEl.style.display = 'inline-block';
+    } else {
+      bottomBadgeEl.style.display = 'none';
+    }
+  }
+  if (statConfirmed) statConfirmed.textContent = confirmedCount;
+  if (statCompleted) statCompleted.textContent = completedCount;
 
   if (!tbody) return;
 
