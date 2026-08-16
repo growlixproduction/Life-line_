@@ -280,7 +280,7 @@ export const defaultHospitalData = {
       experience: "12+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-doc-2-1786613716821.jpeg"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-shroti-asati-official-1786879183069.png"
     },
     {
       id: "doc-3",
