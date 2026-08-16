@@ -200,7 +200,7 @@ if (appState.blogs && defaultHospitalData.blogs) {
   if (updated) saveHospitalData(appState);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   populateDepartmentDropdowns();
   renderSiteFromState();
   initNavigation();
@@ -214,8 +214,25 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initAnimatedCounters();
   
+  // Expose all critical globals explicitly after all functions are defined
+  window.handleRouteHash = handleRouteHash;
+  window.switchAdminTab = switchAdminTab;
+  window.adminExitToPublic = adminExitToPublic;
+  window.populateAdminForms = populateAdminForms;
+  if (typeof populateDirectorAdminForm === 'function') window.populateDirectorAdminForm = populateDirectorAdminForm;
+  
   // Sync all dynamic content live from Supabase database
   syncFromSupabase();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+
+window.addEventListener('load', () => {
+  if (typeof window.handleRouteHash === 'function') window.handleRouteHash();
 });
 
 /* Sync All Dynamic Data Directly from Supabase Backend */
@@ -415,6 +432,7 @@ async function syncFromSupabase() {
     // Re-render frontend and admin panel from updated Supabase state
     saveHospitalData(appState);
     renderSiteFromState();
+    if (typeof handleRouteHash === 'function') handleRouteHash();
     if (typeof renderDoctors === 'function') renderDoctors();
     if (typeof renderAdminDoctorsGrid === 'function') renderAdminDoctorsGrid();
     if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
@@ -667,18 +685,25 @@ function initNavigation() {
 
   window.addEventListener('hashchange', handleRouteHash);
   window.addEventListener('popstate', handleRouteHash);
+
+  let curHash = window.location.hash;
+  setInterval(() => {
+    if (window.location.hash !== curHash) {
+      curHash = window.location.hash;
+      handleRouteHash();
+    }
+  }, 100);
 }
 
 function getRoutePath() {
-  const hash = (window.location.hash || '').replace('#', '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
-  const path = (window.location.pathname || '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+  const rawHash = window.location.hash || '';
+  const hash = rawHash.replace(/^#\/?/, '').replace(/\/$/, '').toLowerCase();
+  const rawPath = window.location.pathname || '';
+  const path = rawPath.replace(/^\//, '').replace(/\/$/, '').toLowerCase();
 
-  if (hash === 'admin' || hash === 'admin-view' || hash === 'admin.html') return 'admin';
-  if (hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view' || hash === 'login.html') return 'login';
+  if (hash === 'admin' || hash === 'admin-view' || hash === 'admin.html' || path === 'admin' || path === 'admin.html' || path === 'admin-view') return 'admin';
+  if (hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view' || hash === 'login.html' || path === 'login' || path === 'login.html' || path === 'admin-login') return 'login';
 
-  if (path === 'admin' || path === 'admin.html') return 'admin';
-  if (path === 'login' || path === 'login.html') return 'login';
-  
   if (hash.startsWith('department-')) return hash;
   if (hash) return hash;
   if (path && path !== 'index.html' && path !== 'index') return path;
@@ -686,13 +711,15 @@ function getRoutePath() {
   return 'home-view';
 }
 
-window.handleRouteHash = function handleRouteHash() {
+function handleRouteHash() {
   const route = getRoutePath();
+
+  const earlyStyle = document.getElementById('early-route-style');
+  if (earlyStyle) earlyStyle.remove();
 
   // Close any open modals and reset body scroll when navigating
   if (typeof closeDoctorEditorModal === 'function') closeDoctorEditorModal();
   if (typeof closeDoctorDetailsModal === 'function') closeDoctorDetailsModal();
-  if (typeof closeAdminLoginModal === 'function') closeAdminLoginModal();
   if (typeof closeBookingModal === 'function') closeBookingModal();
   document.body.style.overflow = '';
 
@@ -707,6 +734,7 @@ window.handleRouteHash = function handleRouteHash() {
       loginView.style.display = 'flex';
     }
     document.body.classList.add('admin-mode-active');
+    document.documentElement.classList.add('admin-mode-active');
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (window.lucide) window.lucide.createIcons();
     return;
@@ -723,6 +751,7 @@ window.handleRouteHash = function handleRouteHash() {
       adminView.style.display = 'block';
     }
     document.body.classList.add('admin-mode-active');
+    document.documentElement.classList.add('admin-mode-active');
 
     if (typeof populateAdminForms === 'function') populateAdminForms();
     if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
@@ -739,6 +768,7 @@ window.handleRouteHash = function handleRouteHash() {
 
   // Public pages
   document.body.classList.remove('admin-mode-active');
+  document.documentElement.classList.remove('admin-mode-active');
 
   let targetId = route;
   if (route.startsWith('department-') && route !== 'department-detail-view') {
@@ -776,8 +806,9 @@ window.handleRouteHash = function handleRouteHash() {
   setTimeout(initScrollAnimations, 50);
   if (window.lucide) window.lucide.createIcons();
 }
+window.handleRouteHash = handleRouteHash;
 
-window.switchAdminTab = function(tabId) {
+function switchAdminTab(tabId) {
   if (!tabId) return;
 
   const navItems = document.querySelectorAll('.admin-nav-item');
@@ -815,10 +846,27 @@ window.switchAdminTab = function(tabId) {
   tabPanes.forEach(pane => {
     if (pane.id === tabId) {
       pane.classList.add('active');
+      pane.style.setProperty('display', 'block', 'important');
     } else {
       pane.classList.remove('active');
+      pane.style.setProperty('display', 'none', 'important');
     }
   });
+
+  // Call relevant renderers for the selected tab
+  if (tabId === 'admin-tab-overview' && typeof populateAdminForms === 'function') populateAdminForms();
+  if (tabId === 'admin-tab-settings' && typeof populateAdminForms === 'function') populateAdminForms();
+  if (tabId === 'admin-tab-hero' && typeof populateAdminForms === 'function') populateAdminForms();
+  if (tabId === 'admin-tab-doctors') {
+    if (typeof renderAdminDoctorsGrid === 'function') renderAdminDoctorsGrid();
+    if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+  }
+  if (tabId === 'admin-tab-blogs' && typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
+  if (tabId === 'admin-tab-departments' && typeof renderAdminDepartmentsTable === 'function') renderAdminDepartmentsTable();
+  if (tabId === 'admin-tab-facilities' && typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
+  if (tabId === 'admin-tab-appointments' && typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
+  if (tabId === 'admin-tab-gallery' && typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
+  if (tabId === 'admin-tab-director' && typeof populateDirectorAdminForm === 'function') populateDirectorAdminForm();
 
   // Update mobile topbar active pill
   const pillEl = document.getElementById('admin-mobile-active-pill');
@@ -842,16 +890,18 @@ window.switchAdminTab = function(tabId) {
     toggleAdminMobileDrawer(false);
   }
 
-  if (tabId === 'admin-tab-overview' && typeof populateAdminForms === 'function') populateAdminForms();
-  if (tabId === 'admin-tab-doctors' && typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
-  if (tabId === 'admin-tab-blogs' && typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
-  if (tabId === 'admin-tab-facilities' && typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
-  if (tabId === 'admin-tab-appointments' && typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
-  if (tabId === 'admin-tab-gallery' && typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
-
   window.scrollTo({ top: 0, behavior: 'instant' });
   if (window.lucide) window.lucide.createIcons();
-};
+}
+window.switchAdminTab = switchAdminTab;
+
+function adminExitToPublic() {
+  document.body.classList.remove('admin-mode-active');
+  document.documentElement.classList.remove('admin-mode-active');
+  window.location.hash = 'home-view';
+  handleRouteHash();
+}
+window.adminExitToPublic = adminExitToPublic;
 
 /* ===================================================
    ADMIN AUTHENTICATION & SECURITY ENGINE
@@ -868,8 +918,8 @@ window.openAdminLoginModal = function() {
 };
 
 window.closeAdminLoginModal = function() {
+  // Just set hash; hashchange event will trigger handleRouteHash
   window.location.hash = 'home-view';
-  handleRouteHash();
 };
 
 window.handleDedicatedAdminLoginSubmit = function(e) {
@@ -2213,38 +2263,6 @@ function initContactForm() {
   });
 }
 
-window.switchAdminTab = function(tabId) {
-  if (!tabId) return;
-
-  const navItems = document.querySelectorAll('.admin-nav-item');
-  const tabPanes = document.querySelectorAll('.admin-tab-pane');
-
-  navItems.forEach(item => {
-    if (item.getAttribute('data-admin-tab') === tabId) {
-      item.classList.add('active');
-    } else {
-      item.classList.remove('active');
-    }
-  });
-
-  tabPanes.forEach(pane => {
-    if (pane.id === tabId) {
-      pane.classList.add('active');
-    } else {
-      pane.classList.remove('active');
-    }
-  });
-
-  if (tabId === 'admin-tab-overview' && typeof populateAdminForms === 'function') populateAdminForms();
-  if (tabId === 'admin-tab-doctors' && typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
-  if (tabId === 'admin-tab-blogs' && typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
-  if (tabId === 'admin-tab-facilities' && typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
-  if (tabId === 'admin-tab-appointments' && typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
-  if (tabId === 'admin-tab-gallery' && typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
-
-  window.scrollTo({ top: 0, behavior: 'instant' });
-};
-
 /* ============ DIRECTOR PROFILE - VISITOR RENDER ============ */
 function renderDirectorSection() {
   const dir = (appState && appState.director && appState.director.name)
@@ -2351,8 +2369,9 @@ function populateDirectorAdminForm() {
   if (get('admin-dir-facebook')) get('admin-dir-facebook').value = (dir.socialLinks && dir.socialLinks.facebook) ? dir.socialLinks.facebook : '';
   if (get('admin-dir-twitter')) get('admin-dir-twitter').value = (dir.socialLinks && dir.socialLinks.twitter) ? dir.socialLinks.twitter : '';
 
-  updateDirPhotoPreview(dir.photo || '');
+  if (typeof updateDirPhotoPreview === 'function') updateDirPhotoPreview(dir.photo || '');
 }
+window.populateDirectorAdminForm = populateDirectorAdminForm;
 
 /* ============ DIRECTOR ADMIN - PHOTO PREVIEW ============ */
 window.updateDirPhotoPreview = function(url) {
@@ -2544,9 +2563,9 @@ function populateAdminForms() {
     const deptsStat = document.getElementById('admin-stat-depts');
     const blogsStat = document.getElementById('admin-stat-blogs');
 
-    if (docsStat) docsStat.textContent = appState.doctors ? appState.doctors.length : 0;
-    if (deptsStat) deptsStat.textContent = appState.departments ? appState.departments.length : 0;
-    if (blogsStat) blogsStat.textContent = appState.blogs ? appState.blogs.length : 0;
+    if (docsStat) docsStat.textContent = (appState.doctors && Array.isArray(appState.doctors)) ? appState.doctors.length : 0;
+    if (deptsStat) deptsStat.textContent = (appState.departments && Array.isArray(appState.departments)) ? appState.departments.length : 0;
+    if (blogsStat) blogsStat.textContent = (appState.blogs && Array.isArray(appState.blogs)) ? appState.blogs.length : 0;
 
     const elName = document.getElementById('admin-input-name');
     const elAnnounce = document.getElementById('admin-input-announcement');
@@ -2588,6 +2607,7 @@ function populateAdminForms() {
     }
   }
 }
+window.populateAdminForms = populateAdminForms;
 
 window.handleDoctorFormSubmit = function(e) {
   if (e) e.preventDefault();
@@ -3925,7 +3945,7 @@ function renderAdminAppointmentsTable() {
     `;
   }).join('');
 
-  updateSelectedApptCount();
+  if (typeof updateSelectedApptCount === 'function') updateSelectedApptCount();
 }
 
 window.toggleSelectAllAppts = function(masterCheckbox) {
@@ -3939,11 +3959,12 @@ window.toggleSelectAllAppts = function(masterCheckbox) {
   updateSelectedApptCount();
 };
 
-window.updateSelectedApptCount = function() {
+function updateSelectedApptCount() {
   const selected = document.querySelectorAll('.appt-row-checkbox:checked');
   const countEl = document.getElementById('admin-selected-count');
   if (countEl) countEl.textContent = selected.length;
-};
+}
+window.updateSelectedApptCount = updateSelectedApptCount;
 
 window.massDeleteAppts = function() {
   const selectedBoxes = Array.from(document.querySelectorAll('.appt-row-checkbox:checked'));

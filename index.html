@@ -36,14 +36,21 @@
           adminView.style.display = 'block';
         }
         document.body.classList.add('admin-mode-active');
+        document.documentElement.classList.add('admin-mode-active');
         window.scrollTo(0, 0);
       }
     };
 
     window.switchView = function(viewId) {
       if (!viewId) return;
-      var cleanId = viewId.replace('#', '');
-      window.location.hash = cleanId;
+      var cleanId = viewId.replace(/^#\/?/, '').replace(/\/$/, '');
+      if (cleanId === 'admin' || cleanId === 'admin-view') {
+        window.location.hash = 'admin';
+      } else if (cleanId === 'login' || cleanId === 'admin-login') {
+        window.location.hash = 'login';
+      } else {
+        window.location.hash = cleanId;
+      }
       if (typeof window.handleRouteHash === 'function') {
         window.handleRouteHash();
       } else {
@@ -57,11 +64,33 @@
           target.style.display = 'block';
           if (cleanId === 'admin' || cleanId === 'admin-view' || cleanId === 'login' || cleanId === 'admin-login-view') {
             document.body.classList.add('admin-mode-active');
+            document.documentElement.classList.add('admin-mode-active');
           } else {
             document.body.classList.remove('admin-mode-active');
+            document.documentElement.classList.remove('admin-mode-active');
           }
           window.scrollTo(0, 0);
         }
+      }
+    };
+
+    window.adminExitToPublic = function() {
+      document.body.classList.remove('admin-mode-active');
+      document.documentElement.classList.remove('admin-mode-active');
+      window.location.hash = 'home-view';
+      if (typeof window.handleRouteHash === 'function') {
+        window.handleRouteHash();
+      } else {
+        document.querySelectorAll('.page-view').forEach(function(v) {
+          v.classList.remove('active-view');
+          v.style.display = 'none';
+        });
+        var homeView = document.getElementById('home-view');
+        if (homeView) {
+          homeView.classList.add('active-view');
+          homeView.style.display = 'block';
+        }
+        window.scrollTo(0, 0);
       }
     };
   </script>
@@ -1564,9 +1593,14 @@
             <h2 class="section-title">Hospital Administration Control Dashboard</h2>
             <p class="section-desc">Real-time full-size content management panel to update doctors, hero banners, site branding, and health articles.</p>
           </div>
-          <a href="javascript:void(0)" onclick="adminLogout()" class="btn btn-primary" style="background: linear-gradient(135deg, #014e59 0%, #028090 100%); padding: 12px 24px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-            <i data-lucide="log-out"></i> Exit &amp; Lock Admin
-          </a>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <a href="#home-view" onclick="adminExitToPublic(); return false;" class="btn btn-outline" style="background: white; border: 1.5px solid #cbd5e1; color: #014e59; padding: 10px 20px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 10px;">
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Return to Website
+            </a>
+            <a href="javascript:void(0)" onclick="adminLogout()" class="btn btn-primary" style="background: linear-gradient(135deg, #014e59 0%, #028090 100%); padding: 10px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border-radius: 10px;">
+              <i data-lucide="log-out" style="width: 16px; height: 16px;"></i> Lock &amp; Exit
+            </a>
+          </div>
         </div>
 
         <div class="admin-layout">
@@ -2892,6 +2926,7 @@
             <li><a href="#doctors-view" data-view-target="doctors-view">Our Specialists</a></li>
             <li><a href="#facilities-view" data-view-target="facilities-view">Facilities</a></li>
             <li><a href="#contact-view" data-view-target="contact-view">Contact Us</a></li>
+            <li><a href="#admin" onclick="openAdminPortal(); return false;" data-view-target="admin" style="color: #70e4d5; font-weight: 700;">🔐 Admin Portal</a></li>
           </ul>
         </div>
 

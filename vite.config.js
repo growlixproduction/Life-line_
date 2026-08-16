@@ -19,10 +19,14 @@ export default defineConfig({
         server.middlewares.use((req, res, next) => {
           const rawUrl = (req.url || '').split('?')[0].toLowerCase().replace(/\/$/, '');
           
-          if (rawUrl === '/admin') {
-            req.url = '/index.html#admin';
-          } else if (rawUrl === '/login') {
-            req.url = '/index.html#login';
+          if (rawUrl === '/admin' || rawUrl === '/admin-view' || rawUrl === '/admin.html') {
+            res.writeHead(302, { Location: '/#admin' });
+            res.end();
+            return;
+          } else if (rawUrl === '/login' || rawUrl === '/admin-login' || rawUrl === '/login.html') {
+            res.writeHead(302, { Location: '/#login' });
+            res.end();
+            return;
           } else if (rawUrl === '/doctors') {
             req.url = '/doctors.html';
           } else if (rawUrl === '/about' || rawUrl === '/overview') {
