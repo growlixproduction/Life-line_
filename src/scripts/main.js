@@ -4189,9 +4189,8 @@ window.openDoctorEditorModal = function(docId) {
   }
 
   modal.style.display = 'flex';
+  modal.scrollTop = 0;
   document.body.style.overflow = 'hidden';
-  const modalBox = modal.querySelector('div');
-  if (modalBox) modalBox.scrollTop = 0;
 };
 
 window.closeDoctorEditorModal = function() {
