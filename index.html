@@ -18,6 +18,53 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/src/styles/main.css">
+
+  <!-- Instant View & Admin Routing Fallback -->
+  <script>
+    window.openAdminPortal = function() {
+      window.location.hash = 'admin';
+      if (typeof window.handleRouteHash === 'function') {
+        window.handleRouteHash();
+      } else {
+        document.querySelectorAll('.page-view').forEach(function(v) {
+          v.classList.remove('active-view');
+          v.style.display = 'none';
+        });
+        var adminView = document.getElementById('admin-view');
+        if (adminView) {
+          adminView.classList.add('active-view');
+          adminView.style.display = 'block';
+        }
+        document.body.classList.add('admin-mode-active');
+        window.scrollTo(0, 0);
+      }
+    };
+
+    window.switchView = function(viewId) {
+      if (!viewId) return;
+      var cleanId = viewId.replace('#', '');
+      window.location.hash = cleanId;
+      if (typeof window.handleRouteHash === 'function') {
+        window.handleRouteHash();
+      } else {
+        var target = document.getElementById(cleanId) || document.getElementById(cleanId + '-view');
+        if (target) {
+          document.querySelectorAll('.page-view').forEach(function(v) {
+            v.classList.remove('active-view');
+            v.style.display = 'none';
+          });
+          target.classList.add('active-view');
+          target.style.display = 'block';
+          if (cleanId === 'admin' || cleanId === 'admin-view' || cleanId === 'login' || cleanId === 'admin-login-view') {
+            document.body.classList.add('admin-mode-active');
+          } else {
+            document.body.classList.remove('admin-mode-active');
+          }
+          window.scrollTo(0, 0);
+        }
+      }
+    };
+  </script>
 </head>
 <body>
 

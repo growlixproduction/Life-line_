@@ -686,7 +686,7 @@ function getRoutePath() {
   return 'home-view';
 }
 
-function handleRouteHash() {
+window.handleRouteHash = function handleRouteHash() {
   const route = getRoutePath();
 
   // Close any open modals and reset body scroll when navigating
