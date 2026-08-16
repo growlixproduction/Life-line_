@@ -13,7 +13,7 @@ export const defaultHospitalData = {
     titleMain: "World-Class Healthcare Right in",
     titleHighlight: "Ambikapur",
     description: "Life Line Hospital brings together renowned specialist doctors, 50 Beds, 3 Operation Theatres, modern ICU infrastructure, and 24/7 emergency care to serve Northern Chhattisgarh.",
-    imageUrl: "/assets/images/hospital_hero.png",
+    imageUrl: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-hospital_hero.png",
     floatingTitle: "24x7 Emergency Care",
     floatingSubtitle: "Trauma & Cardiac Team Ready"
   },
@@ -268,7 +268,7 @@ export const defaultHospitalData = {
       experience: "15+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_male_1.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_1.png"
     },
     {
       id: "doc-2",
@@ -304,7 +304,7 @@ export const defaultHospitalData = {
       experience: "14+ Years Exp",
       timings: "11:00 AM - 03:00 PM",
       fee: "₹600",
-      image: "/assets/images/doctor_male_3.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_3.png"
     },
     {
       id: "doc-5",
@@ -328,7 +328,7 @@ export const defaultHospitalData = {
       experience: "15+ Years Exp",
       timings: "11:00 AM - 04:00 PM",
       fee: "₹700",
-      image: "/assets/images/doctor_male_1.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_1.png"
     },
     {
       id: "doc-7",
@@ -340,7 +340,7 @@ export const defaultHospitalData = {
       experience: "11+ Years Exp",
       timings: "09:00 AM - 02:00 PM",
       fee: "₹400",
-      image: "/assets/images/doctor_female_2.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_female_2.png"
     },
     {
       id: "doc-8",
@@ -352,7 +352,7 @@ export const defaultHospitalData = {
       experience: "13+ Years Exp",
       timings: "01:00 PM - 03:00 PM",
       fee: "₹600",
-      image: "/assets/images/doctor_male_2.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_2.png"
     },
     {
       id: "doc-9",
@@ -364,7 +364,7 @@ export const defaultHospitalData = {
       experience: "10+ Years Exp",
       timings: "24x7 On Duty",
       fee: "₹500",
-      image: "/assets/images/doctor_male_3.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_3.png"
     },
     {
       id: "doc-10",
@@ -376,7 +376,7 @@ export const defaultHospitalData = {
       experience: "9+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹450",
-      image: "/assets/images/doctor_male_4.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_4.png"
     },
     {
       id: "doc-11",
@@ -400,7 +400,7 @@ export const defaultHospitalData = {
       experience: "12+ Years Exp",
       timings: "11:00 AM - 05:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_male_1.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-doctor_male_1.png"
     },
     {
       id: "doc-13",
@@ -530,7 +530,7 @@ export const defaultHospitalData = {
       readTime: "5 min read",
       excerpt: "Learn the crucial early warning signs of a cardiac event including chest tightness and shortness of breath.",
       content: "Heart attacks are among the leading causes of medical emergencies. Immediate first aid saves lives.",
-      image: "/Screenshot 2026-08-11 164157.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164157.png"
     },
     {
       id: "blog-2",
@@ -541,7 +541,7 @@ export const defaultHospitalData = {
       readTime: "6 min read",
       excerpt: "Severe knee pain affecting daily walking? Discover modern joint replacement options.",
       content: "Modern joint replacement allows patients to walk pain-free within 24 to 48 hours.",
-      image: "/Screenshot 2026-08-11 164052.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164052.png"
     },
     {
       id: "blog-3",
@@ -552,7 +552,7 @@ export const defaultHospitalData = {
       readTime: "4 min read",
       excerpt: "Key precautions and prenatal monitoring tips for mothers.",
       content: "A high-risk pregnancy requires close medical monitoring to ensure safety.",
-      image: "/Screenshot 2026-08-11 164117.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164117.png"
     }
   ],
   gallery: [
@@ -561,35 +561,35 @@ export const defaultHospitalData = {
       title: "Life Line Hospital Main Campus Building",
       category: "Hospital Campus",
       caption: "Outer Ring Road, Namnakala, Ambikapur Campus",
-      image: "/Screenshot 2026-08-11 163953.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_163953.png"
     },
     {
       id: "gal-2",
       title: "Advanced Modular Operation Theatre (OT)",
       category: "OT & ICU",
       caption: "Laminar Airflow & HEPA Filter Surgery Suite",
-      image: "/Screenshot 2026-08-11 164052.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164052.png"
     },
     {
       id: "gal-3",
       title: "24x7 Critical Care Intensive Unit (ICU)",
       category: "OT & ICU",
       caption: "Level-3 NICU, PICU & Cardiac Emergency Beds",
-      image: "/Screenshot 2026-08-11 164117.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164117.png"
     },
     {
       id: "gal-4",
       title: "Digital Flat-Panel Cath Lab Suite",
       category: "Diagnostics & MRI",
       caption: "24x7 Emergency Angioplasty & Cardiac Diagnostics",
-      image: "/Screenshot 2026-08-11 164157.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164157.png"
     },
     {
       id: "gal-5",
       title: "CT-Scan & MRI Diagnostic Center",
       category: "Diagnostics & MRI",
       caption: "128-Slice CT Scan, 3T MRI & High-Freq Digital X-Ray",
-      image: "/Screenshot 2026-08-11 164223.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/asset-screenshot_2026_08_11_164223.png"
     }
   ],
   testimonials: [
