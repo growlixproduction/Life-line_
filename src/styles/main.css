@@ -790,7 +790,7 @@ body.admin-mode-active .mobile-bottom-nav {
 .page-view.active-view {
   display: block !important;
   min-height: calc(100vh - 380px);
-  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.25s ease forwards;
 }
 
 #admin-login-view.active-view {
@@ -803,6 +803,25 @@ body.admin-mode-active .mobile-bottom-nav {
 #admin-view.active-view {
   display: block !important;
   min-height: 100vh;
+}
+
+/* Modal Overlay Centering Fix */
+#doctor-editor-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
 }
 
 /* HERO SECTION - FULL SCREEN WIDE LAYOUT */

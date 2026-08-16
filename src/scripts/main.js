@@ -4085,56 +4085,21 @@ window.openDoctorEditorModal = function(docId) {
   }
 
   modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  const modalBox = modal.querySelector('div');
+  if (modalBox) modalBox.scrollTop = 0;
 };
 
 window.closeDoctorEditorModal = function() {
   const modal = document.getElementById('doctor-editor-modal');
   if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
 };
 
 window.editDoctorInAdmin = function(docId) {
-  if (!appState.doctors) return;
-  const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
-  const doc = appState.doctors.find(d => 
-    String(d.id || '') === String(docId || '') || 
-    String(d.id || '').replace(/^doc-?/, '') === cleanTargetId
-  );
-  if (!doc) return;
-
-  const docImage = getDoctorImage(doc) || '';
-
-  const idEl = document.getElementById('admin-doc-id');
-  const nameEl = document.getElementById('admin-doc-name');
-  const specEl = document.getElementById('admin-doc-specialty');
-  const specNameEl = document.getElementById('admin-doc-specialty-name');
-  const desigEl = document.getElementById('admin-doc-designation');
-  const degEl = document.getElementById('admin-doc-degree');
-  const expEl = document.getElementById('admin-doc-exp');
-  const timEl = document.getElementById('admin-doc-timings');
-  const feeEl = document.getElementById('admin-doc-fee');
-  const imgEl = document.getElementById('admin-doc-image');
-
-  if (idEl) idEl.value = doc.id || '';
-  if (nameEl) nameEl.value = doc.name || '';
-  if (specEl) specEl.value = doc.specialty || 'general';
-  if (specNameEl) specNameEl.value = doc.specialtyName || doc.specialty || '';
-  if (desigEl) desigEl.value = doc.designation || 'Consultant Specialist';
-  if (degEl) degEl.value = doc.degree || '';
-  if (expEl) expEl.value = doc.experience || '';
-  if (timEl) timEl.value = doc.timings || '';
-  if (feeEl) feeEl.value = doc.fee || '';
-  if (imgEl) imgEl.value = docImage || '';
-
-  if (typeof updateDocImgPreview === 'function') {
-    updateDocImgPreview(docImage || '');
+  if (typeof openDoctorEditorModal === 'function') {
+    openDoctorEditorModal(docId);
   }
-
-  const docTabBtn = document.querySelector('[data-admin-tab="admin-tab-doctors"]');
-  if (docTabBtn) docTabBtn.click();
-
-  setTimeout(() => {
-    document.getElementById('admin-doctor-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
 };
 
 window.renderAdminDoctorsGrid = function() {
