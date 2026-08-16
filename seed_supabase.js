@@ -57,6 +57,9 @@ async function seedAllDataToSupabase() {
 
   // 2. DOCTORS
   console.log('\n2. Seeding doctors...');
+  await supabase.from('doctors').delete().eq('id', 'doc-1786630577004');
+  await supabase.from('doctors').delete().eq('id', 'doc-1786662129871');
+
   const doctorRows = defaultHospitalData.doctors.map(d => ({
     id: d.id,
     name: d.name,
@@ -153,8 +156,8 @@ async function seedAllDataToSupabase() {
 
   // 7. APPOINTMENTS
   console.log('\n7. Seeding appointments...');
+  await supabase.from('appointments').delete().neq('id', 0);
   const apptRows = defaultHospitalData.appointments.map(a => ({
-    id: a.id,
     booking_id: a.id,
     patient_name: a.patientName,
     patient_phone: a.patientPhone,
@@ -166,13 +169,9 @@ async function seedAllDataToSupabase() {
     notes: a.notes || ''
   }));
 
-  for (const appt of apptRows) {
-    const { error } = await supabase
-      .from('appointments')
-      .upsert([appt], { onConflict: 'id' });
-    if (error) console.error(`❌ Appointment ${appt.id} failed:`, error.message);
-    else console.log(`  ✓ Appointment '${appt.id}' saved.`);
-  }
+  const { error: apptErr, data: apptData } = await supabase.from('appointments').insert(apptRows).select();
+  if (apptErr) console.error('❌ Appointments insert failed:', apptErr.message);
+  else console.log(`  ✓ Inserted ${apptData.length} appointments.`);
 
   console.log('\n========================================');
   console.log('🎉 ALL DATA PUSHED TO SUPABASE LIVE DATABASE SUCCESSFULLY!');
