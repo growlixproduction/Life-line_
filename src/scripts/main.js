@@ -830,13 +830,15 @@ window.handleDedicatedAdminLoginSubmit = function(e) {
     localStorage.setItem('admin_authenticated', 'true');
     sessionStorage.setItem('admin_authenticated', 'true');
 
-    if (window.location.pathname === '/login' || window.location.pathname === '/login/') {
-      window.history.pushState(null, '', '/admin');
-    } else {
-      window.location.hash = 'admin';
-    }
+    // Cleanly switch active views immediately
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+    const adminView = document.getElementById('admin-view');
+    if (adminView) adminView.classList.add('active-view');
+    document.body.classList.add('admin-mode-active');
+
+    window.location.hash = 'admin';
     handleRouteHash();
-    showToast('🔐 Welcome Admin! Session authenticated.');
+    showToast('🔐 Welcome Admin! Redirected to Dashboard.');
   } else {
     if (errorEl) errorEl.style.display = 'block';
   }
@@ -883,6 +885,12 @@ window.adminLogout = function() {
   localStorage.removeItem('admin_authenticated');
   sessionStorage.removeItem('admin_authenticated');
   document.body.classList.remove('admin-mode-active');
+
+  // Cleanly switch active views to login
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+  const loginView = document.getElementById('admin-login-view');
+  if (loginView) loginView.classList.add('active-view');
+
   window.location.hash = 'login';
   handleRouteHash();
   showToast('🔒 Admin session locked & logged out.');

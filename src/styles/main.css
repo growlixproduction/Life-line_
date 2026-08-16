@@ -784,19 +784,24 @@ body.admin-mode-active .mobile-bottom-nav {
 
 /* Page View Switcher */
 .page-view {
-  display: none;
+  display: none !important;
 }
 
 .page-view.active-view {
-  display: block;
+  display: block !important;
   min-height: calc(100vh - 380px);
-  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 #admin-login-view.active-view {
   display: flex !important;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
+}
+
+#admin-view.active-view {
+  display: block !important;
   min-height: 100vh;
 }
 
