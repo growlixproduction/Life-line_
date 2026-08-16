@@ -30,7 +30,7 @@ export const defaultHospitalData = {
       name: "Cardiology & Cath Lab",
       icon: "heart-pulse",
       shortDesc: "Comprehensive heart care, 24x7 Cath Lab, Angioplasty & TMT.",
-      head: "Dr. Sitanshu Sekhar Mohanti (MD, DM Cardiology)",
+      head: "Dr. Sitanshu Sekhar Mohanti & Dr. Satish Chainsingh Suryawanshi (MD, DM Cardiology)",
       fullDescription: "Life Line Hospital's Department of Cardiology & Cath Lab provides round-the-clock emergency cardiac care, interventional cardiology, and non-invasive diagnostic cardiac evaluation in Ambikapur. Equipped with a digital Cath Lab, our cardiac team performs life-saving primary angioplasties during heart attack emergencies.",
       procedures: [
         "Emergency Coronary Angiography & PPCI Angioplasty",
@@ -51,7 +51,7 @@ export const defaultHospitalData = {
       name: "Orthopedics & Joint Replacement",
       icon: "bone",
       shortDesc: "Knee & Hip replacements, Arthroscopy & 24x7 Complex Trauma Care.",
-      head: "Dr. Nitesh Dubey & Dr. Rupesh Gupta (MS Ortho, DNB)",
+      head: "Dr. Rupesh Gupta (MS Ortho)",
       fullDescription: "The Department of Orthopedics & Joint Replacement offers specialized surgical and non-surgical care for bone, joint, and spine disorders. Our team specializes in computer-assisted Total Knee Replacement (TKR), Total Hip Replacement (THR), Arthroscopic Keyhole Knee Surgery, and complex fracture fixation.",
       procedures: [
         "Total Knee Replacement (TKR) & Total Hip Replacement (THR)",
@@ -72,7 +72,7 @@ export const defaultHospitalData = {
       name: "Neurology & Neurosurgery",
       icon: "brain",
       shortDesc: "Brain & Spine surgery, Stroke emergency unit & Nerve care.",
-      head: "Dr. Satish Chainsingh Suryawanshi (MS, MCh Neurosurgery)",
+      head: "Dr. Nitesh Kumar Dubey (MBBS, MS, MCh Neurosurgery)",
       fullDescription: "Providing advanced neuro-surgical care and neurological treatment in Surguja district. Our neurosurgery team handles complex brain tumors, head injury trauma emergencies, brain hemorrhage evacuation, micro-discectomy for slipped disc, and acute stroke management.",
       procedures: [
         "Emergency Brain Trauma & Intracranial Hemorrhage Surgery",
@@ -93,7 +93,7 @@ export const defaultHospitalData = {
       name: "Pediatrics & Neonatology (NICU)",
       icon: "baby",
       shortDesc: "Level-3 NICU, Newborn care, Pediatric Surgery & Vaccination.",
-      head: "Dr. Bhavna Gardia & Dr. Sonal Gardia (MD Pediatrics, DCH)",
+      head: "Dr. Sonal Gardia (MD Pediatrics, DCH)",
       fullDescription: "The Center for Pediatrics & Neonatology offers dedicated Level-3 NICU (Neonatal Intensive Care Unit) for premature and critical newborns. Equipped with advanced incubators, neonatal ventilators, LED phototherapy, and specialized pediatric OPD care.",
       procedures: [
         "Level-3 Neonatal Intensive Care (Premature & Low Birth Weight Babies)",
@@ -114,7 +114,7 @@ export const defaultHospitalData = {
       name: "Obstetrics & Gynecology",
       icon: "sparkles",
       shortDesc: "Painless delivery, High-risk pregnancy & Laparoscopy.",
-      head: "Dr. Shroti Asati & Dr. Pravdha Gupta (MS Obs & Gynae, DNB)",
+      head: "Dr. Shroti Asati, Dr. Bhavna Gardia & Dr. Pravdha Gupta (MS Obs & Gynae)",
       fullDescription: "Providing comprehensive women's health services, maternity care, and gynecological surgeries. Our department specializes in painless epidural deliveries, high-risk pregnancy management, laparoscopic hysterectomy, ovarian cystectomy, and infertility workup.",
       procedures: [
         "Normal & Epidural Painless Delivery / Emergency C-Section",
@@ -135,7 +135,7 @@ export const defaultHospitalData = {
       name: "General & Laparoscopic Surgery",
       icon: "activity",
       shortDesc: "Keyhole laparoscopic surgeries for gallbladder, hernia & appendix.",
-      head: "Dr. Prassan Mohan Tripathi & Dr. Chandranshu Tripathi (MS Surgery, FIAGES)",
+      head: "Dr. Prassan Mohan Tripathi, Dr. Chandranshu Tripathi & Dr. Akhilesh Kumar Bharat (MS Surgery, DNB)",
       fullDescription: "Equipped with modern laparoscopic keyhole surgical towers to perform minimally invasive abdominal surgeries with faster recovery, smaller incisions, and minimal pain. Handling routine and emergency general surgeries round-the-clock.",
       procedures: [
         "Laparoscopic Cholecystectomy (Gallbladder Stone Removal)",
@@ -156,7 +156,7 @@ export const defaultHospitalData = {
       name: "Urology & Kidney Care",
       icon: "activity",
       shortDesc: "Laser stone removal (RIRS/PCNL), Prostate surgery & Kidney care.",
-      head: "Dr. Akhilesh Ku. Bharat (MS, MCh Urology)",
+      head: "Visiting Urologist Specialist",
       fullDescription: "Comprehensive treatment for kidney stones, prostate enlargement, urinary tract infections, and urological cancers. Featuring advanced Holmium Laser technology for incisionless kidney stone fragmentation and TURP prostate surgery.",
       procedures: [
         "RIRS (Laser Kidney Stone Removal without Incisions)",
@@ -177,7 +177,7 @@ export const defaultHospitalData = {
       name: "Radiology & Diagnostic Pathology",
       icon: "scan",
       shortDesc: "CT-Scan, Digital X-Ray, USG, TMT & Pathology Lab.",
-      head: "Dr. Suneedh Gupta (MD Radiodiagnosis)",
+      head: "Radiologist & Imaging Specialist",
       fullDescription: "Providing 24x7 imaging and diagnostic laboratory services. Equipped with high-resolution 3T MRI, 128-Slice CT Scan, 3D/4D Color Ultrasound, Digital Mammography, Digital X-Ray, and NABL-standard automated pathology laboratory.",
       procedures: [
         "3T Whole Body MRI & Brain MR Angiography",
@@ -192,16 +192,79 @@ export const defaultHospitalData = {
         "3D/4D Color Doppler Ultrasound",
         "Automated Clinical Pathology Analyzer"
       ]
+    },
+    {
+      id: "mdmedicine",
+      name: "MD Medicine & Critical Care",
+      icon: "stethoscope",
+      shortDesc: "Internal medicine, critical care, fever clinic & chronic disease management.",
+      head: "Dr. Amit Asati (MD Medicine)",
+      fullDescription: "The Department of MD Medicine provides comprehensive internal medicine services including diagnosis and treatment of complex medical conditions, critical care ICU management, fever clinic, diabetes care, hypertension management, and emergency medical stabilization.",
+      procedures: [
+        "Critical Care & ICU Management",
+        "Fever Clinic & Infectious Disease Treatment",
+        "Diabetes & Hypertension Management",
+        "Chronic Disease Management & Follow-Up",
+        "Emergency Medical Stabilization & Resuscitation"
+      ],
+      equipment: [
+        "Multi-Parameter ICU Monitors",
+        "Advanced Blood Gas Analyzer",
+        "Central Venous Pressure Monitoring",
+        "Continuous Glucose Monitoring System"
+      ]
+    },
+    {
+      id: "dental",
+      name: "Dental & Orthodontics",
+      icon: "smile",
+      shortDesc: "Orthodontic braces, dental implants, root canal & oral surgery.",
+      head: "Dr. Suneedh Gupta (BDS, MDS Orthodontics)",
+      fullDescription: "The Department of Dental & Orthodontics provides comprehensive dental care including orthodontic treatment with metal and ceramic braces, dental implants, root canal therapy, wisdom tooth extraction, cosmetic dentistry, and preventive oral health care.",
+      procedures: [
+        "Orthodontic Treatment (Metal & Ceramic Braces)",
+        "Dental Implant Surgery",
+        "Root Canal Treatment (RCT)",
+        "Wisdom Tooth Extraction & Oral Surgery",
+        "Cosmetic Dentistry & Teeth Whitening"
+      ],
+      equipment: [
+        "Digital Dental X-Ray (RVG)",
+        "Dental Chair with LED Curing Light",
+        "Orthodontic Instruments & Brackets System",
+        "Dental Sterilization Autoclave"
+      ]
+    },
+    {
+      id: "anaesthesiology",
+      name: "Anaesthesiology & Critical Care",
+      icon: "syringe",
+      shortDesc: "Expert anaesthesia for all surgeries, ICU management & pain clinic.",
+      head: "Dr. Shivam Kumar Sharma (MBBS, DA, FIPM)",
+      fullDescription: "The Department of Anaesthesiology provides expert anaesthesia support for all surgical procedures including general, spinal, and epidural anaesthesia. Our team manages pre-operative assessment, intra-operative monitoring, post-operative pain management, and critical care ventilator management in ICU.",
+      procedures: [
+        "General Anaesthesia for Major Surgeries",
+        "Spinal & Epidural Anaesthesia",
+        "Epidural Painless Delivery Anaesthesia",
+        "ICU Ventilator & Critical Care Management",
+        "Chronic Pain Management & Pain Clinic"
+      ],
+      equipment: [
+        "Advanced Anaesthesia Workstations",
+        "Multi-Parameter Patient Monitors",
+        "Mechanical Ventilators (ICU Grade)",
+        "Ultrasound-Guided Regional Block System"
+      ]
     }
   ],
   doctors: [
     {
       id: "doc-1",
       name: "Dr. Amit Asati",
-      specialty: "general",
-      specialtyName: "General Medicine & Critical Care",
+      specialty: "mdmedicine",
+      specialtyName: "MD Medicine & Critical Care",
       designation: "Senior Consultant Physician",
-      degree: "MD (Med), Senior Consultant",
+      degree: "MD (Medicine)",
       experience: "15+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
@@ -217,19 +280,19 @@ export const defaultHospitalData = {
       experience: "12+ Years Exp",
       timings: "05:00 AM - 12:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_female_1.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-doc-2-1786613716821.jpeg"
     },
     {
       id: "doc-3",
       name: "Dr. Nitesh Dubey",
-      specialty: "orthopedics",
-      specialtyName: "Orthopedics & Joint Care",
-      designation: "Consultant Orthopedic Surgeon",
-      degree: "MS (Ortho), DNB",
+      specialty: "neurology",
+      specialtyName: "Neurology & Neurosurgery",
+      designation: "Neurosurgeon",
+      degree: "MBBS, MS, MCh (Neurosurgery)",
       experience: "10+ Years Exp",
       timings: "09:00 AM - 02:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_male_2.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-1786812234750.png"
     },
     {
       id: "doc-4",
@@ -253,15 +316,15 @@ export const defaultHospitalData = {
       experience: "16+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹600",
-      image: "/assets/images/doctor_male_4.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-1786812007574.png"
     },
     {
       id: "doc-6",
       name: "Dr. Satish Chainsingh Suryawanshi",
-      specialty: "neurology",
-      specialtyName: "Neurology & Neurosurgery",
-      designation: "Senior Brain & Spine Surgeon",
-      degree: "MS, MCh (Neurosurgery)",
+      specialty: "cardiology",
+      specialtyName: "Interventional Cardiology",
+      designation: "Interventional Cardiologist",
+      degree: "MBBS, MD, DM (Cardiology)",
       experience: "15+ Years Exp",
       timings: "11:00 AM - 04:00 PM",
       fee: "₹700",
@@ -270,10 +333,10 @@ export const defaultHospitalData = {
     {
       id: "doc-7",
       name: "Dr. Bhavna Gardia",
-      specialty: "pediatrics",
-      specialtyName: "Pediatrics & Neonatology",
-      designation: "Pediatrician & Child Specialist",
-      degree: "MD (Pediatrics), DCH",
+      specialty: "gynecology",
+      specialtyName: "Obstetrics & Gynecology",
+      designation: "Consultant Gynecologist",
+      degree: "MBBS, MD (Obs & Gynae)",
       experience: "11+ Years Exp",
       timings: "09:00 AM - 02:00 PM",
       fee: "₹400",
@@ -282,10 +345,10 @@ export const defaultHospitalData = {
     {
       id: "doc-8",
       name: "Dr. Akhilesh Ku. Bharat",
-      specialty: "urology",
-      specialtyName: "Urology & Kidney Care",
-      designation: "Consultant Urologist",
-      degree: "MS, MCh (Urology)",
+      specialty: "surgery",
+      specialtyName: "General & Laparoscopic Surgery",
+      designation: "General Surgeon",
+      degree: "MBBS, DNB (General Surgery)",
       experience: "13+ Years Exp",
       timings: "01:00 PM - 03:00 PM",
       fee: "₹600",
@@ -294,10 +357,10 @@ export const defaultHospitalData = {
     {
       id: "doc-9",
       name: "Dr. Suneedh Gupta",
-      specialty: "radiology",
-      specialtyName: "Radiology & Imaging",
-      designation: "Chief Radiologist",
-      degree: "MD (Radiodiagnosis)",
+      specialty: "dental",
+      specialtyName: "Dental & Orthodontics",
+      designation: "Orthodontist & Dental Surgeon",
+      degree: "BDS, MDS (Orthodontics)",
       experience: "10+ Years Exp",
       timings: "24x7 On Duty",
       fee: "₹500",
@@ -306,10 +369,10 @@ export const defaultHospitalData = {
     {
       id: "doc-10",
       name: "Dr. Shivam Ku. Sharma",
-      specialty: "general",
-      specialtyName: "General Medicine",
-      designation: "Consultant Physician",
-      degree: "MD (Internal Medicine)",
+      specialty: "anaesthesiology",
+      specialtyName: "Anaesthesiology & Critical Care",
+      designation: "Consultant Anaesthesiologist",
+      degree: "MBBS, DA (NBE), FIPM",
       experience: "9+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹450",
@@ -325,7 +388,7 @@ export const defaultHospitalData = {
       experience: "10+ Years Exp",
       timings: "10:00 AM - 03:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_female_3.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-1786663768660.png"
     },
     {
       id: "doc-12",
@@ -349,7 +412,7 @@ export const defaultHospitalData = {
       experience: "8+ Years Exp",
       timings: "09:30 AM - 02:30 PM",
       fee: "₹400",
-      image: "/assets/images/doctor_female_4.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-1786663797971.png"
     },
     {
       id: "doc-14",
@@ -361,7 +424,7 @@ export const defaultHospitalData = {
       experience: "11+ Years Exp",
       timings: "10:00 AM - 04:00 PM",
       fee: "₹500",
-      image: "/assets/images/doctor_male_2.png"
+      image: "https://wduxusyodnfqnhtdtltl.supabase.co/storage/v1/object/public/hospital-assets/doctor-1786663816812.png"
     }
   ],
   tpaInsurance: [

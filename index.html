@@ -1806,7 +1806,7 @@
               </div>
 
               <!-- Quick Search & Filter Controls Bar -->
-              <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+              <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
                 <div style="display: flex; gap: 12px; flex: 1; min-width: 280px;">
                   <div style="position: relative; flex: 1;">
                     <input type="text" id="admin-doc-search" placeholder="Search doctor by name, specialty, or degree..." oninput="renderAdminDoctorsGrid()" class="form-control" style="padding-left: 38px; height: 42px; font-size: 0.875rem;">
@@ -1827,6 +1827,18 @@
                     <option value="radiology">Radiology &amp; Imaging</option>
                   </select>
                 </div>
+              </div>
+
+              <!-- Reorder Instruction Info Bar -->
+              <div style="background: #f0fdfa; border: 1px solid rgba(2,128,144,0.22); border-radius: 12px; padding: 12px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 2px 10px rgba(2,128,144,0.04);">
+                <div style="display: flex; align-items: center; gap: 10px; color: #014e59; font-size: 0.85rem; font-weight: 600;">
+                  <span style="font-size: 1.15rem; display: inline-flex;">🔄</span>
+                  <span><strong>Drag to Reorder:</strong> Drag doctor cards (or click <strong>▲</strong> / <strong>▼</strong>) to adjust the sequence. Changes instantly sync to the visitor page.</span>
+                </div>
+                <span style="background: white; border: 1px solid rgba(2,128,144,0.3); color: #028090; font-size: 0.725rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                  <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                  Live Visitor Sync
+                </span>
               </div>
 
               <!-- Live Doctor Roster Cards Grid -->

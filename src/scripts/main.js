@@ -121,7 +121,60 @@ if (!appState.director) {
   saveHospitalData(appState);
 }
 
+// Ensure default departments are present in appState
+if (!appState.departments || appState.departments.length < defaultHospitalData.departments.length) {
+  appState.departments = JSON.parse(JSON.stringify(defaultHospitalData.departments));
+  saveHospitalData(appState);
+} else {
+  let deptUpdated = false;
+  defaultHospitalData.departments.forEach(defDept => {
+    const exists = appState.departments.some(d => d.id === defDept.id);
+    if (!exists) {
+      appState.departments.push(JSON.parse(JSON.stringify(defDept)));
+      deptUpdated = true;
+    }
+  });
+  if (deptUpdated) saveHospitalData(appState);
+}
 
+// Ensure doctors in appState are synced with latest default department assignments
+if (defaultHospitalData.doctors && appState.doctors) {
+  let docUpdated = false;
+  defaultHospitalData.doctors.forEach(defDoc => {
+    const existingIndex = appState.doctors.findIndex(d => d.id === defDoc.id || d.name === defDoc.name);
+    if (existingIndex >= 0) {
+      const existing = appState.doctors[existingIndex];
+      if (existing.specialty !== defDoc.specialty || existing.specialtyName !== defDoc.specialtyName) {
+        existing.specialty = defDoc.specialty;
+        existing.specialtyName = defDoc.specialtyName;
+        existing.degree = defDoc.degree;
+        existing.designation = defDoc.designation;
+        docUpdated = true;
+      }
+    } else {
+      appState.doctors.push(JSON.parse(JSON.stringify(defDoc)));
+      docUpdated = true;
+    }
+  });
+  if (docUpdated) saveHospitalData(appState);
+}
+
+// Preserve custom doctor arrangement order if saved in localStorage
+try {
+  const savedDocOrder = JSON.parse(localStorage.getItem('lifeLine_doctor_order') || '[]');
+  if (Array.isArray(savedDocOrder) && savedDocOrder.length > 0 && appState.doctors) {
+    appState.doctors.sort((a, b) => {
+      const idxA = savedDocOrder.indexOf(a.id);
+      const idxB = savedDocOrder.indexOf(b.id);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return 0;
+    });
+  }
+} catch (e) {
+  console.warn('Doctor order restore notice:', e);
+}
 
 // Sync rich detailed blog content from defaultHospitalData if stored blogs don't have markdown headers or full content
 if (appState.blogs && defaultHospitalData.blogs) {
@@ -231,8 +284,25 @@ async function syncFromSupabase() {
       if (Array.isArray(docs) && docs.length > 0) {
         const localImgMap = new Map((appState.doctors || []).map(d => [d.id, d.image]));
         appState.doctors = docs.map(d => {
+          const cleanId = String(d.id || '').replace(/^doc-?/, '');
+          const cleanNameKey = String(d.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const cachedPhoto = localStorage.getItem('doc_photo_' + d.id) ||
+                              localStorage.getItem('doc_photo_doc-' + cleanId) ||
+                              localStorage.getItem('doc_photo_' + cleanId) ||
+                              localStorage.getItem('doc_photo_name_' + cleanNameKey);
+
           const localImg = localImgMap.get(d.id);
-          const finalImg = (d.image && d.image.length > 5) ? d.image : (localImg || '');
+          let finalImg = cachedPhoto || '';
+          if (!finalImg && d.image && d.image.length > 5 && (d.image.startsWith('data:image') || d.image.startsWith('http') || d.image.startsWith('/storage'))) {
+            finalImg = d.image;
+          }
+          if (!finalImg && localImg && localImg.length > 5) {
+            finalImg = localImg;
+          }
+          if (!finalImg && d.image && d.image.length > 5) {
+            finalImg = d.image;
+          }
+
           return {
             id: d.id,
             name: d.name,
@@ -246,6 +316,21 @@ async function syncFromSupabase() {
             image: finalImg
           };
         });
+
+        // Preserve custom drag-and-drop doctor order
+        try {
+          const savedOrder = JSON.parse(localStorage.getItem('lifeLine_doctor_order') || '[]');
+          if (Array.isArray(savedOrder) && savedOrder.length > 0) {
+            appState.doctors.sort((a, b) => {
+              const idxA = savedOrder.indexOf(a.id);
+              const idxB = savedOrder.indexOf(b.id);
+              if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+              if (idxA !== -1) return -1;
+              if (idxB !== -1) return 1;
+              return 0;
+            });
+          }
+        } catch (e) {}
       }
     } catch (docFetchErr) {
       console.log('Supabase doctors sync notice:', docFetchErr.message);
@@ -856,7 +941,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "cardiology",
     name: "Cardiology & Cath Lab",
     icon: "heart-pulse",
-    head: "Dr. Sitanshu Sekhar Mohanti (MD, DM Cardiology)",
+    head: "Dr. Sitanshu Sekhar Mohanti & Dr. Satish Chainsingh Suryawanshi (MD, DM Cardiology)",
     shortDesc: "Comprehensive heart care, 24x7 Cath Lab, Angioplasty & TMT.",
     fullDescription: "Life Line Hospital's Department of Cardiology & Cath Lab provides round-the-clock emergency cardiac care, interventional cardiology, and non-invasive diagnostic evaluation in Ambikapur. Equipped with a digital Cath Lab, our cardiac team performs life-saving primary angioplasties during acute heart attack emergencies.",
     procedures: [
@@ -879,7 +964,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "orthopedics",
     name: "Orthopedics & Joint Replacement",
     icon: "bone",
-    head: "Dr. Nitesh Dubey & Dr. Rupesh Gupta (MS Ortho, DNB)",
+    head: "Dr. Rupesh Gupta (MS Ortho)",
     shortDesc: "Knee & Hip replacements, Arthroscopy & 24x7 Complex Trauma Care.",
     fullDescription: "The Department of Orthopedics & Joint Replacement offers comprehensive surgical and non-surgical care for bone, joint, ligament, and spine disorders. Our team specializes in computer-navigated Total Knee Replacement (TKR), Total Hip Replacement (THR), Arthroscopic Keyhole Joint Repair, and 24x7 complex fracture trauma surgery.",
     procedures: [
@@ -902,7 +987,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "neurology",
     name: "Neurology & Neurosurgery",
     icon: "brain",
-    head: "Dr. Satish Chainsingh Suryawanshi (MS, MCh Neurosurgery)",
+    head: "Dr. Nitesh Kumar Dubey (MBBS, MS, MCh Neurosurgery)",
     shortDesc: "Brain & Spine surgery, Stroke emergency unit & Nerve care.",
     fullDescription: "Providing advanced neuro-surgical procedures and specialized neurological care in Surguja division. Our neurosurgery team handles complex brain tumors, head injury trauma emergencies, brain hemorrhage evacuation, spinal disc surgeries, and acute ischemic stroke thrombolysis.",
     procedures: [
@@ -925,7 +1010,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "pediatrics",
     name: "Pediatrics & Neonatology (NICU)",
     icon: "baby",
-    head: "Dr. Bhavna Gardia & Dr. Sonal Gardia (MD Pediatrics, DCH)",
+    head: "Dr. Sonal Gardia (MD Pediatrics, DCH)",
     shortDesc: "Level-3 NICU, Newborn care, Pediatric Surgery & Vaccination.",
     fullDescription: "The Center for Pediatrics & Neonatology offers a dedicated Level-3 NICU (Neonatal Intensive Care Unit) for premature, low birth weight, and critically ill newborns. Equipped with advanced radiant warmers, neonatal ventilators, LED phototherapy, and specialized pediatric OPD care.",
     procedures: [
@@ -948,7 +1033,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "gynecology",
     name: "Obstetrics & Gynecology",
     icon: "sparkles",
-    head: "Dr. Shroti Asati & Dr. Pravdha Gupta (MS Obs & Gynae, DNB)",
+    head: "Dr. Shroti Asati, Dr. Bhavna Gardia & Dr. Pravdha Gupta (MS Obs & Gynae)",
     shortDesc: "Painless delivery, High-risk pregnancy & Laparoscopy.",
     fullDescription: "Providing comprehensive women's health services, maternity care, and advanced gynecological surgeries. Our department specializes in painless epidural deliveries, high-risk pregnancy management, total laparoscopic hysterectomy, ovarian cyst removal, and infertility workup.",
     procedures: [
@@ -971,7 +1056,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "surgery",
     name: "General & Laparoscopic Surgery",
     icon: "activity",
-    head: "Dr. Prassan Mohan Tripathi & Dr. Chandranshu Tripathi (MS Surgery, FIAGES)",
+    head: "Dr. Prassan Mohan Tripathi, Dr. Chandranshu Tripathi & Dr. Akhilesh Kumar Bharat (MS Surgery, DNB)",
     shortDesc: "Keyhole laparoscopic surgeries for gallbladder, hernia & appendix.",
     fullDescription: "Equipped with modern laparoscopic keyhole surgical towers to perform minimally invasive abdominal surgeries with faster recovery, minimal pain, and minimal scarring. Handling routine and emergency general surgeries round-the-clock.",
     procedures: [
@@ -994,7 +1079,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "urology",
     name: "Urology & Kidney Care",
     icon: "activity",
-    head: "Dr. Akhilesh Ku. Bharat (MS, MCh Urology)",
+    head: "Visiting Urologist Specialist",
     shortDesc: "Laser stone removal (RIRS/PCNL), Prostate surgery & Kidney care.",
     fullDescription: "Comprehensive treatment for kidney stones, prostate enlargement, urinary tract infections, and urological cancers. Featuring advanced Holmium Laser technology for incisionless kidney stone fragmentation and TURP prostate surgery.",
     procedures: [
@@ -1017,7 +1102,7 @@ const DEPARTMENT_DETAILS_MAP = {
     id: "radiology",
     name: "Radiology & Diagnostic Pathology",
     icon: "scan",
-    head: "Dr. Suneedh Gupta (MD Radiodiagnosis)",
+    head: "Radiologist & Imaging Specialist",
     shortDesc: "CT-Scan, Digital X-Ray, USG, TMT & Pathology Lab.",
     fullDescription: "Providing 24x7 imaging and diagnostic laboratory services. Equipped with high-resolution 3T MRI, 128-Slice CT Scan, 3D/4D Color Ultrasound, Digital X-Ray, and NABL-standard automated pathology laboratory.",
     procedures: [
@@ -1034,6 +1119,69 @@ const DEPARTMENT_DETAILS_MAP = {
       "3D/4D Color Doppler Ultrasound Unit",
       "Automated Hematology & Biochemistry Analyzers",
       "Digital Radiography (DR) X-Ray System"
+    ]
+  },
+  mdmedicine: {
+    id: "mdmedicine",
+    name: "MD Medicine & Critical Care",
+    icon: "stethoscope",
+    head: "Dr. Amit Asati (MD Medicine)",
+    shortDesc: "Internal medicine, critical care, fever clinic & chronic disease management.",
+    fullDescription: "The Department of MD Medicine provides comprehensive internal medicine services including diagnosis and treatment of complex medical conditions, critical care ICU management, fever clinic, diabetes care, hypertension management, and emergency medical stabilization.",
+    procedures: [
+      "Critical Care & ICU Management",
+      "Fever Clinic & Infectious Disease Treatment",
+      "Diabetes & Hypertension Management",
+      "Chronic Disease Management & Follow-Up",
+      "Emergency Medical Stabilization & Resuscitation"
+    ],
+    equipment: [
+      "Multi-Parameter ICU Monitors",
+      "Advanced Blood Gas Analyzer",
+      "Central Venous Pressure Monitoring",
+      "Continuous Glucose Monitoring System"
+    ]
+  },
+  dental: {
+    id: "dental",
+    name: "Dental & Orthodontics",
+    icon: "smile",
+    head: "Dr. Suneedh Gupta (BDS, MDS Orthodontics)",
+    shortDesc: "Orthodontic braces, dental implants, root canal & oral surgery.",
+    fullDescription: "The Department of Dental & Orthodontics provides comprehensive dental care including orthodontic treatment with metal and ceramic braces, dental implants, root canal therapy, wisdom tooth extraction, cosmetic dentistry, and preventive oral health care.",
+    procedures: [
+      "Orthodontic Treatment (Metal & Ceramic Braces)",
+      "Dental Implant Surgery",
+      "Root Canal Treatment (RCT)",
+      "Wisdom Tooth Extraction & Oral Surgery",
+      "Cosmetic Dentistry & Teeth Whitening"
+    ],
+    equipment: [
+      "Digital Dental X-Ray (RVG)",
+      "Dental Chair with LED Curing Light",
+      "Orthodontic Instruments & Brackets System",
+      "Dental Sterilization Autoclave"
+    ]
+  },
+  anaesthesiology: {
+    id: "anaesthesiology",
+    name: "Anaesthesiology & Critical Care",
+    icon: "syringe",
+    head: "Dr. Shivam Kumar Sharma (MBBS, DA, FIPM)",
+    shortDesc: "Expert anaesthesia for all surgeries, ICU management & pain clinic.",
+    fullDescription: "The Department of Anaesthesiology provides expert anaesthesia support for all surgical procedures including general, spinal, and epidural anaesthesia. Our team manages pre-operative assessment, intra-operative monitoring, post-operative pain management, and critical care ventilator management in ICU.",
+    procedures: [
+      "General Anaesthesia for Major Surgeries",
+      "Spinal & Epidural Anaesthesia",
+      "Epidural Painless Delivery Anaesthesia",
+      "ICU Ventilator & Critical Care Management",
+      "Chronic Pain Management & Pain Clinic"
+    ],
+    equipment: [
+      "Advanced Anaesthesia Workstations",
+      "Multi-Parameter Patient Monitors",
+      "Mechanical Ventilators (ICU Grade)",
+      "Ultrasound-Guided Regional Block System"
     ]
   }
 };
@@ -1154,7 +1302,11 @@ function getDoctorImage(doc) {
                       localStorage.getItem('doc_photo_' + cleanId) ||
                       localStorage.getItem('doc_photo_name_' + cleanNameKey);
 
-  let img = (doc.image && doc.image.length > 5) ? doc.image : (cachedPhoto || doc.imageUrl || '');
+  if (cachedPhoto && cachedPhoto.length > 5 && !cachedPhoto.includes('unsplash.com') && !cachedPhoto.includes('placeholder')) {
+    return cachedPhoto;
+  }
+
+  let img = (doc.image && doc.image.length > 5) ? doc.image : (doc.imageUrl || '');
   img = String(img || '').trim().replace(/[\r\n]+/g, '');
   if (img && img.length > 5 && !img.includes('unsplash.com') && !img.includes('placeholder')) {
     return img;
@@ -3886,12 +4038,39 @@ window.renderAdminDoctorsGrid = function() {
     return;
   }
 
+  const totalAllDocs = (appState.doctors || []).length;
+
   grid.innerHTML = list.map(doc => {
     const photoUrl = getDoctorImage(doc);
     const feeText = String(doc.fee || '₹500').startsWith('₹') ? doc.fee : `₹${doc.fee}`;
+    const globalIdx = (appState.doctors || []).findIndex(d => d.id === doc.id);
+    const isFirst = globalIdx === 0;
+    const isLast = globalIdx === totalAllDocs - 1;
 
     return `
-      <div class="admin-doc-card" style="background: white; border-radius: 18px; border: 1px solid rgba(2,128,144,0.12); padding: 22px; box-shadow: 0 6px 24px rgba(2,128,144,0.06); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
+      <div class="admin-doc-card draggable-doctor-card" 
+           draggable="true" 
+           data-doc-id="${doc.id}"
+           style="background: white; border-radius: 18px; border: 1px solid rgba(2,128,144,0.12); padding: 20px; box-shadow: 0 6px 24px rgba(2,128,144,0.06); display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;">
+        
+        <!-- Drag & Order Header Bar -->
+        <div class="doc-drag-header">
+          <div class="doc-drag-handle" title="Click & drag this card to reposition on visitor page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
+              <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
+            </svg>
+            <span>Drag to Move</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="doc-order-badge" title="Display position on visitor page">#${globalIdx + 1}</span>
+            <div class="doc-order-actions">
+              <button type="button" class="doc-order-btn" title="Move Up" onclick="moveDoctorOrder('${doc.id}', -1)" ${isFirst ? 'disabled' : ''}>▲</button>
+              <button type="button" class="doc-order-btn" title="Move Down" onclick="moveDoctorOrder('${doc.id}', 1)" ${isLast ? 'disabled' : ''}>▼</button>
+            </div>
+          </div>
+        </div>
+
         <div>
           <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px;">
             <img src="${photoUrl}" alt="${doc.name}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2.5px solid #028090; box-shadow: 0 4px 14px rgba(2,128,144,0.25); flex-shrink: 0;">
@@ -3932,30 +4111,102 @@ window.renderAdminDoctorsGrid = function() {
     `;
   }).join('');
 
+  attachDoctorDragDropHandlers();
+
   if (window.lucide) window.lucide.createIcons();
 };
 
-window.deleteDoctorInAdmin = function(docId) {
+let activeDraggedDocId = null;
+
+function attachDoctorDragDropHandlers() {
+  const cards = document.querySelectorAll('.draggable-doctor-card');
+  if (!cards.length) return;
+
+  cards.forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      activeDraggedDocId = card.getAttribute('data-doc-id');
+      card.classList.add('is-dragging');
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', activeDraggedDocId);
+      }
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('is-dragging');
+      document.querySelectorAll('.draggable-doctor-card').forEach(c => c.classList.remove('drag-target-over'));
+      activeDraggedDocId = null;
+    });
+
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      if (!card.classList.contains('is-dragging')) {
+        card.classList.add('drag-target-over');
+      }
+    });
+
+    card.addEventListener('dragleave', (e) => {
+      if (!card.contains(e.relatedTarget)) {
+        card.classList.remove('drag-target-over');
+      }
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      card.classList.remove('drag-target-over');
+      const targetDocId = card.getAttribute('data-doc-id');
+      const sourceDocId = activeDraggedDocId || (e.dataTransfer ? e.dataTransfer.getData('text/plain') : null);
+
+      if (!sourceDocId || !targetDocId || sourceDocId === targetDocId) return;
+
+      reorderDoctorsList(sourceDocId, targetDocId);
+    });
+  });
+}
+
+function reorderDoctorsList(sourceId, targetId) {
   if (!appState.doctors) return;
-  const cleanTargetId = String(docId || '').replace(/^doc-?/, '');
-  const doc = appState.doctors.find(d => 
-    String(d.id || '') === String(docId || '') || 
-    String(d.id || '').replace(/^doc-?/, '') === cleanTargetId
-  );
-  if (!doc) return;
+  const fromIndex = appState.doctors.findIndex(d => d.id === sourceId);
+  const toIndex = appState.doctors.findIndex(d => d.id === targetId);
 
-  if (confirm(`Are you sure you want to delete ${doc.name}?`)) {
-    appState.doctors = appState.doctors.filter(d => 
-      String(d.id || '') !== String(doc.id || '') && 
-      String(d.id || '').replace(/^doc-?/, '') !== cleanTargetId
-    );
-    saveHospitalData(appState);
-    renderDoctors();
-    renderAdminDoctorsTable();
-    showToast(`Deleted ${doc.name}`);
+  if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return;
 
-    deleteDoctorFromSupabase(doc.id).catch(err => console.warn('Supabase delete notice:', err));
-  }
+  const [movedDoc] = appState.doctors.splice(fromIndex, 1);
+  appState.doctors.splice(toIndex, 0, movedDoc);
+
+  // Save new ordering to localStorage
+  const orderIds = appState.doctors.map(d => d.id);
+  localStorage.setItem('lifeLine_doctor_order', JSON.stringify(orderIds));
+  saveHospitalData(appState);
+
+  // Re-render UI components live
+  renderAdminDoctorsGrid();
+  renderDoctors();
+
+  showToast(`✨ Moved ${movedDoc.name} to position #${toIndex + 1}! Visitor page updated live.`);
+}
+
+window.moveDoctorOrder = function(docId, delta) {
+  if (!appState.doctors) return;
+  const currentIndex = appState.doctors.findIndex(d => d.id === docId);
+  if (currentIndex < 0) return;
+
+  const newIndex = currentIndex + delta;
+  if (newIndex < 0 || newIndex >= appState.doctors.length) return;
+
+  const [movedDoc] = appState.doctors.splice(currentIndex, 1);
+  appState.doctors.splice(newIndex, 0, movedDoc);
+
+  // Save new ordering to localStorage
+  const orderIds = appState.doctors.map(d => d.id);
+  localStorage.setItem('lifeLine_doctor_order', JSON.stringify(orderIds));
+  saveHospitalData(appState);
+
+  renderAdminDoctorsGrid();
+  renderDoctors();
+
+  showToast(`✨ ${movedDoc.name} moved to #${newIndex + 1}! Visitor page updated.`);
 };
 
 
