@@ -637,12 +637,30 @@ function initNavigation() {
     const link = e.target.closest('[data-view-target], a[href^="#"]');
     if (link) {
       const href = link.getAttribute('href') || '';
-      const targetId = link.getAttribute('data-view-target') || (href.startsWith('#') ? href.slice(1) : '');
-      if (targetId && document.getElementById(targetId)) {
-        e.preventDefault();
-        window.location.hash = targetId;
-        handleRouteHash();
-        closeMobileDrawer();
+      let targetId = link.getAttribute('data-view-target') || (href.startsWith('#') ? href.slice(1) : '');
+      if (targetId) {
+        if (targetId === 'admin' || targetId === 'admin-view') {
+          e.preventDefault();
+          window.location.hash = 'admin';
+          handleRouteHash();
+          closeMobileDrawer();
+          return;
+        }
+        if (targetId === 'login' || targetId === 'admin-login' || targetId === 'admin-login-view') {
+          e.preventDefault();
+          window.location.hash = 'login';
+          handleRouteHash();
+          closeMobileDrawer();
+          return;
+        }
+
+        const exactEl = document.getElementById(targetId) || document.getElementById(targetId + '-view');
+        if (exactEl) {
+          e.preventDefault();
+          window.location.hash = targetId;
+          handleRouteHash();
+          closeMobileDrawer();
+        }
       }
     }
   });
