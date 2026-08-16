@@ -268,6 +268,11 @@ async function syncFromSupabase() {
       if (settings.departments && Array.isArray(settings.departments) && settings.departments.length > 0) {
         appState.departments = settings.departments;
       }
+      if (settings.doctor_order && Array.isArray(settings.doctor_order) && settings.doctor_order.length > 0) {
+        try {
+          localStorage.setItem('lifeLine_doctor_order', JSON.stringify(settings.doctor_order));
+        } catch (e) {}
+      }
     }
 
     // 2. Fetch Doctors directly from Supabase REST API (with /api/doctors fallback)
@@ -662,6 +667,13 @@ function getRoutePath() {
 
 function handleRouteHash() {
   const route = getRoutePath();
+
+  // Close any open modals and reset body scroll when navigating
+  if (typeof closeDoctorEditorModal === 'function') closeDoctorEditorModal();
+  if (typeof closeDoctorDetailsModal === 'function') closeDoctorDetailsModal();
+  if (typeof closeAdminLoginModal === 'function') closeAdminLoginModal();
+  if (typeof closeBookingModal === 'function') closeBookingModal();
+  document.body.style.overflow = '';
 
   if (route === 'login') {
     document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
@@ -4107,6 +4119,17 @@ window.closeDoctorEditorModal = function() {
   document.body.style.overflow = '';
 };
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.keyCode === 27) {
+    if (typeof closeDoctorEditorModal === 'function') closeDoctorEditorModal();
+    if (typeof closeDoctorDetailsModal === 'function') closeDoctorDetailsModal();
+    if (typeof closeAdminLoginModal === 'function') closeAdminLoginModal();
+    if (typeof closeBookingModal === 'function') closeBookingModal();
+    if (typeof closeCropperModal === 'function') closeCropperModal();
+    document.body.style.overflow = '';
+  }
+});
+
 window.editDoctorInAdmin = function(docId) {
   if (typeof openDoctorEditorModal === 'function') {
     openDoctorEditorModal(docId);
@@ -4276,10 +4299,11 @@ function reorderDoctorsList(sourceId, targetId) {
   const [movedDoc] = appState.doctors.splice(fromIndex, 1);
   appState.doctors.splice(toIndex, 0, movedDoc);
 
-  // Save new ordering to localStorage
+  // Save new ordering to localStorage and Supabase database
   const orderIds = appState.doctors.map(d => d.id);
   localStorage.setItem('lifeLine_doctor_order', JSON.stringify(orderIds));
   saveHospitalData(appState);
+  saveSettingToSupabase('doctor_order', orderIds);
 
   // Re-render UI components live
   renderAdminDoctorsGrid();
@@ -4299,15 +4323,16 @@ window.moveDoctorOrder = function(docId, delta) {
   const [movedDoc] = appState.doctors.splice(currentIndex, 1);
   appState.doctors.splice(newIndex, 0, movedDoc);
 
-  // Save new ordering to localStorage
+  // Save new ordering to localStorage and Supabase database
   const orderIds = appState.doctors.map(d => d.id);
   localStorage.setItem('lifeLine_doctor_order', JSON.stringify(orderIds));
   saveHospitalData(appState);
+  saveSettingToSupabase('doctor_order', orderIds);
 
   renderAdminDoctorsGrid();
   renderDoctors();
 
-  showToast(`✨ ${movedDoc.name} moved to #${newIndex + 1}! Visitor page updated.`);
+  showToast(`✨ ${movedDoc.name} moved to #${newIndex + 1}! Saved live.`);
 };
 
 
