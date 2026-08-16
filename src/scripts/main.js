@@ -1,5 +1,10 @@
 import { getHospitalData, saveHospitalData, defaultHospitalData } from './data.js';
 
+export const SUPABASE_URL = 'https://wduxusyodnfqnhtdtltl.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkdXh1c3lvZG5mcW5odGR0bHRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjg4MjAsImV4cCI6MjEwMTg0NDgyMH0.AqnZ5CmvMioiFQoID7yUstsG6TnsFT6v0W01ebHveoI';
+export const SUPABASE_STORAGE_URL = SUPABASE_URL;
+export const SUPABASE_STORAGE_KEY = SUPABASE_ANON_KEY;
+
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
 async function uploadImageToSupabase(fileName, base64Data) {
@@ -293,14 +298,18 @@ async function syncFromSupabase() {
 
           const localImg = localImgMap.get(d.id);
           let finalImg = cachedPhoto || '';
-          if (!finalImg && d.image && d.image.length > 5 && (d.image.startsWith('data:image') || d.image.startsWith('http') || d.image.startsWith('/storage'))) {
+          if (!finalImg && d.image && d.image.length > 5 && (d.image.startsWith('data:image') || d.image.startsWith('http') || d.image.startsWith('/storage') || d.image.startsWith('/assets'))) {
             finalImg = d.image;
           }
           if (!finalImg && localImg && localImg.length > 5) {
             finalImg = localImg;
           }
-          if (!finalImg && d.image && d.image.length > 5) {
-            finalImg = d.image;
+          const defDoc = (defaultHospitalData.doctors || []).find(def => def.name === d.name || def.id === d.id);
+          if (!finalImg && defDoc && defDoc.image) {
+            finalImg = defDoc.image;
+          }
+          if (!finalImg) {
+            finalImg = '/assets/images/doctor_male_1.png';
           }
 
           return {
@@ -401,14 +410,16 @@ async function syncFromSupabase() {
     // Re-render frontend and admin panel from updated Supabase state
     saveHospitalData(appState);
     renderSiteFromState();
-    populateDepartmentDropdowns();
-  renderAdminDepartmentsTable();
-  populateAdminForms();
-    populateDepartmentDropdowns();
-    renderAdminDepartmentsTable();
-    renderAdminDoctorsTable();
-    renderAdminBlogsTable();
-    renderAdminGalleryTable();
+    if (typeof renderDoctors === 'function') renderDoctors();
+    if (typeof renderAdminDoctorsGrid === 'function') renderAdminDoctorsGrid();
+    if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+    if (typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
+    if (typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
+    if (typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
+    if (typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
+    if (typeof renderAdminDepartmentsTable === 'function') renderAdminDepartmentsTable();
+    if (typeof populateAdminForms === 'function') populateAdminForms();
+    if (typeof populateDepartmentDropdowns === 'function') populateDepartmentDropdowns();
   } catch (err) {
     console.log('Supabase sync notice:', err.message);
   }
@@ -4506,11 +4517,7 @@ function showToast(message) {
   }, 3500);
 }
 
-/* Direct Supabase Storage Bucket Uploader from Client Browser */
-const SUPABASE_STORAGE_URL = 'https://wduxusyodnfqnhtdtltl.supabase.co';
-// Use anon key for browser requests
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkdXh1c3lvZG5mcW5odGR0bHRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNjg4MjAsImV4cCI6MjEwMTg0NDgyMH0.AqnZ5CmvMioiFQoID7yUstsG6TnsFT6v0W01ebHveoI';
-const SUPABASE_STORAGE_KEY = SUPABASE_ANON_KEY;
+
 
 async function uploadFileDirectToSupabaseBucket(file, maxWidth = 1600, maxHeight = 1200) {
   const fileExt = file.name ? file.name.split('.').pop().toLowerCase() : 'jpg';
