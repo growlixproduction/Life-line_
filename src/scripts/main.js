@@ -285,6 +285,12 @@ async function syncFromSupabase() {
       if (settings.departments && Array.isArray(settings.departments) && settings.departments.length > 0) {
         appState.departments = settings.departments;
       }
+      if (settings.facilities && Array.isArray(settings.facilities) && settings.facilities.length > 0) {
+        appState.facilities = settings.facilities;
+      }
+      if (settings.gallery && Array.isArray(settings.gallery) && settings.gallery.length > 0) {
+        appState.gallery = settings.gallery;
+      }
       if (settings.doctor_order && Array.isArray(settings.doctor_order) && settings.doctor_order.length > 0) {
         try {
           localStorage.setItem('lifeLine_doctor_order', JSON.stringify(settings.doctor_order));
@@ -428,6 +434,85 @@ async function syncFromSupabase() {
       }
     } catch (deptFetchErr) {
       console.log('Supabase departments sync notice:', deptFetchErr.message);
+    }
+
+    // 5. Fetch Facilities
+    try {
+      const supaFac = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/facilities?select=*&order=created_at.asc`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaFac.ok) {
+        const facs = await supaFac.json();
+        if (Array.isArray(facs) && facs.length > 0) {
+          appState.facilities = facs.map((f, i) => ({
+            id: `fac-${f.id || (i + 1)}`,
+            title: f.title,
+            desc: f.description || '',
+            icon: f.icon || 'hospital',
+            image: f.image || '',
+            category: f.category || 'General Care',
+            features: []
+          }));
+        }
+      }
+    } catch (facErr) {
+      console.log('Supabase facilities sync notice:', facErr.message);
+    }
+
+    // 6. Fetch Gallery
+    try {
+      const supaGal = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/gallery?select=*&order=created_at.asc`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaGal.ok) {
+        const gals = await supaGal.json();
+        if (Array.isArray(gals) && gals.length > 0) {
+          appState.gallery = gals.map((g, i) => ({
+            id: `gal-${g.id || (i + 1)}`,
+            title: g.title,
+            category: g.category || 'Hospital Campus',
+            caption: g.description || '',
+            image: g.image || ''
+          }));
+        }
+      }
+    } catch (galErr) {
+      console.log('Supabase gallery sync notice:', galErr.message);
+    }
+
+    // 7. Fetch Appointments
+    try {
+      const supaAppts = await fetch(`${SUPABASE_STORAGE_URL}/rest/v1/appointments?select=*&order=created_at.desc`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_STORAGE_KEY}`,
+          'apiKey': SUPABASE_STORAGE_KEY
+        }
+      });
+      if (supaAppts.ok) {
+        const rawAppts = await supaAppts.json();
+        if (Array.isArray(rawAppts) && rawAppts.length > 0) {
+          appState.appointments = rawAppts.map(a => ({
+            id: a.booking_id || `LLH-${a.id}`,
+            patientName: a.patient_name || 'Patient',
+            patientPhone: a.patient_phone || '',
+            department: a.department || '',
+            doctor: a.doctor_name || '',
+            date: a.appointment_date || '',
+            time: a.preferred_time || '',
+            status: a.status || 'Pending',
+            notes: a.notes || '',
+            createdTime: a.created_at ? new Date(a.created_at).toLocaleString() : ''
+          }));
+        }
+      }
+    } catch (apptsErr) {
+      console.log('Supabase appointments sync notice:', apptsErr.message);
     }
     // Re-render frontend and admin panel from updated Supabase state
     saveHospitalData(appState);
