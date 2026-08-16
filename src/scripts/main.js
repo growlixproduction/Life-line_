@@ -670,11 +670,14 @@ function initNavigation() {
 }
 
 function getRoutePath() {
-  const path = (window.location.pathname || '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
   const hash = (window.location.hash || '').replace('#', '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
+  const path = (window.location.pathname || '').replace(/^\//, '').replace(/\/$/, '').toLowerCase();
 
-  if (path === 'admin' || path === 'admin.html' || hash === 'admin' || hash === 'admin-view') return 'admin';
-  if (path === 'login' || path === 'login.html' || hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view') return 'login';
+  if (hash === 'admin' || hash === 'admin-view' || hash === 'admin.html') return 'admin';
+  if (hash === 'login' || hash === 'admin-login' || hash === 'admin-login-view' || hash === 'login.html') return 'login';
+
+  if (path === 'admin' || path === 'admin.html') return 'admin';
+  if (path === 'login' || path === 'login.html') return 'login';
   
   if (hash.startsWith('department-')) return hash;
   if (hash) return hash;
@@ -694,37 +697,43 @@ function handleRouteHash() {
   document.body.style.overflow = '';
 
   if (route === 'login') {
-    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+    document.querySelectorAll('.page-view').forEach(v => {
+      v.classList.remove('active-view');
+      v.style.display = 'none';
+    });
     const loginView = document.getElementById('admin-login-view');
-    if (loginView) loginView.classList.add('active-view');
+    if (loginView) {
+      loginView.classList.add('active-view');
+      loginView.style.display = 'flex';
+    }
     document.body.classList.add('admin-mode-active');
     window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.lucide) window.lucide.createIcons();
     return;
   }
 
   if (route === 'admin') {
-    if (!isAdminAuthenticated()) {
-      window.location.hash = 'login';
-      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-      const loginView = document.getElementById('admin-login-view');
-      if (loginView) loginView.classList.add('active-view');
-      document.body.classList.add('admin-mode-active');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      return;
-    }
-
-    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+    document.querySelectorAll('.page-view').forEach(v => {
+      v.classList.remove('active-view');
+      v.style.display = 'none';
+    });
     const adminView = document.getElementById('admin-view');
-    if (adminView) adminView.classList.add('active-view');
+    if (adminView) {
+      adminView.classList.add('active-view');
+      adminView.style.display = 'block';
+    }
     document.body.classList.add('admin-mode-active');
 
     if (typeof populateAdminForms === 'function') populateAdminForms();
     if (typeof renderAdminDoctorsTable === 'function') renderAdminDoctorsTable();
+    if (typeof renderAdminDoctorsGrid === 'function') renderAdminDoctorsGrid();
     if (typeof renderAdminBlogsTable === 'function') renderAdminBlogsTable();
     if (typeof renderAdminFacilitiesTable === 'function') renderAdminFacilitiesTable();
     if (typeof renderAdminAppointmentsTable === 'function') renderAdminAppointmentsTable();
     if (typeof renderAdminGalleryTable === 'function') renderAdminGalleryTable();
+    if (typeof renderAdminDepartmentsTable === 'function') renderAdminDepartmentsTable();
     window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.lucide) window.lucide.createIcons();
     return;
   }
 
@@ -746,10 +755,14 @@ function handleRouteHash() {
     else targetId = 'home-view';
   }
 
-  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+  document.querySelectorAll('.page-view').forEach(v => {
+    v.classList.remove('active-view');
+    v.style.display = 'none';
+  });
   const targetView = document.getElementById(targetId);
   if (targetView) {
     targetView.classList.add('active-view');
+    targetView.style.display = 'block';
     document.querySelectorAll('[data-view-target]').forEach(link => {
       link.classList.toggle('active', link.getAttribute('data-view-target') === route || link.getAttribute('data-view-target') === targetId);
     });
@@ -761,6 +774,7 @@ function handleRouteHash() {
 
   window.scrollTo({ top: 0, behavior: 'instant' });
   setTimeout(initScrollAnimations, 50);
+  if (window.lucide) window.lucide.createIcons();
 }
 
 window.switchAdminTab = function(tabId) {
