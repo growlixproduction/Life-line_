@@ -5,7 +5,7 @@ export const defaultHospitalData = {
   address: "Namnakala, Opposite Polytechnic College, Outer Ring Road, Ambikapur, Surguja, Chhattisgarh - 497001",
   emergencyPhone: "+91 7879596337",
   opdPhone: "+91 7879714048",
-  whatsapp: "+91 7879596337",
+  whatsapp: "+91 9109396613",
   email: "Lifelinehospitalabikapur2017@gmail.com",
   logoUrl: "",
   hero: {
