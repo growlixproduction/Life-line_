@@ -1031,11 +1031,14 @@ window.closeAdminLoginModal = function() {
 
 window.handleDedicatedAdminLoginSubmit = function(e) {
   if (e) e.preventDefault();
-  const user = document.getElementById('page-admin-username')?.value.trim();
-  const pass = document.getElementById('page-admin-password')?.value.trim();
-  const errorEl = document.getElementById('page-admin-login-error');
+  const user = (document.getElementById('page-admin-username')?.value || document.getElementById('admin-username')?.value || '').trim();
+  const pass = (document.getElementById('page-admin-password')?.value || document.getElementById('admin-password')?.value || '').trim();
+  const errorEl = document.getElementById('page-admin-login-error') || document.getElementById('admin-login-error');
 
-  if (user === 'admin' && pass === 'admin') {
+  const isValidUser = (user.toLowerCase() === 'lifelife' || user.toLowerCase() === 'lifeline');
+  const isValidPass = (pass === 'Lifeline@01');
+
+  if (isValidUser && isValidPass) {
     if (errorEl) errorEl.style.display = 'none';
     
     // Always store permanently in localStorage so user logs in ONLY ONCE!
@@ -1054,14 +1057,6 @@ window.handleDedicatedAdminLoginSubmit = function(e) {
   } else {
     if (errorEl) errorEl.style.display = 'block';
   }
-};
-
-window.quickFillAdminLogin = function() {
-  const userEl = document.getElementById('page-admin-username');
-  const passEl = document.getElementById('page-admin-password');
-  if (userEl) userEl.value = 'admin';
-  if (passEl) passEl.value = 'admin';
-  showToast('⚡ Demo credentials filled (admin / admin)');
 };
 
 window.togglePasswordVisibility = function(inputId, btn) {
